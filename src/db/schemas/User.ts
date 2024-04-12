@@ -2,7 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { genSalt, compare, hash } from 'bcrypt';
 import { Types } from 'mongoose';
 
-@Schema()
+@Schema({ collection: 'users' })
 export class UserSchema {
   @Prop({
     type: String,
@@ -30,7 +30,6 @@ export class UserSchema {
     minlength: [10, 'Passw3ord is too short'],
     maxlength: [20, 'Passw3ord is too long'],
     trim: true,
-    select: false,
   })
   password: string;
 
@@ -83,9 +82,18 @@ export class UserSchema {
 
 export const UserModel = SchemaFactory.createForClass(UserSchema);
 
+// Methods
+UserModel.methods.comparePassword = async function (
+  candidatePassword: string,
+): Promise<boolean> {
+  return await compare(candidatePassword, this.Password);
+};
+
+// Index
 UserModel.index({ username: 1 }, { unique: true });
 UserModel.index({ name: 1 });
 
+// Middleware
 UserModel.pre('save', async function (next) {
   if (this.isModified('password')) {
     const salt = await genSalt(11);
