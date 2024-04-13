@@ -23,11 +23,11 @@ export class Roles {
   role_description: string;
 
   @Prop({
-    type: Types.ObjectId,
+    type: Array<Types.ObjectId>,
     required: [true, 'Role permissions are required'],
     ref: 'permissions',
   })
-  permissions_id: Types.ObjectId;
+  permissions_id: Permissions[];
 
   @Prop({
     type: Date,

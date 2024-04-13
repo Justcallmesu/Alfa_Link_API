@@ -2,6 +2,9 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 import { HistoryPembayaran } from '../customer/HistoryPembayaran';
 
+// Schema
+import { Mobil } from '../mobil/Mobil';
+
 @Schema({
   collection: 'penjualan',
 })
@@ -11,7 +14,7 @@ export class Penjualan {
     required: [true, 'ID Customer is required'],
     ref: 'mobil',
   })
-  id_mobil: Types.ObjectId;
+  id_mobil: Mobil;
 
   @Prop({
     type: Types.ObjectId,

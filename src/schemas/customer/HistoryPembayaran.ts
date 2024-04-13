@@ -4,6 +4,7 @@ import { Types } from 'mongoose';
 // Schema
 import { Customer } from './Customer';
 import { Pembayaran } from './NestedSchema/Pembayaran';
+import { Penjualan } from '../penjualan/Penjualan';
 
 @Schema({ collection: 'history_pembayaran' })
 export class HistoryPembayaran {
@@ -19,7 +20,7 @@ export class HistoryPembayaran {
     required: true,
     ref: 'penjualan',
   })
-  id_penjualan: Types.ObjectId;
+  id_penjualan: Penjualan;
 
   @Prop({
     type: String,
