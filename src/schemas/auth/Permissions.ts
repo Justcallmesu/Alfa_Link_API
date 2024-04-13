@@ -1,4 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
+
+export type PermissionsDocument = HydratedDocument<Permissions>;
 
 @Schema({ collection: 'permissions' })
 export class Permissions {

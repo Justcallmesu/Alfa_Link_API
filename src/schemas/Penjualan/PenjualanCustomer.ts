@@ -1,9 +1,11 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
+import { Types, HydratedDocument } from 'mongoose';
 
 // Schema
 import { Customer } from '../customer/Customer';
 import { Penjualan } from './Penjualan';
+
+export type PenjualanCustomerDocument = HydratedDocument<Penjualan_Customer>;
 
 @Schema()
 export class Penjualan_Customer {
