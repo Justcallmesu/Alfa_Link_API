@@ -1,6 +1,11 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 
+// Schema
+import { MerkMobil } from './mobil_properties/MerkMobil';
+import { JenisMobil } from './mobil_properties/JenisMobil';
+import { TipeMobil } from './mobil_properties/TipeMobil';
+
 @Schema({ collection: 'mobil' })
 export class Mobil {
   @Prop({
@@ -9,31 +14,25 @@ export class Mobil {
   id_inspeksi: Types.ObjectId;
 
   @Prop({
-    type: String,
+    type: Types.ObjectId,
     required: [true, 'Merk is required'],
-    trim: true,
-    minlength: [3, 'Merk must be at least 3 characters'],
-    maxlength: [50, 'Merk must be at most 50 characters'],
+    ref: 'merk',
   })
-  merk: string;
+  merk: MerkMobil;
 
   @Prop({
-    type: String,
-    required: [true, 'Model is required'],
-    trim: true,
-    minlength: [3, 'Model must be at least 3 characters'],
-    maxlength: [50, 'Model must be at most 50 characters'],
+    type: Types.ObjectId,
+    required: [true, 'Jenis is required'],
+    ref: 'jenis',
   })
-  jenis: string;
+  jenis: JenisMobil;
 
   @Prop({
-    type: String,
+    type: Types.ObjectId,
     required: [true, 'Tipe is required'],
-    trim: true,
-    minlength: [3, 'Tipe must be at least 3 characters'],
-    maxlength: [50, 'Tipe must be at most 50 characters'],
+    ref: 'tipe',
   })
-  tipe: string;
+  tipe: TipeMobil;
 
   @Prop({
     type: Date,
