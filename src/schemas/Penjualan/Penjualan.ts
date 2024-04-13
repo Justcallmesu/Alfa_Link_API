@@ -1,19 +1,24 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
+import { HistoryPembayaran } from '../customer/HistoryPembayaran';
 
-@Schema()
+@Schema({
+  collection: 'penjualan',
+})
 export class Penjualan {
   @Prop({
     type: Types.ObjectId,
     required: [true, 'ID Customer is required'],
+    ref: 'mobil',
   })
   id_mobil: Types.ObjectId;
 
   @Prop({
     type: Types.ObjectId,
     required: [true, 'ID History is required'],
+    ref: 'history_pembayaran',
   })
-  id_history: Types.ObjectId;
+  id_history: HistoryPembayaran;
 
   @Prop({
     type: String,
@@ -41,6 +46,7 @@ export class Penjualan {
 
 export const PembayaranSchema = SchemaFactory.createForClass(Penjualan);
 
+// Indexing
 PembayaranSchema.index({ id_mobil: 1, id_history: 1 }, { unique: true });
 
 PembayaranSchema.index({ date_penjualan: 1 });
