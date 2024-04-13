@@ -46,12 +46,6 @@ export class HistoryPembayaran {
   total_terbayar: number;
 
   @Prop({
-    type: Date,
-    default: Date.now(),
-  })
-  date_pembelian: Date;
-
-  @Prop({
     type: Array<Pembayaran>,
     default: [],
   })
