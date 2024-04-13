@@ -1,9 +1,12 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { genSalt, compare, hash } from 'bcrypt';
 import { Types } from 'mongoose';
+import { Roles, RolesSchema } from './Roles';
+
+// Schema
 
 @Schema({ collection: 'users' })
-export class UserSchema {
+export class User {
   @Prop({
     type: String,
     required: [true, 'Name is required'],
@@ -48,7 +51,7 @@ export class UserSchema {
     unqiue: true,
     ref: 'roles',
   })
-  role_id: Types.ObjectId;
+  role_id: Roles;
 
   @Prop({
     type: Date,
@@ -80,21 +83,21 @@ export class UserSchema {
   user_status: string;
 }
 
-export const UserModel = SchemaFactory.createForClass(UserSchema);
+export const UserSchema = SchemaFactory.createForClass(User);
 
 // Methods
-UserModel.methods.comparePassword = async function (
+UserSchema.methods.comparePassword = async function (
   candidatePassword: string,
 ): Promise<boolean> {
   return await compare(candidatePassword, this.Password);
 };
 
 // Index
-UserModel.index({ username: 1 }, { unique: true });
-UserModel.index({ name: 1 });
+UserSchema.index({ username: 1 }, { unique: true });
+UserSchema.index({ name: 1 });
 
 // Middleware
-UserModel.pre('save', async function (next) {
+UserSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
     const salt = await genSalt(11);
     this.password = await hash(this.password, salt);
@@ -102,7 +105,7 @@ UserModel.pre('save', async function (next) {
   next();
 });
 
-UserModel.pre('updateOne', async function (next) {
+UserSchema.pre('updateOne', async function (next) {
   this.set('date_updated', Date.now());
 
   if (this.get('password')) {
