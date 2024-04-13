@@ -5,13 +5,14 @@ import { Types } from 'mongoose';
 import { MerkMobil } from './mobil_properties/MerkMobil';
 import { JenisMobil } from './mobil_properties/JenisMobil';
 import { TipeMobil } from './mobil_properties/TipeMobil';
+import { Inspeksi } from './inspeksi';
 
 @Schema({ collection: 'mobil' })
 export class Mobil {
   @Prop({
     type: Types.ObjectId,
   })
-  id_inspeksi: Types.ObjectId;
+  id_inspeksi: Inspeksi;
 
   @Prop({
     type: Types.ObjectId,
