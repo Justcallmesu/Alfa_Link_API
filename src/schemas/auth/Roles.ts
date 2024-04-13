@@ -1,7 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 
-@Schema()
+@Schema({ collection: 'roles' })
 export class Roles {
   @Prop({
     type: String,

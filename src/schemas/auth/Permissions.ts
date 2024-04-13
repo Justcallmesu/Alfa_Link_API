@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
-@Schema()
+@Schema({ collection: 'permissions' })
 export class Permissions {
   @Prop({
     type: String,
