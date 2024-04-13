@@ -1,10 +1,11 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { genSalt, compare, hash } from 'bcrypt';
-import { Types } from 'mongoose';
-import { Roles, RolesSchema } from './Roles';
+import { Types, HydratedDocument } from 'mongoose';
+import { Roles } from './Roles';
+
+export type UserDocument = HydratedDocument<User>;
 
 // Schema
-
 @Schema({ collection: 'users' })
 export class User {
   @Prop({

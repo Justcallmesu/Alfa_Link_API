@@ -1,6 +1,9 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
 
-@Schema()
+export type MerkMobilDocument = HydratedDocument<MerkMobil>;
+
+@Schema({ collection: 'merk_mobil' })
 export class MerkMobil {
   @Prop({
     type: String,

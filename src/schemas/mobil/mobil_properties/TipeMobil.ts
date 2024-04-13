@@ -1,6 +1,9 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
 
-@Schema()
+export type TipeMobilDocument = HydratedDocument<TipeMobil>;
+
+@Schema({ collection: 'tipe_mobil' })
 export class TipeMobil {
   @Prop({
     type: String,

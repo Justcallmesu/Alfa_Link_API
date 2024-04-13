@@ -1,4 +1,4 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Schema, Prop } from '@nestjs/mongoose';
 
 @Schema()
 export class Pembayaran {

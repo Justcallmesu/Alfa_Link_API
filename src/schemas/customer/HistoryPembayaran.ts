@@ -1,10 +1,12 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
+import { Types, HydratedDocument } from 'mongoose';
 
 // Schema
 import { Customer } from './Customer';
 import { Pembayaran } from './NestedSchema/Pembayaran';
 import { Penjualan } from '../Penjualan/Penjualan';
+
+export type HistoryPembayaranDocument = HydratedDocument<HistoryPembayaran>;
 
 @Schema({ collection: 'history_pembayaran' })
 export class HistoryPembayaran {
