@@ -18,6 +18,9 @@ export class AuthController {
   @Get('/me')
   async getMe() {}
 
+  @Get('/updateme')
+  async updateMe() {}
+
   @Patch('/update-password')
   async updatePassword() {}
 
