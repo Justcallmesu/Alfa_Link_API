@@ -11,7 +11,11 @@ config({ path: '.env' });
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
-  const app = await NestFactory.createApplicationContext(SeedModule);
+  const app = await NestFactory.createApplicationContext(SeedModule, {
+    logger: false,
+  });
+
+  app.useLogger(new Logger());
 
   logger.log('Seeding Started');
   await (await app.resolve(UserSeed)).seed();
