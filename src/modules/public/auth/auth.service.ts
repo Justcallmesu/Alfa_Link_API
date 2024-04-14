@@ -1,7 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 // Schema
 import { Permissions } from '@/schemas/auth/Permissions';
@@ -20,10 +20,25 @@ export class AuthService {
   ) {}
 
   async login(res: Response, body: LoginDto) {
-    const user = await this.UserModel.findOne({ username: body.username });
+    const user = await this.UserModel.findOne({
+      username: body.username,
+    }).select('+password');
 
     if (!user) {
       throw new HttpException('Username or Password is incorrect', 400);
     }
+
+    if (!(await user.comparePassword(body.password))) {
+      throw new HttpException('Username or Password is incorrect', 400);
+    }
+
+    res.json({
+      message: 'Login Successfull',
+      status: 200,
+      data: {
+        name: user.name,
+        username: user.username,
+      },
+    });
   }
 }

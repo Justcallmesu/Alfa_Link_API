@@ -25,7 +25,6 @@ export class User {
     maxlength: [50, 'Username is too long'],
     trim: true,
     unique: true,
-    select: false,
   })
   username: string;
 
@@ -33,6 +32,7 @@ export class User {
     type: String,
     required: [true, 'Password is required'],
     trim: true,
+    select: false,
   })
   password: string;
 
@@ -81,16 +81,19 @@ export class User {
     default: 'active',
   })
   user_status: string;
+
+  comparePassword: (candidatePassword: string) => Promise<boolean>;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
 // Methods
-UserSchema.methods.comparePassword = async function (
-  candidatePassword: string,
-): Promise<boolean> {
-  return await compare(candidatePassword, this.Password);
-};
+UserSchema.method(
+  'comparePassword',
+  async function (candidatePassword: string): Promise<boolean> {
+    return await compare(candidatePassword, this.password);
+  },
+);
 
 // Index
 UserSchema.index({ username: 1 }, { unique: true });
