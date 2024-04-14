@@ -24,7 +24,7 @@ export class UserSeed {
       Logger.log('User Seeding Started');
 
       await this.UserModel.deleteMany({});
-      await this.UserModel.insertMany(data, {});
+      await this.UserModel.insertMany(data);
     } catch (error) {
       log.error('User Seeding Failed');
       log.error(error.message);
