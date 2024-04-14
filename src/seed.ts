@@ -5,6 +5,8 @@ import { NestFactory } from '@nestjs/core';
 // Module
 import { SeedModule } from './database/seed.module';
 import { UserSeed } from './database/seeders/user.seed';
+import { PermissionsSeed } from './database/seeders/permissions.seed';
+import { RolesSeed } from './database/seeders/roles.seed';
 
 // Env Package
 config({ path: '.env' });
@@ -19,6 +21,8 @@ async function bootstrap() {
   app.useLogger(new Logger());
 
   logger.log('Seeding Started');
+  await (await app.resolve(PermissionsSeed)).seed();
+  await (await app.resolve(RolesSeed)).seed();
   await (await app.resolve(UserSeed)).seed();
 
   logger.log('Seeding Completed');

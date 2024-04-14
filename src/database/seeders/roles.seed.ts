@@ -4,10 +4,14 @@ import { Model } from 'mongoose';
 
 // Schema
 import { Roles } from '@/schemas/auth/Roles';
+import { Permissions } from '@/schemas/auth/Permissions';
 
 @Injectable()
 export class RolesSeed {
-  constructor(@InjectModel(Roles.name) private RolesModel: Model<Roles>) {}
+  constructor(
+    @InjectModel(Roles.name) private RolesModel: Model<Roles>,
+    @InjectModel(Permissions.name) private PermissionsModel: Model<Permissions>,
+  ) {}
 
   public async seed() {
     const log = new Logger('RolesSeed');
@@ -17,9 +21,10 @@ export class RolesSeed {
       {
         role_name: 'Super Admin',
         role_description: 'Super Admin Role, Full Access',
+        permissions_id: [await this.PermissionsModel.find({}).select('_id')],
       },
     ];
-
+    console.log(data);
     try {
       Logger.log('Roles Seeding Started');
 
