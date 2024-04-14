@@ -4,6 +4,10 @@ import { User } from '@/schemas/auth/User';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Request } from 'express';
+
+// DTO
+import { LoginDto } from './auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -13,5 +17,5 @@ export class AuthService {
     @InjectModel(Permissions.name) private PermissionsModel: Model<Permissions>,
   ) {}
 
-  async login() {}
+  async login(req: Request, body: LoginDto) {}
 }
