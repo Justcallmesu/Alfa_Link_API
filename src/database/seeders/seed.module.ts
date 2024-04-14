@@ -8,9 +8,16 @@ import { UserSeed } from './user.seed';
 import { User, UserSchema } from '@/schemas/auth/User';
 import { Roles, RolesSchema } from '@/schemas/auth/Roles';
 import { PermissionsSchema, Permissions } from '@/schemas/auth/Permissions';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+    }),
+    MongooseModule.forRoot(process.env.MONGODB_URL as string, {
+      dbName: process.env.MONGODB_DB as string,
+    }),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Roles.name, schema: RolesSchema },
