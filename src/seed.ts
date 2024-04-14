@@ -9,8 +9,9 @@ import { UserSeed } from './database/seeders/user.seed';
 // Env Package
 config({ path: '.env' });
 
+const logger = new Logger('Bootstrap');
+
 async function bootstrap() {
-  const logger = new Logger('Bootstrap');
   const app = await NestFactory.createApplicationContext(SeedModule, {
     logger: false,
   });
@@ -20,7 +21,12 @@ async function bootstrap() {
   logger.log('Seeding Started');
   await (await app.resolve(UserSeed)).seed();
 
+  logger.log('Seeding Completed');
   await app.close();
 }
+logger.warn('Seeding will delete all data in the database');
+logger.warn('Press Ctrl + C to cancel the operation');
 
-bootstrap();
+setTimeout(() => {
+  bootstrap();
+}, 5000);
