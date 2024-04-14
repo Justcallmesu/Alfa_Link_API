@@ -1,7 +1,7 @@
 import { Permissions } from '@/schemas/auth/Permissions';
 import { Roles } from '@/schemas/auth/Roles';
 import { User } from '@/schemas/auth/User';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Request } from 'express';
@@ -17,5 +17,11 @@ export class AuthService {
     @InjectModel(Permissions.name) private PermissionsModel: Model<Permissions>,
   ) {}
 
-  async login(req: Request, body: LoginDto) {}
+  async login(res: Response, body: LoginDto) {
+    const user = await this.UserModel.findOne({ username: body.username });
+
+    if (!user) {
+      throw new HttpException('Username or Password is incorrect', 400);
+    }
+  }
 }
