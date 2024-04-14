@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 // Services
-import { UserSeed } from './user.seed';
+import { UserSeed } from './seeders/user.seed';
+import { RolesSeed } from './seeders/roles.seed';
+import { PermissionsSeed } from './seeders/permissions.seed';
 
 // Schema
 import { User, UserSchema } from '@/schemas/auth/User';
@@ -25,6 +27,6 @@ import { ConfigModule } from '@nestjs/config';
     ]),
   ],
   controllers: [],
-  providers: [UserSeed],
+  providers: [UserSeed, RolesSeed, PermissionsSeed],
 })
 export class SeedModule {}
