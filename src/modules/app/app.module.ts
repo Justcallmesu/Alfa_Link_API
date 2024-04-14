@@ -3,6 +3,9 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 
+// Module
+import { PublicModule } from '../public/public.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -12,6 +15,7 @@ import { ConfigModule } from '@nestjs/config';
       dbName: process.env.MONGODB_DB as string,
       appName: 'alfa-link-api',
     }),
+    PublicModule,
   ],
   controllers: [],
   providers: [],
