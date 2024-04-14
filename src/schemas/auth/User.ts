@@ -2,6 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { genSalt, compare, hash } from 'bcrypt';
 import { Types, HydratedDocument } from 'mongoose';
 import { Roles } from './Roles';
+import { isArray } from 'class-validator';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -31,8 +32,6 @@ export class User {
   @Prop({
     type: String,
     required: [true, 'Password is required'],
-    minlength: [10, 'Passw3ord is too short'],
-    maxlength: [20, 'Passw3ord is too long'],
     trim: true,
   })
   password: string;
@@ -104,6 +103,19 @@ UserSchema.pre('save', async function (next) {
     this.password = await hash(this.password, salt);
   }
   next();
+});
+
+UserSchema.pre('insertMany', async function (next, docs: Array<User>) {
+  if (isArray(docs) && docs.length) {
+    const hashedDocs: Promise<User>[] = docs.map(async (doc) => {
+      const salt = await genSalt(11);
+      doc.password = await hash(doc.password, salt);
+      return doc;
+    });
+
+    docs = await Promise.all(hashedDocs);
+  }
+  next;
 });
 
 UserSchema.pre('updateOne', async function (next) {
