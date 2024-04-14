@@ -10,7 +10,7 @@ export class UserSeed {
   constructor(@InjectModel(User.name) private UserModel: Model<User>) {}
 
   public async seed() {
-    const log = new Logger(UserSeed.name);
+    const log = new Logger('UserSeed');
 
     // User Data
     const data = [
@@ -22,9 +22,13 @@ export class UserSeed {
     ];
     try {
       Logger.log('User Seeding Started');
+
+      await this.UserModel.deleteMany({});
       await this.UserModel.insertMany(data, {});
     } catch (error) {
       log.error('User Seeding Failed');
+      log.error(error.message);
     }
+    Logger.log('User Seeding Completed');
   }
 }
