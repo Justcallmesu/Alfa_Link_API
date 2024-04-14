@@ -16,27 +16,24 @@ export class UserSeed {
   public async seed() {
     const log = new Logger('UserSeed');
 
+    const role_id = await this.RolesModel.findOne({
+      role_name: 'Super Admin',
+    }).select('_id');
     // User Data
     const data = [
       {
         name: 'Suwanto Ardi Winata',
         username: 'admin',
         password: 'superadmin',
+        role_id,
       },
     ];
-
-    const role_id = await this.RolesModel.findOne({
-      role_name: 'Super Admin',
-    }).select('_id');
 
     try {
       Logger.log('User Seeding Started');
 
       await this.UserModel.deleteMany({});
-      await this.UserModel.insertMany({
-        ...data,
-        role_id: role_id,
-      });
+      await this.UserModel.insertMany(data);
     } catch (error) {
       log.error('User Seeding Failed');
       log.error(error.message);
