@@ -41,4 +41,8 @@ export class AuthService {
       },
     });
   }
+
+  async register(req: Request, res: Response, body: LoginDto) {
+    console.log(req);
+  }
 }
