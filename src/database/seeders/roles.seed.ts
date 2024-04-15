@@ -22,7 +22,9 @@ export class RolesSeed {
         role_name: 'Super Admin',
         role_description: 'Super Admin Role, Full Access',
         permissions_id: [
-          ...(await this.PermissionsModel.find({}).select('_id')),
+          ...(await this.PermissionsModel.find({}).select('_id')).map(
+            (v) => v._id,
+          ),
         ],
       },
     ];
