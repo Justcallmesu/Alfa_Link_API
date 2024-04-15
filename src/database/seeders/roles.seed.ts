@@ -21,10 +21,12 @@ export class RolesSeed {
       {
         role_name: 'Super Admin',
         role_description: 'Super Admin Role, Full Access',
-        permissions_id: [await this.PermissionsModel.find({}).select('_id')],
+        permissions_id: [
+          ...(await this.PermissionsModel.find({}).select('_id')),
+        ],
       },
     ];
-    console.log(data);
+
     try {
       Logger.log('Roles Seeding Started');
 
