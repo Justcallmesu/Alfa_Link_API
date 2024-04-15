@@ -38,6 +38,10 @@ export class createUserDto {
   @MinLength(10)
   @MaxLength(20)
   password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  role_id: string;
 }
 
 export class updateUserDto {

@@ -11,6 +11,12 @@ import { User } from '@/schemas/auth/User';
 // DTO
 import { LoginDto } from './auth.dto';
 
+// Enum
+import { GenerateTokenType } from '@/modules/common/enum/GenerateTokenType.enum';
+
+// Functions
+import GenerateToken from '@/modules/common/function/GenerateToken.function';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -32,6 +38,28 @@ export class AuthService {
       throw new HttpException('Username or Password is incorrect', 400);
     }
 
+    // Cookies Send
+    res.cookie(
+      'refresh_token_jwt',
+      GenerateToken(GenerateTokenType.REFRESH_TOKEN, { id: user._id }),
+      {
+        httpOnly: true,
+        signed: true,
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      },
+    );
+
+    res.cookie(
+      'access_token_jwt',
+      GenerateToken(GenerateTokenType.ACCESS_TOKEN, { id: user._id }),
+      {
+        httpOnly: true,
+        signed: true,
+        expires: new Date(Date.now() + 1000 * 60 * 15),
+      },
+    );
+
+    // Json Send and End Response
     res.json({
       message: 'Login Successfull',
       status: 200,
