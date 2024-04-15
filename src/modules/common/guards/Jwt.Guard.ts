@@ -38,7 +38,7 @@ export class JwtGuard implements CanActivate {
         process.env.JWT_REFRESH_SECRET as string,
       )) as JwtGuardDto;
 
-      const userData: Document<User> | null = await this.UserModel.findById(
+      const userData: User | null = await this.UserModel.findById(
         data.id as string,
       )
         .select(
@@ -66,6 +66,8 @@ export class JwtGuard implements CanActivate {
           'Session Expired! Please Log In!',
         );
       }
+
+      console.log(userData.role_id.permissions_id);
 
       request.user = userData;
 

@@ -18,6 +18,13 @@ import { LoginDto, createUserDto } from './auth.dto';
 
 // Guards
 import { JwtGuard } from '@/modules/common/guards/Jwt.Guard';
+import { PermissionsGuard } from '@/modules/common/guards/Permissions.Guard';
+
+// Reflector
+import { RequiredPermissions } from '@/modules/common/decorators/Permissions.decorator';
+
+// Enum
+import { PermissionsEnum } from '@/modules/common/enum/Permissions.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -29,6 +36,8 @@ export class AuthController {
   }
 
   @Post('/register')
+  @RequiredPermissions(PermissionsEnum.CREATE_USER)
+  @UseGuards(PermissionsGuard)
   @UseGuards(JwtGuard)
   async Register(
     @Req() req: Request,
