@@ -41,15 +41,22 @@ export class JwtGuard implements CanActivate {
       const userData: Document<User> | null = await this.UserModel.findById(
         data.id as string,
       )
-        .select('+role_id')
+        .select(
+          '+role_id -date_created -date_updated -date_deleted -__v -password -refresh_token -user_status',
+        )
         .populate({
           path: 'role_id' as string,
           model: this.RolesModel,
           select: ['role_name', 'permissions_id'],
+          foreignField: '_id',
+          strictPopulate: false,
+
+          // Populate Permissions
           populate: {
+            strictPopulate: false,
+            foreignField: '_id',
             path: 'permissions_id',
             model: this.PermissionsModel,
-            select: ['_id', 'permission_name'],
           },
         });
 
