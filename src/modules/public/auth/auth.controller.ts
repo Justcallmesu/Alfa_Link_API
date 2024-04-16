@@ -14,7 +14,12 @@ import { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 
 // DTO
-import { LoginDto, createUserDto } from './auth.dto';
+import {
+  LoginDto,
+  createUserDto,
+  updatePasswordDto,
+  updateUserDto,
+} from './auth.dto';
 
 // Guards
 import { JwtGuard } from '@/modules/common/guards/Jwt.Guard';
@@ -54,14 +59,20 @@ export class AuthController {
   }
 
   @Get('/me')
-  @RequiredPermissions(PermissionsEnum.READ_USER)
   @UseGuards(JwtGuard)
   async getMe(@Res() res: Response, @Req() req: Request) {
     return await this.AuthService.getMe(res, req);
   }
 
   @Get('/updateme')
-  async updateMe() {}
+  @UseGuards(JwtGuard)
+  async updateMe(
+    @Res() res: Response,
+    @Req() req: Request,
+    @Body() body: updateUserDto,
+  ) {
+    await this.AuthService.updateMe(res, req, body);
+  }
 
   @Patch('/update-password')
   async updatePassword() {}

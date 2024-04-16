@@ -6,10 +6,15 @@ import { Request, Response } from 'express';
 // Schema
 import { Permissions } from '@/schemas/auth/Permissions';
 import { Roles } from '@/schemas/auth/Roles';
-import { User } from '@/schemas/auth/User';
+import { User, UserDocument } from '@/schemas/auth/User';
 
 // DTO
-import { LoginDto, createUserDto } from './auth.dto';
+import {
+  LoginDto,
+  createUserDto,
+  updatePasswordDto,
+  updateUserDto,
+} from './auth.dto';
 
 // Enum
 import { GenerateTokenType } from '@/modules/common/enum/GenerateTokenType.enum';
@@ -110,8 +115,28 @@ export class AuthService {
       .json({
         message: 'Success',
         status: 200,
-        data: req.user,
+        data: req.user as User,
       })
       .status(200);
   }
+
+  async updateMe(res: Response, req: Request, body: updateUserDto) {
+    const { _id } = req.user as UserDocument;
+
+    const user = await this.UserModel.findById(_id);
+
+    if (!user) {
+      throw new HttpException('User not found', 404);
+    }
+
+    const updatedUser = await user.updateOne(body);
+
+    res.json({
+      message: 'User Updated',
+      status: 200,
+      data: updatedUser,
+    });
+  }
+
+  async updatePassword(res: Response, req: Request, body: updatePasswordDto) {}
 }
