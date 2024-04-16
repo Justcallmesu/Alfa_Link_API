@@ -91,4 +91,17 @@ export class AuthService {
       },
     });
   }
+
+  async logout(res: Response) {
+    res.cookie('refresh_token_jwt', '', {
+      signed: true,
+      expires: new Date(Date.now()),
+    });
+    res.cookie('access_token_jwt', '', {
+      signed: true,
+      expires: new Date(Date.now()),
+    });
+
+    res.status(200).end();
+  }
 }

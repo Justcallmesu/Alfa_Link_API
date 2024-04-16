@@ -48,7 +48,9 @@ export class AuthController {
   }
 
   @Get('/logout')
-  async logout() {}
+  async logout(@Res() res: Response) {
+    return await this.AuthService.logout(res);
+  }
 
   @Get('/me')
   async getMe() {}
