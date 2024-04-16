@@ -38,7 +38,7 @@ export class JwtGuard implements CanActivate {
         process.env.JWT_REFRESH_SECRET as string,
       )) as JwtGuardDto;
 
-      const userData: User | null = await this.UserModel.findById(
+      const userData: User | null = (await this.UserModel.findById(
         data.id as string,
       )
         .select(
@@ -48,17 +48,14 @@ export class JwtGuard implements CanActivate {
           path: 'role_id' as string,
           model: this.RolesModel,
           select: ['role_name', 'permissions_id'],
-          foreignField: '_id',
-          strictPopulate: false,
 
           // Populate Permissions
           populate: {
-            strictPopulate: false,
-            foreignField: '_id',
-            path: 'permissions_id',
+            path: 'permissions_id' as string,
             model: this.PermissionsModel,
           },
-        });
+        })
+        .lean()) as User;
 
       if (!userData) {
         throw new UnauthorizedException(
@@ -67,13 +64,10 @@ export class JwtGuard implements CanActivate {
         );
       }
 
-      console.log(userData.role_id.permissions_id);
-
       request.user = userData;
 
       return true;
     } catch (error) {
-      console.log(error);
       throw new UnauthorizedException(
         'Session Expired',
         'Session Expired! Refresh Please Log In!',

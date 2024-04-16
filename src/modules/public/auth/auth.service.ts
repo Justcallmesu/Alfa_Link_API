@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { ConflictException, HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Request, Response } from 'express';
@@ -9,7 +9,7 @@ import { Roles } from '@/schemas/auth/Roles';
 import { User } from '@/schemas/auth/User';
 
 // DTO
-import { LoginDto } from './auth.dto';
+import { LoginDto, createUserDto } from './auth.dto';
 
 // Enum
 import { GenerateTokenType } from '@/modules/common/enum/GenerateTokenType.enum';
@@ -70,8 +70,25 @@ export class AuthService {
     });
   }
 
-  async register(req: Request, res: Response, body: LoginDto) {
-    res.json(req.user);
-    res.end();
+  async register(req: Request, res: Response, body: createUserDto) {
+    const isExist = await this.UserModel.findOne({
+      $or: [{ username: body.username }, { name: body.name }],
+    });
+
+    if (isExist) {
+      throw new ConflictException(
+        'There is Username or Name that is already exist',
+      );
+    }
+
+    const user = await this.UserModel.create(body);
+    res.json({
+      message: 'User Created',
+      status: 200,
+      data: {
+        name: user.name,
+        username: user.username,
+      },
+    });
   }
 }
