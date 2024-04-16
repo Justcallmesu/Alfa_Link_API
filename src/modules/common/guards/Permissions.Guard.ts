@@ -35,12 +35,24 @@ export class PermissionsGuard implements CanActivate {
 
     const {
       role_id: { permissions_id },
-    }: User = request.user as User;
+    } = request.user as User;
 
     const ReflectorPermissions = this.reflector.get(
       RequiredPermissions,
       context.getHandler(),
     );
+
+    const isPermissioned = permissions_id.some((value) => {
+      const data: Permissions = value as unknown as Permissions;
+      return ReflectorPermissions.includes(data.permission_name as string);
+    });
+
+    if (!isPermissioned) {
+      throw new UnauthorizedException(
+        'Unauthorized',
+        'Unauthorized! You do not have the required permissions!',
+      );
+    }
 
     return true;
   }
