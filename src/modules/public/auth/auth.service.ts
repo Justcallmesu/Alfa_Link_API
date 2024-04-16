@@ -104,4 +104,14 @@ export class AuthService {
 
     res.status(200).end();
   }
+
+  async getMe(res: Response, req: Request) {
+    res
+      .json({
+        message: 'Success',
+        status: 200,
+        data: req.user,
+      })
+      .status(200);
+  }
 }

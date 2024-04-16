@@ -48,12 +48,17 @@ export class AuthController {
   }
 
   @Get('/logout')
+  @UseGuards(JwtGuard)
   async logout(@Res() res: Response) {
     return await this.AuthService.logout(res);
   }
 
   @Get('/me')
-  async getMe() {}
+  @RequiredPermissions(PermissionsEnum.READ_USER)
+  @UseGuards(JwtGuard)
+  async getMe(@Res() res: Response, @Req() req: Request) {
+    return await this.AuthService.getMe(res, req);
+  }
 
   @Get('/updateme')
   async updateMe() {}
