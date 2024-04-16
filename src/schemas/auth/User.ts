@@ -48,7 +48,6 @@ export class User {
     type: Types.ObjectId,
     trim: true,
     select: false,
-    unique: true,
     ref: 'roles',
   })
   role_id: Roles;
