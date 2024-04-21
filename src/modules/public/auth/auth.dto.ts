@@ -45,15 +45,11 @@ export class createUserDto {
 }
 
 export class updateUserDto {
-  @IsString()
-  @MinLength(3)
-  @MaxLength(100)
-  name: string;
+  name?: string;
 
-  @IsString()
-  @MinLength(3)
-  @MaxLength(50)
-  username: string;
+  username?: string;
+
+  role_id?: string;
 }
 
 export class updatePasswordDto {
@@ -68,4 +64,10 @@ export class updatePasswordDto {
   @MinLength(10)
   @MaxLength(20)
   password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(10)
+  @MaxLength(20)
+  oldPassword: string;
 }

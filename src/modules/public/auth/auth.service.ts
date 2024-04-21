@@ -1,21 +1,43 @@
-import { ConflictException, HttpException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Request, Response } from 'express';
+import { verify } from 'jsonwebtoken';
 
 // Schema
 import { Permissions } from '@/schemas/auth/Permissions';
 import { Roles } from '@/schemas/auth/Roles';
-import { User } from '@/schemas/auth/User';
+import { User, UserDocument } from '@/schemas/auth/User';
 
 // DTO
-import { LoginDto, createUserDto } from './auth.dto';
+import {
+  LoginDto,
+  createUserDto,
+  updatePasswordDto,
+  updateUserDto,
+} from './auth.dto';
 
 // Enum
 import { GenerateTokenType } from '@/modules/common/enum/GenerateTokenType.enum';
 
 // Functions
 import GenerateToken from '@/modules/common/function/GenerateToken.function';
+import ResetToken from '@/modules/common/function/ResetToken.function';
+import { CookiesJWT } from '@/modules/common/interface/CookiesJWT.interface';
+import { JwtGuardDto } from '@/modules/common/dto/JwtGuard.dto';
+import {
+  AccessCookiesConfig,
+  RefreshCookiesConfig,
+} from '@/modules/common/config/CookiesConfig';
+
+const logger = new Logger('AuthService');
 
 @Injectable()
 export class AuthService {
@@ -38,26 +60,22 @@ export class AuthService {
       throw new HttpException('Username or Password is incorrect', 400);
     }
 
+    const refreshToken = GenerateToken(GenerateTokenType.REFRESH_TOKEN, {
+      id: user._id,
+    });
+
     // Cookies Send
-    res.cookie(
-      'refresh_token_jwt',
-      GenerateToken(GenerateTokenType.REFRESH_TOKEN, { id: user._id }),
-      {
-        httpOnly: true,
-        signed: true,
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-      },
-    );
+    res.cookie('refresh_token_jwt', refreshToken, RefreshCookiesConfig());
 
     res.cookie(
       'access_token_jwt',
       GenerateToken(GenerateTokenType.ACCESS_TOKEN, { id: user._id }),
-      {
-        httpOnly: true,
-        signed: true,
-        expires: new Date(Date.now() + 1000 * 60 * 15),
-      },
+      AccessCookiesConfig(),
     );
+
+    user.refresh_token = refreshToken as string;
+
+    await user.save();
 
     // Json Send and End Response
     res.json({
@@ -92,15 +110,12 @@ export class AuthService {
     });
   }
 
-  async logout(res: Response) {
-    res.cookie('refresh_token_jwt', '', {
-      signed: true,
-      expires: new Date(Date.now()),
-    });
-    res.cookie('access_token_jwt', '', {
-      signed: true,
-      expires: new Date(Date.now()),
-    });
+  async logout(req: Request, res: Response) {
+    const { _id } = req.user as UserDocument;
+
+    ResetToken(res);
+
+    await this.UserModel.findByIdAndUpdate(_id, { refresh_token: '' });
 
     res.status(200).end();
   }
@@ -110,8 +125,118 @@ export class AuthService {
       .json({
         message: 'Success',
         status: 200,
-        data: req.user,
+        data: req.user as User,
       })
       .status(200);
+  }
+
+  async updateMe(res: Response, req: Request, body: updateUserDto) {
+    const { _id } = req.user as UserDocument;
+
+    const user = await this.UserModel.findById(_id);
+
+    if (!user) {
+      throw new HttpException('User not found', 404);
+    }
+
+    await user.updateOne(body);
+
+    res.json({
+      message: 'User Updated',
+      status: 200,
+    });
+  }
+
+  async updatePassword(res: Response, req: Request, body: updatePasswordDto) {
+    const { _id } = req.user as UserDocument;
+
+    const isExist: UserDocument | null =
+      await this.UserModel.findById(_id).select('+password');
+
+    if (!isExist) {
+      throw new UnauthorizedException(
+        'Session Expired',
+        'Session Expired! Please Log In!',
+      );
+    }
+
+    if (await !isExist.comparePassword(body.oldPassword)) {
+      throw new HttpException('Old Password is incorrect', 400);
+    }
+
+    if (body.password !== body.confirmPassword) {
+      throw new HttpException('Password doesnt match', 400);
+    }
+
+    isExist.password = body.password;
+
+    try {
+      await isExist.save();
+
+      ResetToken(res);
+      await this.UserModel.findByIdAndUpdate(_id, { refresh_token: '' });
+
+      return res.json({
+        message: 'Password Updated',
+        status: 201,
+      });
+    } catch (error) {
+      logger.error(error);
+
+      throw new InternalServerErrorException('Something is Wrong');
+    }
+  }
+
+  async refreshToken(req: Request, res: Response) {
+    const { access_token_jwt, refresh_token_jwt } =
+      req.signedCookies as CookiesJWT;
+
+    if (!refresh_token_jwt) {
+      throw new UnauthorizedException(
+        'Session Expired',
+        'Session Expired! Please Log In!',
+      );
+    }
+
+    const { id } = verify(
+      refresh_token_jwt,
+      process.env.JWT_REFRESH_SECRET as string,
+    ) as JwtGuardDto;
+
+    const foundUser = await this.UserModel.findById(id);
+
+    if (!foundUser) {
+      throw new UnauthorizedException(
+        'Session Expired',
+        'Session Expired! Please Log In!',
+      );
+    }
+
+    if (!(await foundUser.compareRefreshToken(refresh_token_jwt))) {
+      throw new UnauthorizedException(
+        'Session Expired',
+        'Session Expired! Please Log In!',
+      );
+    }
+
+    foundUser.refresh_token = GenerateToken(GenerateTokenType.REFRESH_TOKEN, {
+      id: foundUser._id,
+    }) as string;
+
+    await foundUser.save();
+
+    res.cookie(
+      'refresh_token_jwt',
+      foundUser.refresh_token,
+      RefreshCookiesConfig(),
+    );
+
+    res.cookie(
+      'access_token_jwt',
+      GenerateToken(GenerateTokenType.ACCESS_TOKEN, { id: foundUser._id }),
+      AccessCookiesConfig(),
+    );
+
+    res.status(201).end();
   }
 }
