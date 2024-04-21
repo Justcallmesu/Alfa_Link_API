@@ -7,6 +7,7 @@ import {
   Body,
   Res,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
 
@@ -30,6 +31,7 @@ import { RequiredPermissions } from '@/modules/common/decorators/Permissions.dec
 
 // Enum
 import { PermissionsEnum } from '@/modules/common/enum/Permissions.enum';
+import { AccessToken } from '@/modules/common/guards/AccessToken.Guard';
 
 @Controller('auth')
 export class AuthController {
@@ -54,8 +56,8 @@ export class AuthController {
 
   @Get('/logout')
   @UseGuards(JwtGuard)
-  async logout(@Res() res: Response) {
-    return await this.AuthService.logout(res);
+  async logout(@Req() req: Request, @Res() res: Response) {
+    return await this.AuthService.logout(req, res);
   }
 
   @Get('/me')
@@ -64,7 +66,7 @@ export class AuthController {
     return await this.AuthService.getMe(res, req);
   }
 
-  @Get('/updateme')
+  @Put('/updateme')
   @UseGuards(JwtGuard)
   async updateMe(
     @Res() res: Response,
@@ -75,8 +77,17 @@ export class AuthController {
   }
 
   @Patch('/update-password')
-  async updatePassword() {}
+  @UseGuards(JwtGuard)
+  async updatePassword(
+    @Res() res: Response,
+    @Req() req: Request,
+    @Body() body: updatePasswordDto,
+  ) {
+    await this.AuthService.updatePassword(res, req, body);
+  }
 
   @Post('/refresh-token')
-  async refreshToken() {}
+  async refreshToken(@Req() req: Request, @Res() res: Response) {
+    await this.AuthService.refreshToken(req, res);
+  }
 }

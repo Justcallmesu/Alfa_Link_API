@@ -45,17 +45,10 @@ export class createUserDto {
 }
 
 export class updateUserDto {
-  @IsString()
-  @MinLength(3)
-  @MaxLength(100)
   name?: string;
 
-  @IsString()
-  @MinLength(3)
-  @MaxLength(50)
   username?: string;
 
-  @IsString()
   role_id?: string;
 }
 

@@ -7,14 +7,14 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Request } from 'express';
 import { verify } from 'jsonwebtoken';
-import { Document, Model } from 'mongoose';
+import { Model } from 'mongoose';
 
 // DTO
 import { JwtGuardDto } from '../dto/JwtGuard.dto';
 
 // Schema
-import { User } from '@/schemas/auth/User';
-import { Roles, RolesSchema } from '@/schemas/auth/Roles';
+import { User, UserDocument } from '@/schemas/auth/User';
+import { Roles } from '@/schemas/auth/Roles';
 import { Permissions } from '@/schemas/auth/Permissions';
 
 @Injectable()
@@ -42,7 +42,7 @@ export class JwtGuard implements CanActivate {
         data.id as string,
       )
         .select(
-          '+role_id -date_created -date_updated -date_deleted -__v -password -refresh_token -user_status',
+          '+role_id -date_created -date_updated -date_deleted +refresh_token -__v -password  -user_status',
         )
         .populate({
           path: 'role_id' as string,
@@ -54,10 +54,19 @@ export class JwtGuard implements CanActivate {
             path: 'permissions_id' as string,
             model: this.PermissionsModel,
           },
-        })
-        .lean()) as User;
-
+        })) as User;
       if (!userData) {
+        throw new UnauthorizedException(
+          'Session Expired',
+          'Session Expired! Please Log In!',
+        );
+      }
+
+      if (
+        !(await userData.compareRefreshToken(
+          request.signedCookies.refresh_token_jwt,
+        ))
+      ) {
         throw new UnauthorizedException(
           'Session Expired',
           'Session Expired! Please Log In!',

@@ -82,6 +82,8 @@ export class User {
   user_status: string;
 
   comparePassword: (candidatePassword: string) => Promise<boolean>;
+
+  compareRefreshToken: (candidateRefreshToken: string) => Promise<boolean>;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
@@ -91,6 +93,13 @@ UserSchema.method(
   'comparePassword',
   async function (candidatePassword: string): Promise<boolean> {
     return await compare(candidatePassword, this.password);
+  },
+);
+
+UserSchema.method(
+  'compareRefreshToken',
+  async function (candidateRefreshToken: string): Promise<boolean> {
+    return await compare(candidateRefreshToken, this.refresh_token);
   },
 );
 
@@ -104,6 +113,12 @@ UserSchema.pre('save', async function (next) {
     const salt = await genSalt(11);
     this.password = await hash(this.password, salt);
   }
+
+  if (this.isModified('refresh_token')) {
+    const salt = await genSalt(11);
+    this.refresh_token = await hash(this.refresh_token, salt);
+  }
+
   next();
 });
 
@@ -126,6 +141,11 @@ UserSchema.pre('updateOne', async function (next) {
   if (this.get('password')) {
     const salt = await genSalt(11);
     this.set('password', await hash(this.get('password'), salt));
+  }
+
+  if (this.get('refresh_token')) {
+    const salt = await genSalt(11);
+    this.set('refresh_token', await hash(this.get('refresh_token'), salt));
   }
 
   next();
