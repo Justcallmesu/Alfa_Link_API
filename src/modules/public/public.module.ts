@@ -1,10 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 
 // Modules
 import { AuthModule } from './auth/auth.module';
+import { CustomerModule } from './customer/customer.module';
 
+@Global()
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, CustomerModule],
   controllers: [],
   providers: [],
   exports: [],
