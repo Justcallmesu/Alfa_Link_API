@@ -12,16 +12,17 @@ import { AuthController } from './auth.controller';
 // Services
 import { AuthService } from './auth.service';
 
+// Database Model
+const DatabaseModelConnection = MongooseModule.forFeature([
+  { name: User.name, schema: UserSchema },
+  { name: Roles.name, schema: RolesSchema },
+  { name: Permissions.name, schema: PermissionsSchema },
+]);
+
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
-      { name: Roles.name, schema: RolesSchema },
-      { name: Permissions.name, schema: PermissionsSchema },
-    ]),
-  ],
+  imports: [DatabaseModelConnection],
   controllers: [AuthController],
   providers: [AuthService],
-  exports: [],
+  exports: [DatabaseModelConnection],
 })
 export class AuthModule {}
