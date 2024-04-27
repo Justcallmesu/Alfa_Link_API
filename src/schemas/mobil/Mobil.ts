@@ -55,7 +55,7 @@ export class Mobil {
 
   @Prop({
     type: String,
-    required: [true, 'Warna is required'],
+    required: [true, 'No Polisi is required'],
     trim: true,
     minlength: [5, 'Warna must be at least 4 characters'],
     maxlength: [9, 'Warna must be at most 9 characters'],
@@ -72,8 +72,8 @@ export class Mobil {
     type: String,
     required: [true, 'Status pajak is required'],
     enum: {
-      values: ['hidup', 'mati', 'terblokir'],
-      message: 'Status pajak must be either hidup, mati, or terblokir',
+      values: ['Hidup', 'Mati', 'Terblokir'],
+      message: 'Status pajak must be either Hidup, Mati, or Terblokir',
     },
   })
   status_pajak: string;
