@@ -10,12 +10,11 @@ import { MobilController } from './mobil.controller';
 // Service
 import { MobilService } from './mobil.service';
 import { AuthModule } from '../auth/auth.module';
+import { Mobil, MobilSchema } from '@/schemas/mobil/Mobil';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Customer.name, schema: CustomerSchema },
-    ]),
+    MongooseModule.forFeature([{ name: Mobil.name, schema: MobilSchema }]),
     AuthModule,
   ],
   controllers: [MobilController],

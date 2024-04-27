@@ -12,7 +12,7 @@ export class JenisMobil {
     minlength: [3, 'Jenis mobil must be at least 3 characters'],
     maxlength: [50, 'Jenis mobil must be at most 50 characters'],
   })
-  jenis_mobil: string;
+  name: string;
 }
 
 export const JenisMobilSchema = SchemaFactory.createForClass(JenisMobil);

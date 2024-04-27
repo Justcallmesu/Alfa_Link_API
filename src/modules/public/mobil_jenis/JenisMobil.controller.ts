@@ -17,10 +17,10 @@ import { JwtGuard } from '@/modules/common/guards/Jwt.Guard';
 import { PermissionsGuard } from '@/modules/common/guards/Permissions.Guard';
 
 // DTO
-import { CreateMobilDto, UpdateMobilDto } from './mobil.dto';
+import { CreateJenisMobilDto, UpdateJenisMobilDto } from './JenisMobil.dto';
 
 // Services
-import { MobilService } from './mobil.service';
+import { JenisMobilService } from './JenisMobil.service';
 
 // Decorators
 import { RequiredPermissions } from '@/modules/common/decorators/Permissions.decorator';
@@ -29,16 +29,16 @@ import { RequiredPermissions } from '@/modules/common/decorators/Permissions.dec
 import { PermissionsEnum } from '@/modules/common/enum/Permissions.enum';
 import { ObjectIdParams } from '@/modules/common/decorators/ObjectIdParams.decorator';
 
-@Controller('mobil')
+@Controller('jenismobil')
 @UseGuards(JwtGuard)
-export class MobilController {
-  constructor(private readonly mobilService: MobilService) {}
+export class JenisMobilController {
+  constructor(private readonly jenisMobilService: JenisMobilService) {}
 
   @Get('/')
   //   @UseGuards(PermissionsGuard)
   //   @RequiredPermissions(PermissionsEnum.)
   async findAll(@Req() req: Request, @Res() res: Response) {
-    return await this.mobilService.getAll(res);
+    return await this.jenisMobilService.getAll(res);
   }
 
   @Get('/:id')
@@ -47,16 +47,16 @@ export class MobilController {
     @ObjectIdParams() id: string,
     @Res() res: Response,
   ) {
-    await this.mobilService.getOne(res, id);
+    await this.jenisMobilService.getOne(res, id);
   }
 
   @Post()
-  async createCustomer(
+  async createJenisMobil(
     @Req() req: Request,
     @Res() res: Response,
-    @Body() body: CreateMobilDto,
+    @Body() body: CreateJenisMobilDto,
   ) {
-    await this.mobilService.createMobil(res, body);
+    await this.jenisMobilService.createMobil(res, body);
   }
 
   @Put('/:id')
@@ -64,9 +64,9 @@ export class MobilController {
     @Req() req: Request,
     @Res() res: Response,
     @ObjectIdParams() id: string,
-    @Body() body: UpdateMobilDto,
+    @Body() body: UpdateJenisMobilDto,
   ) {
-    await this.mobilService.updateMobil(res, id, body);
+    await this.jenisMobilService.updateMobil(res, id, body);
   }
 
   @Delete('/:id')
@@ -75,6 +75,6 @@ export class MobilController {
     @ObjectIdParams() id: string,
     @Res() res: Response,
   ) {
-    await this.mobilService.deleteMobil(res, id);
+    await this.jenisMobilService.deleteMobil(res, id);
   }
 }
