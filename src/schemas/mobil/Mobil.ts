@@ -13,8 +13,18 @@ export type MobilDocument = HydratedDocument<Mobil>;
 export class Mobil {
   @Prop({
     type: Types.ObjectId,
+    ref: 'inspeksi',
   })
-  id_inspeksi: Inspeksi;
+  inspeksi: Inspeksi;
+
+  @Prop({
+    type: String,
+    required: [true, 'Nama Mobil is required'],
+    trim: true,
+    minlength: [3, 'Nama Mobil must be at least 3 characters'],
+    maxlength: [50, 'Nama Mobil must be at most 50 characters'],
+  })
+  nama: string;
 
   @Prop({
     type: Types.ObjectId,
@@ -38,17 +48,17 @@ export class Mobil {
   tipe: TipeMobil;
 
   @Prop({
-    type: Date,
+    type: Number,
     required: [true, 'Tahun rakit is required'],
   })
-  tahun_rakit: Date;
+  tahun_rakit: number;
 
   @Prop({
     type: String,
     required: [true, 'Transmisi is required'],
     enum: {
-      values: ['manual', 'matic'],
-      message: 'Transmisi must be either manual or matic',
+      values: ['AT', 'MT'],
+      message: 'Transmisi must be either AT or MT',
     },
   })
   transmisi: string;

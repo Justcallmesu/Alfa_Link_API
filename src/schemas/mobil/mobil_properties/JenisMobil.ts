@@ -18,4 +18,4 @@ export class JenisMobil {
 export const JenisMobilSchema = SchemaFactory.createForClass(JenisMobil);
 
 //  Indexing
-JenisMobilSchema.index({ jenis_mobil: 1 }, { unique: true });
+JenisMobilSchema.index({ name: 1 }, { unique: true });

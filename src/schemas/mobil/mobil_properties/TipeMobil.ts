@@ -18,4 +18,4 @@ export class TipeMobil {
 export const TipeMobilSchema = SchemaFactory.createForClass(TipeMobil);
 
 //  Indexing
-TipeMobilSchema.index({ tipe: 1 }, { unique: true });
+TipeMobilSchema.index({ name: 1 }, { unique: true });

@@ -27,6 +27,10 @@ import {
   ],
   controllers: [MerkMobilController],
   providers: [MerkMobilService],
-  exports: [],
+  exports: [
+    MongooseModule.forFeature([
+      { name: MerkMobil.name, schema: MerkMobilSchema },
+    ]),
+  ],
 })
 export class MerkMobilModule {}

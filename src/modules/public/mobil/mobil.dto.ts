@@ -1,6 +1,8 @@
+import { CheckIsValidObjectId } from '@/modules/common/decorators/Class-Custom-Validator/IsValidObjectId';
+import { JenisMobil } from '@/schemas/mobil/mobil_properties/JenisMobil';
+import { MerkMobil } from '@/schemas/mobil/mobil_properties/MerkMobil';
+import { TipeMobil } from '@/schemas/mobil/mobil_properties/TipeMobil';
 import {
-  IsDate,
-  IsEmail,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -15,36 +17,41 @@ export enum StatusPajakMobil {
   TERBLOKIR = 'Terblokir',
 }
 
+export enum TransmisiMobil {
+  AT = 'AT',
+  MT = 'MT',
+}
+
 export class CreateMobilDto {
   @IsString()
   @IsNotEmpty()
-  id_inspeksi: string;
+  nama: string;
+
+  @IsNotEmpty()
+  @CheckIsValidObjectId('merk')
+  merk: MerkMobil;
+
+  @IsNotEmpty()
+  @CheckIsValidObjectId('jenis')
+  jenis: JenisMobil;
+
+  @IsNotEmpty()
+  @CheckIsValidObjectId('tipe')
+  tipe: TipeMobil;
+
+  @IsNumber()
+  @IsNotEmpty()
+  tahun_rakit: number;
 
   @IsString()
   @IsNotEmpty()
-  merk: string;
-
-  @IsString()
-  @IsNotEmpty()
-  jenis: string;
-
-  @IsString()
-  @IsNotEmpty()
-  tipe: string;
-
-  @IsDate()
-  @IsNotEmpty()
-  tahun_rakit: Date;
-
-  @IsString()
-  @IsNotEmpty()
-  transmisi: string;
+  transmisi: TransmisiMobil;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
   @MaxLength(9)
-  plat_pol: string;
+  no_polisi: string;
 
   @IsNumber()
   @IsNotEmpty()
@@ -59,4 +66,46 @@ export class CreateMobilDto {
   total_pajak: number;
 }
 
-export interface UpdateMobilDto extends CreateMobilDto {}
+export class UpdateMobilDto extends CreateMobilDto {
+  @IsString()
+  @IsOptional()
+  nama: string;
+
+  @IsOptional()
+  @CheckIsValidObjectId('merk')
+  merk: MerkMobil;
+
+  @IsOptional()
+  @CheckIsValidObjectId('jenis')
+  jenis: JenisMobil;
+
+  @IsOptional()
+  @CheckIsValidObjectId('tipe')
+  tipe: TipeMobil;
+
+  @IsNumber()
+  @IsOptional()
+  tahun_rakit: number;
+
+  @IsString()
+  @IsOptional()
+  transmisi: TransmisiMobil;
+
+  @IsString()
+  @IsOptional()
+  @MinLength(5)
+  @MaxLength(9)
+  no_polisi: string;
+
+  @IsNumber()
+  @IsOptional()
+  harga: number;
+
+  @IsString()
+  @IsOptional()
+  status_pajak: StatusPajakMobil;
+
+  @IsNumber()
+  @IsOptional()
+  total_pajak: number;
+}

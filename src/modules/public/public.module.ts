@@ -10,15 +10,21 @@ import { CustomerModule } from './customer/customer.module';
 import { JenisMobilModule } from './mobil_jenis/JenisMobil.Module';
 import { MerkMobilModule } from './mobil_merk/MerkMobil.Module';
 import { MobilModule } from './mobil/mobil.module';
+import { TipeMobilModule } from './mobil_tipe/TipeMobil.module';
 
 @Global()
 @Module({
   imports: [
     AuthModule,
     CustomerModule,
-    // MobilModule,
+
+    /**
+     * Mobil Module
+     */
     JenisMobilModule,
     MerkMobilModule,
+    TipeMobilModule,
+    MobilModule,
   ],
   controllers: [],
   providers: [],

@@ -17,16 +17,24 @@ import {
   MerkMobil,
   MerkMobilSchema,
 } from '@/schemas/mobil/mobil_properties/MerkMobil';
+import {
+  TipeMobil,
+  TipeMobilSchema,
+} from '@/schemas/mobil/mobil_properties/TipeMobil';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: MerkMobil.name, schema: MerkMobilSchema },
+      { name: TipeMobil.name, schema: TipeMobilSchema },
     ]),
     AuthModule,
   ],
   controllers: [TipeMobilController],
   providers: [TipeMobilservice],
-  exports: [],
+  exports: [
+    MongooseModule.forFeature([
+      { name: TipeMobil.name, schema: TipeMobilSchema },
+    ]),
+  ],
 })
-export class MerkMobilModule {}
+export class TipeMobilModule {}

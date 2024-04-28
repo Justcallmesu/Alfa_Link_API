@@ -26,6 +26,10 @@ import {
   ],
   controllers: [JenisMobilController],
   providers: [JenisMobilService],
-  exports: [],
+  exports: [
+    MongooseModule.forFeature([
+      { name: JenisMobil.name, schema: JenisMobilSchema },
+    ]),
+  ],
 })
 export class JenisMobilModule {}

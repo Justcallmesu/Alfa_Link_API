@@ -18,4 +18,4 @@ export class MerkMobil {
 export const MerkMobilSchema = SchemaFactory.createForClass(MerkMobil);
 
 //  Indexing
-MerkMobilSchema.index({ merk: 1 }, { unique: true });
+MerkMobilSchema.index({ name: 1 }, { unique: true });
