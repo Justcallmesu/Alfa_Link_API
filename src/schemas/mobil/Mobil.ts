@@ -13,8 +13,18 @@ export type MobilDocument = HydratedDocument<Mobil>;
 export class Mobil {
   @Prop({
     type: Types.ObjectId,
+    ref: 'inspeksi',
   })
-  id_inspeksi: Inspeksi;
+  inspeksi: Inspeksi;
+
+  @Prop({
+    type: String,
+    required: [true, 'Nama Mobil is required'],
+    trim: true,
+    minlength: [3, 'Nama Mobil must be at least 3 characters'],
+    maxlength: [50, 'Nama Mobil must be at most 50 characters'],
+  })
+  nama: string;
 
   @Prop({
     type: Types.ObjectId,
@@ -38,24 +48,24 @@ export class Mobil {
   tipe: TipeMobil;
 
   @Prop({
-    type: Date,
+    type: Number,
     required: [true, 'Tahun rakit is required'],
   })
-  tahun_rakit: Date;
+  tahun_rakit: number;
 
   @Prop({
     type: String,
     required: [true, 'Transmisi is required'],
     enum: {
-      values: ['manual', 'matic'],
-      message: 'Transmisi must be either manual or matic',
+      values: ['AT', 'MT'],
+      message: 'Transmisi must be either AT or MT',
     },
   })
   transmisi: string;
 
   @Prop({
     type: String,
-    required: [true, 'Warna is required'],
+    required: [true, 'No Polisi is required'],
     trim: true,
     minlength: [5, 'Warna must be at least 4 characters'],
     maxlength: [9, 'Warna must be at most 9 characters'],
@@ -72,8 +82,8 @@ export class Mobil {
     type: String,
     required: [true, 'Status pajak is required'],
     enum: {
-      values: ['hidup', 'mati', 'terblokir'],
-      message: 'Status pajak must be either hidup, mati, or terblokir',
+      values: ['Hidup', 'Mati', 'Terblokir'],
+      message: 'Status pajak must be either Hidup, Mati, or Terblokir',
     },
   })
   status_pajak: string;

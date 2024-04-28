@@ -4,9 +4,28 @@ import { Global, Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { CustomerModule } from './customer/customer.module';
 
+/**
+ * Mobil
+ */
+import { JenisMobilModule } from './mobil_jenis/JenisMobil.Module';
+import { MerkMobilModule } from './mobil_merk/MerkMobil.Module';
+import { MobilModule } from './mobil/mobil.module';
+import { TipeMobilModule } from './mobil_tipe/TipeMobil.module';
+
 @Global()
 @Module({
-  imports: [AuthModule, CustomerModule],
+  imports: [
+    AuthModule,
+    CustomerModule,
+
+    /**
+     * Mobil Module
+     */
+    JenisMobilModule,
+    MerkMobilModule,
+    TipeMobilModule,
+    MobilModule,
+  ],
   controllers: [],
   providers: [],
   exports: [],

@@ -1,9 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
 
-// Schema
-import { Mobil } from './Mobil';
-
 export type InspeksiDocument = HydratedDocument<Inspeksi>;
 
 @Schema()
@@ -13,7 +10,7 @@ export class Inspeksi {
     required: [true, 'Mobil is required'],
     ref: 'mobil',
   })
-  id_mobil: Mobil;
+  mobil: Types.ObjectId;
 }
 
 export const InspeksiSchema = SchemaFactory.createForClass(Inspeksi);
