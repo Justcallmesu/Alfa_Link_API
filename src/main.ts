@@ -14,7 +14,7 @@ async function bootstrap() {
 
   // Middleware
   app.useGlobalPipes(new ValidationPipe());
-  app.use(cookieParser(process.env.cookie_secret as string));
+  app.use(cookieParser(process.env.COOKIE_SECRET as string));
 
   await app.listen(3000);
 }

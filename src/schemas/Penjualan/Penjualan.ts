@@ -49,13 +49,13 @@ export class Penjualan {
   date_penjualan: Date;
 }
 
-export const PembayaranSchema = SchemaFactory.createForClass(Penjualan);
+export const PenjualanSchema = SchemaFactory.createForClass(Penjualan);
 
 // Indexing
-PembayaranSchema.index({ id_mobil: 1, id_history: 1 }, { unique: true });
+PenjualanSchema.index({ id_mobil: 1, id_history: 1 }, { unique: true });
 
-PembayaranSchema.index({ date_penjualan: 1 });
-PembayaranSchema.index({ metode_pembayaran: 1 });
+PenjualanSchema.index({ date_penjualan: 1 });
+PenjualanSchema.index({ metode_pembayaran: 1 });
 
-PembayaranSchema.index({ id_history: 1 });
-PembayaranSchema.index({ id_mobil: 1 });
+PenjualanSchema.index({ id_history: 1 });
+PenjualanSchema.index({ id_mobil: 1 });
