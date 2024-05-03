@@ -3,7 +3,7 @@ import { Types, HydratedDocument } from 'mongoose';
 
 export type InspeksiDocument = HydratedDocument<Inspeksi>;
 
-@Schema()
+@Schema({ collection: 'inspeksi' })
 export class Inspeksi {
   @Prop({
     type: Types.ObjectId,
@@ -15,4 +15,4 @@ export class Inspeksi {
 
 export const InspeksiSchema = SchemaFactory.createForClass(Inspeksi);
 
-InspeksiSchema.index({ id_mobil: 1 }, { unique: true });
+InspeksiSchema.index({ mobil: 1 }, { unique: true });
