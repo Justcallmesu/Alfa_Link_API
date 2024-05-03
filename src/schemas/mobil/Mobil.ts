@@ -51,7 +51,7 @@ export class Mobil {
     type: Number,
     required: [true, 'Tahun rakit is required'],
   })
-  tahun_rakit: number;
+  tahunRakit: number;
 
   @Prop({
     type: String,
