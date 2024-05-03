@@ -14,10 +14,6 @@ import { AuthModule } from '../auth/auth.module';
 
 // Model
 import {
-  MerkMobil,
-  MerkMobilSchema,
-} from '@/schemas/mobil/mobil_properties/MerkMobil';
-import {
   TipeMobil,
   TipeMobilSchema,
 } from '@/schemas/mobil/mobil_properties/TipeMobil';

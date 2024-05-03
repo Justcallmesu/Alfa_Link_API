@@ -16,46 +16,46 @@ export class Penjualan {
     required: [true, 'ID Customer is required'],
     ref: 'mobil',
   })
-  id_mobil: Mobil;
+  mobil: Mobil;
 
   @Prop({
     type: Types.ObjectId,
     required: [true, 'ID History is required'],
-    ref: 'history_pembayaran',
+    ref: 'historyPembayaran',
   })
-  id_history: HistoryPembayaran;
+  history: HistoryPembayaran;
 
   @Prop({
     type: String,
     required: [true, 'Metode Pembayaran is required'],
     enum: {
       values: ['Cash', 'Kredit'],
-      message: 'jenis_pembayaran must be either "Cash" or "Kredit"',
+      message: 'Metode Pembayaran must be either "Cash" or "Kredit"',
     },
     trim: true,
   })
-  metode_pembayaran: string;
+  metodePembayaran: string;
 
   @Prop({
     type: Number,
     required: [true, 'Total Harga is required'],
   })
-  total_harga: number;
+  totalHarga: number;
 
   @Prop({
     type: Date,
     required: true,
   })
-  date_penjualan: Date;
+  tanggalPenjualan: Date;
 }
 
 export const PenjualanSchema = SchemaFactory.createForClass(Penjualan);
 
 // Indexing
-PenjualanSchema.index({ id_mobil: 1, id_history: 1 }, { unique: true });
+PenjualanSchema.index({ mobil: 1, history: 1 }, { unique: true });
 
-PenjualanSchema.index({ date_penjualan: 1 });
-PenjualanSchema.index({ metode_pembayaran: 1 });
+PenjualanSchema.index({ tanggalPenjualan: 1 });
+PenjualanSchema.index({ metodePemabayaran: 1 });
 
 PenjualanSchema.index({ id_history: 1 });
-PenjualanSchema.index({ id_mobil: 1 });
+PenjualanSchema.index({ mobil: 1 });

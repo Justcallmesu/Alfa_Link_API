@@ -1,7 +1,8 @@
 import {
-  IsDate,
+  IsBoolean,
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   MaxLength,
   MinLength,
@@ -21,17 +22,19 @@ export class CreateCustomerDto {
 
   @IsNotEmpty()
   @IsString()
-  birth_place: string;
+  birthPlace: string;
 
   @IsNotEmpty()
   @IsString()
-  birth_date: Date;
+  birthDate: Date;
 
   @IsNotEmpty()
   @IsString()
   address: string;
 
-  subscribe_news?: boolean;
+  @IsOptional()
+  @IsBoolean()
+  subscribeNews?: boolean;
 }
 
 export interface UpdateCustomerDto extends CreateCustomerDto {}

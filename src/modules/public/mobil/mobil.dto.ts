@@ -41,7 +41,7 @@ export class CreateMobilDto {
 
   @IsNumber()
   @IsNotEmpty()
-  tahun_rakit: number;
+  tahunRakit: number;
 
   @IsString()
   @IsNotEmpty()
@@ -51,7 +51,7 @@ export class CreateMobilDto {
   @IsNotEmpty()
   @MinLength(5)
   @MaxLength(9)
-  no_polisi: string;
+  noPolisi: string;
 
   @IsNumber()
   @IsNotEmpty()
@@ -59,11 +59,11 @@ export class CreateMobilDto {
 
   @IsString()
   @IsNotEmpty()
-  status_pajak: StatusPajakMobil;
+  statusPajak: StatusPajakMobil;
 
   @IsNumber()
   @IsNotEmpty()
-  total_pajak: number;
+  totalPajak: number;
 }
 
 export class UpdateMobilDto extends CreateMobilDto {
@@ -85,7 +85,7 @@ export class UpdateMobilDto extends CreateMobilDto {
 
   @IsNumber()
   @IsOptional()
-  tahun_rakit: number;
+  tahunRakit: number;
 
   @IsString()
   @IsOptional()
@@ -95,7 +95,7 @@ export class UpdateMobilDto extends CreateMobilDto {
   @IsOptional()
   @MinLength(5)
   @MaxLength(9)
-  no_polisi: string;
+  noPolisi: string;
 
   @IsNumber()
   @IsOptional()
@@ -103,9 +103,9 @@ export class UpdateMobilDto extends CreateMobilDto {
 
   @IsString()
   @IsOptional()
-  status_pajak: StatusPajakMobil;
+  statusPajak: StatusPajakMobil;
 
   @IsNumber()
   @IsOptional()
-  total_pajak: number;
+  totalPajak: number;
 }

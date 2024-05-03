@@ -51,7 +51,7 @@ export class Mobil {
     type: Number,
     required: [true, 'Tahun rakit is required'],
   })
-  tahun_rakit: number;
+  tahunRakit: number;
 
   @Prop({
     type: String,
@@ -70,7 +70,7 @@ export class Mobil {
     minlength: [5, 'Warna must be at least 4 characters'],
     maxlength: [9, 'Warna must be at most 9 characters'],
   })
-  no_polisi: string;
+  noPolisi: string;
 
   @Prop({
     type: Number,
@@ -86,26 +86,26 @@ export class Mobil {
       message: 'Status pajak must be either Hidup, Mati, or Terblokir',
     },
   })
-  status_pajak: string;
+  statusPajak: string;
 
   @Prop({
     type: Number,
     required: [true, 'Total pajak is required'],
   })
-  total_pajak: number;
+  totalPajak: number;
 }
 
 export const MobilSchema = SchemaFactory.createForClass(Mobil);
 
 // Indexing
-MobilSchema.index({ id_inspeksi: 1 });
+MobilSchema.index({ inspeksi: 1 });
 
 MobilSchema.index({ merk: 1 });
 MobilSchema.index({ jenis: 1 });
 MobilSchema.index({ tipe: 1 });
-MobilSchema.index({ tahun_rakit: 1 });
+MobilSchema.index({ tahunRakit: 1 });
 MobilSchema.index({ transmisi: 1 });
-MobilSchema.index({ status_pajak: 1 });
+MobilSchema.index({ statusPajak: 1 });
 MobilSchema.index({ harga: 1 });
 
-MobilSchema.index({ no_polisi: 1 }, { unique: true });
+MobilSchema.index({ noPolisi: 1 }, { unique: true });
