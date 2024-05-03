@@ -26,19 +26,19 @@ export class Customer {
 
   @Prop({
     type: String,
-    required: [true, 'Customer birth_place is required'],
-    minlength: [3, 'Customer birth_place is too short'],
-    maxlength: [100, 'Customer birth_place is too long'],
+    required: [true, 'Customer birthPlace is required'],
+    minlength: [3, 'Customer birthPlace is too short'],
+    maxlength: [100, 'Customer birthPlace is too long'],
     trim: true,
   })
-  birth_place: string;
+  birthPlace: string;
 
   @Prop({
     type: Date,
-    required: [true, 'Customer Date is required'],
+    required: [true, 'Customer Birth Date is required'],
     trim: true,
   })
-  birth_date: Date;
+  birthDate: Date;
 
   @Prop({
     type: String,
@@ -53,7 +53,7 @@ export class Customer {
     type: Boolean,
     default: false,
   })
-  subscribe_news: boolean;
+  subscribeNews: boolean;
 }
 
 export const CustomerSchema = SchemaFactory.createForClass(Customer);
@@ -63,4 +63,4 @@ CustomerSchema.index({ fullname: 1, email: 1 }, { unique: true });
 CustomerSchema.index({ fullname: 1 }, { unique: true });
 
 CustomerSchema.index({ email: 1 }, { unique: true });
-CustomerSchema.index({ subscribe_news: 1 }, { unique: true });
+CustomerSchema.index({ subscribeNews: 1 });

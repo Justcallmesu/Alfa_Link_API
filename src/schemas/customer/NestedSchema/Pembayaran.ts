@@ -1,23 +1,23 @@
 import { Schema, Prop } from '@nestjs/mongoose';
 
-@Schema()
+@Schema({ collection: 'pembayaran' })
 export class Pembayaran {
   @Prop({
     type: String,
     required: [true, 'Pembayaran via is required'],
     enum: {
       values: ['Cash', 'Transfer'],
-      message: 'pembayaran_via must be either "Cash" or "Transfer"',
+      message: 'pembayaranVia must be either "Cash" or "Transfer"',
     },
     trim: true,
   })
-  pembayaran_via: string;
+  pembayaranVia: string;
 
   @Prop({
     type: Number,
     required: true,
   })
-  jumlah_pembayaran: number;
+  jumlahPembayaran: number;
 
   @Prop({
     type: String,
@@ -26,12 +26,12 @@ export class Pembayaran {
     maxlength: [100, 'Nama Pembayar is too long'],
     trim: true,
   })
-  nama_pembayar: string;
+  namaPembayar: string;
 
   @Prop({
     type: Date,
     required: [true, 'Tanggal Pembayaran is required'],
     default: Date.now(),
   })
-  date_pembayaran: Date;
+  tanggalPembayaran: Date;
 }

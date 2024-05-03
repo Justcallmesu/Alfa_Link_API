@@ -3,15 +3,15 @@ import { CreatePenjualanDto, UpdatePenjualanDto } from './Penjualan.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Penjualan } from '@/schemas/Penjualan/Penjualan';
 import { Document, Model } from 'mongoose';
-import { Penjualan_Customer } from '@/schemas/Penjualan/PenjualanCustomer';
+import { PenjualanCustomer } from '@/schemas/Penjualan/PenjualanCustomer';
 import { Response } from 'express';
 
 @Injectable()
 export class PenjualanService {
   constructor(
     @InjectModel(Penjualan.name) private penjualanModel: Model<Penjualan>,
-    @InjectModel(Penjualan_Customer.name)
-    private penjualan_customerModel: Model<Penjualan_Customer>,
+    @InjectModel(PenjualanCustomer.name)
+    private PenjualanCustomerModel: Model<PenjualanCustomer>,
   ) {}
 
   async createPenjualan(createPenjualan: CreatePenjualanDto) {

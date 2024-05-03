@@ -8,64 +8,59 @@ import { Penjualan } from '../Penjualan/Penjualan';
 
 export type HistoryPembayaranDocument = HydratedDocument<HistoryPembayaran>;
 
-@Schema({ collection: 'history_pembayaran' })
+@Schema({ collection: 'historyPembayaran' })
 export class HistoryPembayaran {
   @Prop({
     type: Types.ObjectId,
     required: true,
     ref: 'customer',
   })
-  id_customer: Customer;
+  customer: Customer;
 
   @Prop({
     type: Types.ObjectId,
     required: true,
     ref: 'penjualan',
   })
-  id_penjualan: Penjualan;
+  penjualan: Penjualan;
 
   @Prop({
     type: String,
     required: [true, 'Metode Pembayaran is required'],
     enum: {
       values: ['Cash', 'Kredit'],
-      message: 'jenis_pembayaran must be either "Cash" or "Kredit"',
+      message: 'jenisPembayaran must be either "Cash" or "Kredit"',
     },
   })
-  jenis_pembayaran: string;
+  jenisPembayaran: string;
 
   @Prop({
     type: Number,
     required: [true, 'Tanggal Pembayaran is required'],
     trim: true,
   })
-  total_pembayaran: number;
+  totalPembayaran: number;
 
   @Prop({
     type: Number,
     required: [true, 'Total Terbayar is required'],
     trim: true,
   })
-  total_terbayar: number;
+  totalTerbayar: number;
 
   @Prop({
     type: Array<Pembayaran>,
     default: [],
   })
-  history_pembayaran: Pembayaran[];
+  historyPembayaran: Pembayaran[];
 }
 
 export const HistoryPembayaranSchema =
   SchemaFactory.createForClass(HistoryPembayaran);
 
 // Indexing
-HistoryPembayaranSchema.index(
-  { id_customer: 1, id_penjualan: 1 },
-  { unique: true },
-);
+HistoryPembayaranSchema.index({ customer: 1, penjualan: 1 }, { unique: true });
 
-HistoryPembayaranSchema.index({ id_customer: 1 });
-HistoryPembayaranSchema.index({ id_penjualan: 1 });
-HistoryPembayaranSchema.index({ jenis_pembayaran: 1 });
-
-HistoryPembayaranSchema.index({ date_pembelian: 1 });
+HistoryPembayaranSchema.index({ customer: 1 });
+HistoryPembayaranSchema.index({ penjualan: 1 });
+HistoryPembayaranSchema.index({ jenisPembayaran: 1 });
