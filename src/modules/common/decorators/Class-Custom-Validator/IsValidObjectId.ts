@@ -13,7 +13,7 @@ export function CheckIsValidObjectId(property: string) {
         message: '$property must be a valid ObjectId',
       },
       validator: {
-        validate(value: any) {
+        validate(value: string) {
           return isValidObjectId(value);
         },
       },

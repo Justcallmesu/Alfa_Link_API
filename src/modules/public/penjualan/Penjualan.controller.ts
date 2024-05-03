@@ -11,36 +11,41 @@ import {
 } from '@nestjs/common';
 
 import { PenjualanService } from './Penjualan.service';
-import { CreateDto, UpdateDto } from './Penjualan.dto';
+import { CreatePenjualanDto, UpdatePenjualanDto } from './Penjualan.dto';
 import { JwtGuard } from '@/modules/common/guards/Jwt.Guard';
+import { ObjectIdParams } from '@/modules/common/decorators/ObjectIdParams.decorator';
+import { Response } from 'express';
 
 @Controller('penjualan')
 @UseGuards(JwtGuard)
 export class PenjualanController {
-  constructor(private readonly sService: PenjualanService) {}
+  constructor(private readonly penjualanService: PenjualanService) {}
 
   @Post()
-  create(@Body() createDto: CreateDto) {
-    return this.sService.create(createDto);
+  create(@Body() createPenjualan: CreatePenjualanDto) {
+    return this.penjualanService.createPenjualan(createPenjualan);
   }
 
   @Get()
-  findAll(@Res() res: Response) {
-    return this.sService.findAll(res);
+  findAll() {
+    return this.penjualanService.getAllPenjualan();
   }
 
   @Get(':id')
+  @UseGuards(ObjectIdParams)
   findOne(@Param('id') id: string) {
-    return this.sService.findOne(+id);
+    return this.penjualanService.getPenjualan(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDto: UpdateDto) {
-    return this.sService.update(+id, updateDto);
+  @UseGuards(ObjectIdParams)
+  update(@Param('id') id: string, @Body() updatePenjualan: UpdatePenjualanDto) {
+    return this.penjualanService.updatePenjualan(+id, updatePenjualan);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sService.remove(+id);
+  @UseGuards(ObjectIdParams)
+  remove(@Param('id') id: string, @Res() res: Response) {
+    return this.penjualanService.deletePenjualan(+id, res);
   }
 }
