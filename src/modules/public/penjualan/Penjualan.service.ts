@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { CreateDto, UpdateDto } from './Penjualan.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreatePenjualanDto, UpdatePenjualanDto } from './Penjualan.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Penjualan } from '@/schemas/Penjualan/Penjualan';
-import { Model } from 'mongoose';
+import { Document, Model } from 'mongoose';
 import { Penjualan_Customer } from '@/schemas/Penjualan/PenjualanCustomer';
+import { Response } from 'express';
 
 @Injectable()
 export class PenjualanService {
@@ -13,25 +14,47 @@ export class PenjualanService {
     private penjualan_customerModel: Model<Penjualan_Customer>,
   ) {}
 
-  async create(createDto: CreateDto) {
-    return 'This action adds a new ';
+  async createPenjualan(createPenjualan: CreatePenjualanDto) {
+    const isExist: Penjualan | null = await this.penjualanModel.findOne({});
+
+    if (!isExist) throw new NotFoundException('Data Penjualan Tidak Ditemukan');
   }
 
-  async findAll(res:Response) {
-    const PenjualanDatas = await this.penjualanModel.find({})
+  async getAllPenjualan() {
+    const PenjualanDatas: Penjualan[] = await this.penjualanModel.find({});
 
-    return
+    return PenjualanDatas;
   }
 
-  async findOne(id: number) {
-    return `This action returns a #id `;
+  async getPenjualan(id: number) {
+    const penjualanData: Penjualan | null =
+      await this.penjualanModel.findById(id);
+
+    if (!penjualanData)
+      throw new NotFoundException('Data Penjualan Tidak Ditemukan');
+
+    return penjualanData;
   }
 
-  async update(id: number, updateDto: UpdateDto) {
-    return `This action updates a #id `;
+  async updatePenjualan(id: number, UpdatePenjualanDto: UpdatePenjualanDto) {
+    const isExist: Document<Penjualan> | null =
+      await this.penjualanModel.findById(id);
+
+    if (!isExist) throw new NotFoundException('Data Penjualan Tidak Ditemukan');
+
+    const updateData = await isExist.updateOne(UpdatePenjualanDto);
+
+    return updateData;
   }
 
-  async remove(id: number) {
-    return `This action removes a #id `;
+  async deletePenjualan(id: number, res: Response) {
+    const isExist: Document<Penjualan> | null =
+      await this.penjualanModel.findById(id);
+
+    if (!isExist) throw new NotFoundException('Data Penjualan Tidak Ditemukan');
+
+    await isExist.deleteOne();
+
+    return res.status(204).end();
   }
 }
