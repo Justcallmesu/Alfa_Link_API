@@ -6,6 +6,11 @@ import { Customer } from './Customer';
 import { Pembayaran } from './NestedSchema/Pembayaran';
 import { Penjualan } from '../Penjualan/Penjualan';
 
+/**
+ * Enum
+ */
+import { metodePembayaran } from '@/modules/public/penjualan/Penjualan.dto';
+
 export type HistoryPembayaranDocument = HydratedDocument<HistoryPembayaran>;
 
 @Schema({ collection: 'historyPembayaran' })
@@ -19,10 +24,9 @@ export class HistoryPembayaran {
 
   @Prop({
     type: Types.ObjectId,
-    required: true,
     ref: 'penjualan',
   })
-  penjualan: Penjualan;
+  penjualan: Types.ObjectId;
 
   @Prop({
     type: String,
@@ -32,7 +36,7 @@ export class HistoryPembayaran {
       message: 'jenisPembayaran must be either "Cash" or "Kredit"',
     },
   })
-  jenisPembayaran: string;
+  metodePembayaran: metodePembayaran;
 
   @Prop({
     type: Number,

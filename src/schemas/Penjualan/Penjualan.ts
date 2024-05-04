@@ -13,14 +13,13 @@ export type PenjualanDocument = HydratedDocument<Penjualan>;
 export class Penjualan {
   @Prop({
     type: Types.ObjectId,
-    required: [true, 'ID Customer is required'],
+    required: [true, 'Mobil is required'],
     ref: 'mobil',
   })
   mobil: Mobil;
 
   @Prop({
     type: Types.ObjectId,
-    required: [true, 'ID History is required'],
     ref: 'historyPembayaran',
   })
   history: HistoryPembayaran;
@@ -57,5 +56,5 @@ PenjualanSchema.index({ mobil: 1, history: 1 }, { unique: true });
 PenjualanSchema.index({ tanggalPenjualan: 1 });
 PenjualanSchema.index({ metodePemabayaran: 1 });
 
-PenjualanSchema.index({ id_history: 1 });
+PenjualanSchema.index({ history: 1 });
 PenjualanSchema.index({ mobil: 1 });
