@@ -6,7 +6,6 @@ import { Document, Model } from 'mongoose';
 import { PenjualanCustomer } from '@/schemas/Penjualan/PenjualanCustomer';
 import { Response } from 'express';
 import { HistoryPembayaran } from '@/schemas/customer/HistoryPembayaran';
-import { create } from 'domain';
 import { Mobil } from '@/schemas/mobil/Mobil';
 import { Customer } from '@/schemas/customer/Customer';
 
@@ -15,12 +14,16 @@ export class PenjualanService {
   constructor(
     @InjectModel(Penjualan.name)
     private readonly penjualanModel: Model<Penjualan>,
+
     @InjectModel(HistoryPembayaran.name)
     private readonly historyCustomer: Model<HistoryPembayaran>,
+
     @InjectModel(PenjualanCustomer.name)
     private readonly PenjualanCustomerModel: Model<PenjualanCustomer>,
+
     @InjectModel(Mobil.name)
     private readonly mobilModel: Model<Mobil>,
+
     @InjectModel(Customer.name)
     private readonly customerModel: Model<Customer>,
   ) {}

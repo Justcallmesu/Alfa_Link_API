@@ -24,6 +24,8 @@ import { TipeMobilModule } from '../mobil_tipe/TipeMobil.module';
   ],
   controllers: [MobilController],
   providers: [MobilService],
-  exports: [],
+  exports: [
+    MongooseModule.forFeature([{ name: Mobil.name, schema: MobilSchema }]),
+  ],
 })
 export class MobilModule {}
