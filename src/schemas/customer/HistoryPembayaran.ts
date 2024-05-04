@@ -2,9 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
 
 // Schema
-import { Customer } from './Customer';
 import { Pembayaran } from './NestedSchema/Pembayaran';
-import { Penjualan } from '../Penjualan/Penjualan';
 
 /**
  * Enum
@@ -20,7 +18,7 @@ export class HistoryPembayaran {
     required: true,
     ref: 'customer',
   })
-  customer: Customer;
+  customer: Types.ObjectId;
 
   @Prop({
     type: Types.ObjectId,

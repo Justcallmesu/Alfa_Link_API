@@ -3,7 +3,10 @@ import { CreatePenjualanDto, UpdatePenjualanDto } from './Penjualan.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Penjualan } from '@/schemas/Penjualan/Penjualan';
 import { Document, Model } from 'mongoose';
-import { PenjualanCustomer } from '@/schemas/Penjualan/PenjualanCustomer';
+import {
+  PenjualanCustomer,
+  PenjualanCustomerDocument,
+} from '@/schemas/Penjualan/PenjualanCustomer';
 import { Response } from 'express';
 import { HistoryPembayaran } from '@/schemas/customer/HistoryPembayaran';
 import { Mobil } from '@/schemas/mobil/Mobil';
@@ -33,7 +36,7 @@ export class PenjualanService {
       mobil: createPenjualan.mobil,
     });
 
-    if (!isExist)
+    if (isExist)
       throw new NotFoundException('Penjualan untuk Mobil ini sudah ada');
 
     const isMobilExist: Mobil | null = await this.mobilModel.findById(
@@ -64,9 +67,27 @@ export class PenjualanService {
       totalTerbayar: 0,
     });
 
-    newPenjualan.updateOne({ historyPembayaran: newHistory._id });
+    newPenjualan.history = newHistory.id;
 
-    return newPenjualan;
+    const updatedData = await newPenjualan.save();
+
+    const PenjualanCustomer: PenjualanCustomerDocument | null =
+      await this.PenjualanCustomerModel.findOne({
+        customer: createPenjualan.customer,
+      });
+
+    if (PenjualanCustomer) {
+      await PenjualanCustomer?.updateOne({
+        penjualan: [...PenjualanCustomer.penjualan, updatedData._id],
+      });
+    } else {
+      await this.PenjualanCustomerModel.create({
+        customer: createPenjualan.customer,
+        penjualan: [updatedData._id],
+      });
+    }
+
+    return updatedData;
   }
 
   async getAllPenjualan() {
@@ -75,34 +96,69 @@ export class PenjualanService {
     return PenjualanDatas;
   }
 
-  async getPenjualan(id: number) {
-    const penjualanData: Penjualan | null =
+  async getPenjualan(id: string) {
+    const penjualanData: Document<Penjualan> | null =
       await this.penjualanModel.findById(id);
 
     if (!penjualanData)
       throw new NotFoundException('Data Penjualan Tidak Ditemukan');
 
+    await penjualanData.populate([
+      {
+        path: 'mobil',
+        model: this.mobilModel,
+      },
+      {
+        path: 'history',
+        model: this.historyCustomer,
+        select: '-penjualan',
+        populate: {
+          path: 'customer',
+          model: this.customerModel,
+        },
+      },
+    ]);
+
     return penjualanData;
   }
 
-  async updatePenjualan(id: number, UpdatePenjualanDto: UpdatePenjualanDto) {
-    const isExist: Document<Penjualan> | null =
+  async updatePenjualan(id: string, updatePenjualan: UpdatePenjualanDto) {
+    const dataPenjualan: Document<Penjualan> | null =
       await this.penjualanModel.findById(id);
 
-    if (!isExist) throw new NotFoundException('Data Penjualan Tidak Ditemukan');
+    if (!dataPenjualan)
+      throw new NotFoundException('Data Penjualan Tidak Ditemukan');
 
-    const updateData = await isExist.updateOne(UpdatePenjualanDto);
+    const updateData = await dataPenjualan.updateOne(updatePenjualan);
 
     return updateData;
   }
 
-  async deletePenjualan(id: number, res: Response) {
-    const isExist: Document<Penjualan> | null =
+  async deletePenjualan(id: string, res: Response) {
+    const dataPenjualan: Document<Penjualan> | null =
       await this.penjualanModel.findById(id);
 
-    if (!isExist) throw new NotFoundException('Data Penjualan Tidak Ditemukan');
+    if (!dataPenjualan)
+      throw new NotFoundException('Data Penjualan Tidak Ditemukan');
 
-    await isExist.deleteOne();
+    await dataPenjualan.deleteOne();
+
+    await this.historyCustomer.findOneAndDelete({
+      penjualan: dataPenjualan._id,
+    });
+
+    const PenjualanCustomer: PenjualanCustomerDocument | null =
+      await this.PenjualanCustomerModel.findOne({
+        penjualan: dataPenjualan._id,
+      });
+
+    if (PenjualanCustomer) {
+      await PenjualanCustomer.updateOne({
+        penjualan: PenjualanCustomer.penjualan.filter(
+          (item) => item != dataPenjualan.id,
+        ),
+      });
+    }
 
     return res.status(204).end();
   }

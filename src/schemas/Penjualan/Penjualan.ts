@@ -1,10 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
 
-// Schema
-import { Mobil } from '../mobil/Mobil';
-import { HistoryPembayaran } from '../customer/HistoryPembayaran';
-
 export type PenjualanDocument = HydratedDocument<Penjualan>;
 
 @Schema({
@@ -16,13 +12,13 @@ export class Penjualan {
     required: [true, 'Mobil is required'],
     ref: 'mobil',
   })
-  mobil: Mobil;
+  mobil: Types.ObjectId;
 
   @Prop({
     type: Types.ObjectId,
     ref: 'historyPembayaran',
   })
-  history: HistoryPembayaran;
+  history: Types.ObjectId;
 
   @Prop({
     type: String,

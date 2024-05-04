@@ -37,7 +37,7 @@ export class PenjualanController {
     @Param('id')
     id: string,
   ) {
-    return this.penjualanService.getPenjualan(+id);
+    return this.penjualanService.getPenjualan(id);
   }
 
   @Put(':id')
@@ -45,11 +45,11 @@ export class PenjualanController {
     @ObjectIdParams() @Param('id') id: string,
     @Body() updatePenjualan: UpdatePenjualanDto,
   ) {
-    return this.penjualanService.updatePenjualan(+id, updatePenjualan);
+    return this.penjualanService.updatePenjualan(id, updatePenjualan);
   }
 
   @Delete(':id')
   remove(@ObjectIdParams() @Param('id') id: string, @Res() res: Response) {
-    return this.penjualanService.deletePenjualan(+id, res);
+    return this.penjualanService.deletePenjualan(id, res);
   }
 }
