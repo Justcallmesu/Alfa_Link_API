@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Put,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -32,20 +32,24 @@ export class PenjualanController {
   }
 
   @Get(':id')
-  @UseGuards(ObjectIdParams)
-  findOne(@Param('id') id: string) {
+  findOne(
+    @ObjectIdParams()
+    @Param('id')
+    id: string,
+  ) {
     return this.penjualanService.getPenjualan(+id);
   }
 
-  @Patch(':id')
-  @UseGuards(ObjectIdParams)
-  update(@Param('id') id: string, @Body() updatePenjualan: UpdatePenjualanDto) {
+  @Put(':id')
+  update(
+    @ObjectIdParams() @Param('id') id: string,
+    @Body() updatePenjualan: UpdatePenjualanDto,
+  ) {
     return this.penjualanService.updatePenjualan(+id, updatePenjualan);
   }
 
   @Delete(':id')
-  @UseGuards(ObjectIdParams)
-  remove(@Param('id') id: string, @Res() res: Response) {
+  remove(@ObjectIdParams() @Param('id') id: string, @Res() res: Response) {
     return this.penjualanService.deletePenjualan(+id, res);
   }
 }
