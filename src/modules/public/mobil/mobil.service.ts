@@ -8,7 +8,6 @@ import { CreateMobilDto, UpdateMobilDto } from './mobil.dto';
 
 // Schema
 import { Mobil, MobilDocument } from '@/schemas/mobil/Mobil';
-import { InspeksiSchema } from '@/schemas/mobil/inspeksi';
 import { MerkMobil } from '@/schemas/mobil/mobil_properties/MerkMobil';
 import { JenisMobil } from '@/schemas/mobil/mobil_properties/JenisMobil';
 import { TipeMobil } from '@/schemas/mobil/mobil_properties/TipeMobil';
@@ -124,7 +123,7 @@ export class MobilService {
 
   async createMobil(res: Response, body: CreateMobilDto) {
     const isMobilWithSameNoPolisiExist = await this.mobilModel.findOne({
-      no_polisi: body.no_polisi,
+      no_polisi: body.noPolisi,
     });
 
     if (isMobilWithSameNoPolisiExist) {

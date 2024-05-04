@@ -1,8 +1,7 @@
 import { CheckIsValidObjectId } from '@/modules/common/decorators/Class-Custom-Validator/IsValidObjectId';
 import { Customer } from '@/schemas/customer/Customer';
-import { HistoryPembayaran } from '@/schemas/customer/HistoryPembayaran';
 import { Mobil } from '@/schemas/mobil/Mobil';
-import { IsDate, IsEnum, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsDate, IsEnum, IsNotEmpty } from 'class-validator';
 
 export enum metodePembayaran {
   CASH = 'CASH',

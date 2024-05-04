@@ -20,6 +20,10 @@ import { AuthModule } from '../auth/auth.module';
   ],
   controllers: [CustomerController],
   providers: [CustomerService],
-  exports: [],
+  exports: [
+    MongooseModule.forFeature([
+      { name: Customer.name, schema: CustomerSchema },
+    ]),
+  ],
 })
 export class CustomerModule {}

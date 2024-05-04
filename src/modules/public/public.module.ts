@@ -17,6 +17,10 @@ import { PenjualanModule } from './penjualan/Penjualan.module';
 @Module({
   imports: [
     AuthModule,
+
+    /**
+     * Customer
+     */
     CustomerModule,
 
     /**
