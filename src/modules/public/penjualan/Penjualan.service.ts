@@ -5,19 +5,65 @@ import { Penjualan } from '@/schemas/Penjualan/Penjualan';
 import { Document, Model } from 'mongoose';
 import { PenjualanCustomer } from '@/schemas/Penjualan/PenjualanCustomer';
 import { Response } from 'express';
+import { HistoryPembayaran } from '@/schemas/customer/HistoryPembayaran';
+import { create } from 'domain';
+import { Mobil } from '@/schemas/mobil/Mobil';
+import { Customer } from '@/schemas/customer/Customer';
 
 @Injectable()
 export class PenjualanService {
   constructor(
-    @InjectModel(Penjualan.name) private penjualanModel: Model<Penjualan>,
+    @InjectModel(Penjualan.name)
+    private readonly penjualanModel: Model<Penjualan>,
+    @InjectModel(HistoryPembayaran.name)
+    private readonly historyCustomer: Model<HistoryPembayaran>,
     @InjectModel(PenjualanCustomer.name)
-    private PenjualanCustomerModel: Model<PenjualanCustomer>,
+    private readonly PenjualanCustomerModel: Model<PenjualanCustomer>,
+    @InjectModel(Mobil.name)
+    private readonly mobilModel: Model<Mobil>,
+    @InjectModel(Customer.name)
+    private readonly customerModel: Model<Customer>,
   ) {}
 
   async createPenjualan(createPenjualan: CreatePenjualanDto) {
-    const isExist: Penjualan | null = await this.penjualanModel.findOne({});
+    const isExist: Penjualan | null = await this.penjualanModel.findOne({
+      mobil: createPenjualan.mobil,
+    });
 
-    if (!isExist) throw new NotFoundException('Data Penjualan Tidak Ditemukan');
+    if (!isExist)
+      throw new NotFoundException('Penjualan untuk Mobil ini sudah ada');
+
+    const isMobilExist: Mobil | null = await this.mobilModel.findById(
+      createPenjualan.mobil,
+    );
+
+    if (!isMobilExist) throw new NotFoundException('Mobil Tidak Ditemukan');
+
+    const isCustomerExist: Customer | null = await this.customerModel.findById(
+      createPenjualan.customer,
+    );
+
+    if (!isCustomerExist)
+      throw new NotFoundException('Customer Tidak Ditemukan');
+
+    const dataPenjualan: Omit<CreatePenjualanDto, 'customer'> = createPenjualan;
+
+    const newPenjualan = await this.penjualanModel.create({
+      ...dataPenjualan,
+      totalHarga: isMobilExist.harga,
+    });
+
+    const newHistory = await this.historyCustomer.create({
+      customer: createPenjualan.customer,
+      penjualan: newPenjualan._id,
+      metodePembayaran: createPenjualan.metodePembayaran,
+      totalPembayaran: newPenjualan.totalHarga,
+      totalTerbayar: 0,
+    });
+
+    newPenjualan.updateOne({ historyPembayaran: newHistory._id });
+
+    return newPenjualan;
   }
 
   async getAllPenjualan() {

@@ -11,6 +11,7 @@ import { JenisMobilModule } from './mobil_jenis/JenisMobil.Module';
 import { MerkMobilModule } from './mobil_merk/MerkMobil.Module';
 import { MobilModule } from './mobil/mobil.module';
 import { TipeMobilModule } from './mobil_tipe/TipeMobil.module';
+import { PenjualanModule } from './penjualan/Penjualan.module';
 
 @Global()
 @Module({
@@ -25,6 +26,11 @@ import { TipeMobilModule } from './mobil_tipe/TipeMobil.module';
     MerkMobilModule,
     TipeMobilModule,
     MobilModule,
+
+    /**
+     * Penjualan
+     */
+    PenjualanModule,
   ],
   controllers: [],
   providers: [],

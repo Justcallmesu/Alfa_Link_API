@@ -1,4 +1,5 @@
 import { CheckIsValidObjectId } from '@/modules/common/decorators/Class-Custom-Validator/IsValidObjectId';
+import { Customer } from '@/schemas/customer/Customer';
 import { HistoryPembayaran } from '@/schemas/customer/HistoryPembayaran';
 import { Mobil } from '@/schemas/mobil/Mobil';
 import { IsDate, IsEnum, IsNotEmpty, IsNumber } from 'class-validator';
@@ -17,16 +18,13 @@ export class CreatePenjualanDto {
   @IsEnum(metodePembayaran)
   metodePembayaran: metodePembayaran;
 
-  @CheckIsValidObjectId('history')
-  history: HistoryPembayaran;
-
-  @IsNotEmpty()
-  @IsNumber()
-  totalHarga: number;
-
   @IsNotEmpty()
   @IsDate()
-  tangalPenjualan: Date;
+  tanggalPenjualan: Date;
+
+  @IsNotEmpty()
+  @CheckIsValidObjectId('customer')
+  customer: Customer;
 }
 
 export class UpdatePenjualanDto extends CreatePenjualanDto {}
