@@ -12,6 +12,7 @@ import { CreateCustomerDto, UpdateCustomerDto } from './customer.dto';
 
 // Schema
 import { Customer, CustomerDocument } from '@/schemas/customer/Customer';
+import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 
 @Injectable()
 export class CustomerService {
@@ -20,12 +21,32 @@ export class CustomerService {
   ) {}
 
   async getAll(res: Response) {
-    const customerDatas = await this.customerModel.find({});
+    const filterQuery = {
+      fullName: { $regex: new RegExp('', 'ig') },
+    };
+
+    const mongoQueryMeta = await new MongoQuery(
+      this.customerModel,
+      filterQuery,
+      { fullName: -1 },
+      '',
+      {
+        page: 1,
+        limit: 10,
+      },
+    )
+      .filter()
+      .sort()
+      .select()
+      .paginate();
+
+    const customerDatas = await mongoQueryMeta.mongoQuery;
 
     return res.json({
       message: 'Data Fetched',
       status: '200',
       data: customerDatas,
+      meta: mongoQueryMeta.meta,
     });
   }
 
