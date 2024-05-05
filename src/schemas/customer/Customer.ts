@@ -59,8 +59,8 @@ export class Customer {
 export const CustomerSchema = SchemaFactory.createForClass(Customer);
 
 // Indexing
-CustomerSchema.index({ fullname: 1, email: 1 }, { unique: true });
-CustomerSchema.index({ fullname: 1 }, { unique: true });
+CustomerSchema.index({ fullName: 1, email: 1 }, { unique: true });
+CustomerSchema.index({ fullName: 1 }, { unique: true });
 
 CustomerSchema.index({ email: 1 }, { unique: true });
 CustomerSchema.index({ subscribeNews: 1 });
