@@ -38,3 +38,12 @@ export class CreateCustomerDto {
 }
 
 export interface UpdateCustomerDto extends CreateCustomerDto {}
+
+export enum CustomerFilterQuery {
+  FULLNAME = 'fullName',
+  EMAIL = 'email',
+  BIRTHPLACE = 'birthPlace',
+  BIRTHDATE = 'birthDate',
+  ADDRESS = 'address',
+  SUBSCRIBENEWS = 'subscribeNews',
+}

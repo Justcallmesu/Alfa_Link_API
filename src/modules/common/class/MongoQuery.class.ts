@@ -1,35 +1,33 @@
 import { BadRequestException } from '@nestjs/common';
 import { Model, Query } from 'mongoose';
 
-export type Pagination = {
-  page: number;
-  limit: number;
-};
+/**
+ * Interface
+ */
+import { PaginationMeta } from '../interface/Pagination/PaginationMeta.interface';
+import { Pagination } from '../interface/Pagination/Pagination.interface';
+import { MongoSort } from '../interface/MongoInterface/Sort.interface';
 
 export class MongoQuery {
   /**
    * Public
    */
   public mongoQuery: Query<any, any>;
-  public meta: {
-    page: number;
-    limit: number;
-    totalPage: number;
-  };
+  public meta: PaginationMeta;
 
   /**
    * Private
    */
   private model: Model<any>;
   private filterQuery: object;
-  private sortQuery: { [key: string]: 1 | -1 };
+  private sortQuery: MongoSort | undefined;
   private selectQuery: string;
   private pagination: Pagination = { page: 1, limit: 10 };
 
   constructor(
     model: Model<any>,
     filterQuery: object,
-    sort: { [key: string]: 1 | -1 },
+    sort: MongoSort | undefined,
     select: string,
     pagination: Pagination,
   ) {
@@ -42,7 +40,6 @@ export class MongoQuery {
 
   filter() {
     this.mongoQuery = this.model.find(this.filterQuery);
-    console.log(this.filterQuery);
     return this;
   }
 
