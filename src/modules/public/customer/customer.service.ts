@@ -8,11 +8,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 // DTO
-import { CreateCustomerDto, UpdateCustomerDto } from './customer.dto';
+import {
+  CreateCustomerDto,
+  CustomerFilterQuery,
+  UpdateCustomerDto,
+} from './customer.dto';
 
 // Schema
 import { Customer, CustomerDocument } from '@/schemas/customer/Customer';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
+import customerQueryConstructor from './customerQuery.constructor';
 
 @Injectable()
 export class CustomerService {
@@ -20,20 +25,18 @@ export class CustomerService {
     @InjectModel(Customer.name) private customerModel: Model<Customer>,
   ) {}
 
-  async getAll(res: Response) {
-    const filterQuery = {
-      fullName: { $regex: new RegExp('', 'ig') },
-    };
+  async getAll(res: Response, query: any) {
+    const { filter, pagination, select, sort } = customerQueryConstructor(
+      query,
+      Object.values(CustomerFilterQuery),
+    );
 
     const mongoQueryMeta = await new MongoQuery(
       this.customerModel,
-      filterQuery,
-      { fullName: -1 },
-      '',
-      {
-        page: 1,
-        limit: 10,
-      },
+      filter,
+      sort,
+      select,
+      pagination,
     )
       .filter()
       .sort()
