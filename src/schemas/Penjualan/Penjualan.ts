@@ -32,6 +32,29 @@ export class Penjualan {
   totalHarga: number;
 
   @Prop({
+    type: Boolean,
+  })
+  isDP: boolean;
+
+  @Prop({
+    type: Number,
+    default: 0,
+  })
+  TotalDP: number;
+
+  @Prop({
+    type: Number,
+    default: 0,
+  })
+  TotalTerbayar: number;
+
+  @Prop({
+    type: Number,
+    required: [true, 'Total Sisa is required'],
+  })
+  totalSisa: number;
+
+  @Prop({
     type: Date,
     required: true,
   })
