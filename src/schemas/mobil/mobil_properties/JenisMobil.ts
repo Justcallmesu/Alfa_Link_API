@@ -13,6 +13,12 @@ export class JenisMobil {
     maxlength: [50, 'Jenis mobil must be at most 50 characters'],
   })
   name: string;
+
+  @Prop({
+    type: String,
+    trim: true,
+  })
+  imageUrl: string;
 }
 
 export const JenisMobilSchema = SchemaFactory.createForClass(JenisMobil);

@@ -53,13 +53,4 @@ export class CreatePenjualanDto {
   @IsEnum(PenjualanStatus)
   status: PenjualanStatus;
 }
-export class UpdatePenjualanDto {
-  @IsNotEmpty()
-  @IsEnum(metodePembayaran)
-  metodePembayaran: metodePembayaran;
-
-  @IsNotEmpty()
-  @IsDate()
-  @Transform(({ value }) => new Date(value))
-  tanggalPenjualan: Date;
-}
+export class UpdatePenjualanDto extends CreatePenjualanDto {}

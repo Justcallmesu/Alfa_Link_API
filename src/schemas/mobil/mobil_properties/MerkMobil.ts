@@ -13,6 +13,12 @@ export class MerkMobil {
     maxlength: [50, 'Merk must be at most 50 characters'],
   })
   name: string;
+
+  @Prop({
+    type: String,
+    trim: true,
+  })
+  imageUrl: string;
 }
 
 export const MerkMobilSchema = SchemaFactory.createForClass(MerkMobil);
