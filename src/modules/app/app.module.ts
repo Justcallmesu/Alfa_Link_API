@@ -31,6 +31,7 @@ import {
   TipeMobilSchema,
 } from '@/schemas/mobil/mobil_properties/TipeMobil';
 import { Penjualan, PenjualanSchema } from '@/schemas/Penjualan/Penjualan';
+import { BankTujuan, BankTujuanSchema } from '@/schemas/BankTujuan/BankTujuan';
 
 @Global()
 @Module({
@@ -57,6 +58,7 @@ import { Penjualan, PenjualanSchema } from '@/schemas/Penjualan/Penjualan';
       { name: MerkMobil.name, schema: MerkMobilSchema },
       { name: TipeMobil.name, schema: TipeMobilSchema },
       { name: Penjualan.name, schema: PenjualanSchema },
+      { name: BankTujuan.name, schema: BankTujuanSchema },
     ]),
 
     /**
@@ -81,6 +83,7 @@ import { Penjualan, PenjualanSchema } from '@/schemas/Penjualan/Penjualan';
       { name: MerkMobil.name, schema: MerkMobilSchema },
       { name: TipeMobil.name, schema: TipeMobilSchema },
       { name: Penjualan.name, schema: PenjualanSchema },
+      { name: BankTujuan.name, schema: BankTujuanSchema },
     ]),
   ],
 })

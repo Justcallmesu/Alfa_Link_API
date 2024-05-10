@@ -27,6 +27,13 @@ export class Penjualan {
   metodePembayaran: string;
 
   @Prop({
+    type: Types.ObjectId,
+    trim: true,
+    ref: 'BankTujuan',
+  })
+  BankTujuan: Types.ObjectId;
+
+  @Prop({
     type: Number,
     required: [true, 'Total Harga is required'],
   })
