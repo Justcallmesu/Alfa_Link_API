@@ -10,10 +10,6 @@ import { PublicModule } from '../public/public.module';
  * Schema
  */
 import {
-  HistoryPembayaran,
-  HistoryPembayaranSchema,
-} from '@/schemas/customer/HistoryPembayaran';
-import {
   PenjualanCustomer,
   PenjualanCustomerSchema,
 } from '@/schemas/Penjualan/PenjualanCustomer';
@@ -55,7 +51,6 @@ import { Penjualan, PenjualanSchema } from '@/schemas/Penjualan/Penjualan';
       { name: Roles.name, schema: RolesSchema },
       { name: Permissions.name, schema: PermissionsSchema },
       { name: PenjualanCustomer.name, schema: PenjualanCustomerSchema },
-      { name: HistoryPembayaran.name, schema: HistoryPembayaranSchema },
       { name: Customer.name, schema: CustomerSchema },
       { name: Mobil.name, schema: MobilSchema },
       { name: JenisMobil.name, schema: JenisMobilSchema },
@@ -80,7 +75,6 @@ import { Penjualan, PenjualanSchema } from '@/schemas/Penjualan/Penjualan';
       { name: Roles.name, schema: RolesSchema },
       { name: Permissions.name, schema: PermissionsSchema },
       { name: PenjualanCustomer.name, schema: PenjualanCustomerSchema },
-      { name: HistoryPembayaran.name, schema: HistoryPembayaranSchema },
       { name: Customer.name, schema: CustomerSchema },
       { name: Mobil.name, schema: MobilSchema },
       { name: JenisMobil.name, schema: JenisMobilSchema },

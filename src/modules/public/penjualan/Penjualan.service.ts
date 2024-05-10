@@ -8,7 +8,6 @@ import {
   PenjualanCustomerDocument,
 } from '@/schemas/Penjualan/PenjualanCustomer';
 import { Response } from 'express';
-import { HistoryPembayaran } from '@/schemas/customer/HistoryPembayaran';
 import { Mobil } from '@/schemas/mobil/Mobil';
 import { Customer } from '@/schemas/customer/Customer';
 
@@ -17,9 +16,6 @@ export class PenjualanService {
   constructor(
     @InjectModel(Penjualan.name)
     private readonly penjualanModel: Model<Penjualan>,
-
-    @InjectModel(HistoryPembayaran.name)
-    private readonly historyCustomer: Model<HistoryPembayaran>,
 
     @InjectModel(PenjualanCustomer.name)
     private readonly PenjualanCustomerModel: Model<PenjualanCustomer>,
@@ -59,18 +55,6 @@ export class PenjualanService {
       totalHarga: isMobilExist.harga,
     });
 
-    const newHistory = await this.historyCustomer.create({
-      customer: createPenjualan.customer,
-      penjualan: newPenjualan._id,
-      metodePembayaran: createPenjualan.metodePembayaran,
-      totalPembayaran: newPenjualan.totalHarga,
-      totalTerbayar: 0,
-    });
-
-    newPenjualan.history = newHistory.id;
-
-    const updatedData = await newPenjualan.save();
-
     const PenjualanCustomer: PenjualanCustomerDocument | null =
       await this.PenjualanCustomerModel.findOne({
         customer: createPenjualan.customer,
@@ -78,16 +62,16 @@ export class PenjualanService {
 
     if (PenjualanCustomer) {
       await PenjualanCustomer?.updateOne({
-        penjualan: [...PenjualanCustomer.penjualan, updatedData._id],
+        penjualan: [...PenjualanCustomer.penjualan, newPenjualan._id],
       });
     } else {
       await this.PenjualanCustomerModel.create({
         customer: createPenjualan.customer,
-        penjualan: [updatedData._id],
+        penjualan: [newPenjualan._id],
       });
     }
 
-    return updatedData;
+    return newPenjualan;
   }
 
   async getAllPenjualan() {
@@ -107,15 +91,6 @@ export class PenjualanService {
       {
         path: 'mobil',
         model: this.mobilModel,
-      },
-      {
-        path: 'history',
-        model: this.historyCustomer,
-        select: '-penjualan',
-        populate: {
-          path: 'customer',
-          model: this.customerModel,
-        },
       },
     ]);
 
@@ -142,10 +117,6 @@ export class PenjualanService {
       throw new NotFoundException('Data Penjualan Tidak Ditemukan');
 
     await dataPenjualan.deleteOne();
-
-    await this.historyCustomer.findOneAndDelete({
-      penjualan: dataPenjualan._id,
-    });
 
     const PenjualanCustomer: PenjualanCustomerDocument | null =
       await this.PenjualanCustomerModel.findOne({
