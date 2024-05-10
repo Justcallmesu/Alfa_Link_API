@@ -15,12 +15,6 @@ export class Penjualan {
   mobil: Types.ObjectId;
 
   @Prop({
-    type: Types.ObjectId,
-    ref: 'historyPembayaran',
-  })
-  history: Types.ObjectId;
-
-  @Prop({
     type: String,
     required: [true, 'Metode Pembayaran is required'],
     enum: {
@@ -47,10 +41,9 @@ export class Penjualan {
 export const PenjualanSchema = SchemaFactory.createForClass(Penjualan);
 
 // Indexing
-PenjualanSchema.index({ mobil: 1, history: 1 }, { unique: true });
+PenjualanSchema.index({ mobil: 1 }, { unique: true });
 
 PenjualanSchema.index({ tanggalPenjualan: 1 });
-PenjualanSchema.index({ metodePemabayaran: 1 });
+PenjualanSchema.index({ metodePembayaran: 1 });
 
-PenjualanSchema.index({ history: 1 });
 PenjualanSchema.index({ mobil: 1 });
