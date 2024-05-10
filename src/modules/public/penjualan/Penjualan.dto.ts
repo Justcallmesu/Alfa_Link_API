@@ -1,8 +1,18 @@
 import { CheckIsValidObjectId } from '@/modules/common/decorators/Class-Custom-Validator/IsValidObjectId';
+import { PenjualanStatus } from '@/modules/common/enum/penjualan/PenjualanEnum';
 import { Customer } from '@/schemas/customer/Customer';
 import { Mobil } from '@/schemas/mobil/Mobil';
+import { Optional } from '@nestjs/common';
 import { Transform } from 'class-transformer';
-import { IsDate, IsEnum, IsNotEmpty } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export enum metodePembayaran {
   CASH = 'Cash',
@@ -26,6 +36,22 @@ export class CreatePenjualanDto {
   @IsNotEmpty()
   @CheckIsValidObjectId('customer')
   customer: Customer;
+
+  @IsBoolean()
+  @IsOptional()
+  isDP: boolean;
+
+  @IsNumber()
+  @Optional()
+  totalDP: number;
+
+  @IsNumber()
+  @Optional()
+  totalTerbayar: number;
+
+  @IsString()
+  @IsEnum(PenjualanStatus)
+  status: PenjualanStatus;
 }
 export class UpdatePenjualanDto {
   @IsNotEmpty()

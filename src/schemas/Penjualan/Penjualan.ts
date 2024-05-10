@@ -1,3 +1,4 @@
+import { PenjualanStatus } from '@/modules/common/enum/penjualan/PenjualanEnum';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
 
@@ -33,6 +34,7 @@ export class Penjualan {
 
   @Prop({
     type: Boolean,
+    default: false,
   })
   isDP: boolean;
 
@@ -40,19 +42,27 @@ export class Penjualan {
     type: Number,
     default: 0,
   })
-  TotalDP: number;
+  totalDP: number;
 
   @Prop({
     type: Number,
     default: 0,
   })
-  TotalTerbayar: number;
+  totalTerbayar: number;
 
   @Prop({
     type: Number,
     required: [true, 'Total Sisa is required'],
   })
   totalSisa: number;
+
+  @Prop({
+    type: String,
+    enum: {
+      values: Object.entries(PenjualanStatus).map(([, value]) => value),
+    },
+  })
+  status: PenjualanStatus;
 
   @Prop({
     type: Date,
