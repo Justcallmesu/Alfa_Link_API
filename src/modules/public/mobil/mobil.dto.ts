@@ -1,5 +1,6 @@
 import { CheckIsValidObjectId } from '@/modules/common/decorators/Class-Custom-Validator/IsValidObjectId';
 import { BodyStyle } from '@/schemas/mobil/mobil_properties/BodyStyle';
+import { FuelType } from '@/schemas/mobil/mobil_properties/FuelType';
 import { MerkMobil } from '@/schemas/mobil/mobil_properties/MerkMobil';
 import { TipeMobil } from '@/schemas/mobil/mobil_properties/TipeMobil';
 import {
@@ -40,17 +41,17 @@ export class CreateMobilDto {
   @IsOptional()
   tipe: TipeMobil;
 
-  @CheckIsValidObjectId('tipe')
+  @CheckIsValidObjectId('warnaInterior')
   @IsOptional()
   warnaInterior: TipeMobil;
 
-  @CheckIsValidObjectId('tipe')
+  @CheckIsValidObjectId('warnaExterior')
   @IsOptional()
   warnaExterior: TipeMobil;
 
-  @CheckIsValidObjectId('tipe')
+  @CheckIsValidObjectId('fuelType')
   @IsOptional()
-  jenisBahanBakar: TipeMobil;
+  jenisBahanBakar: FuelType;
 
   @IsNumber()
   @IsOptional()

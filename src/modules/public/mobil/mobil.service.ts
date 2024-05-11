@@ -11,6 +11,8 @@ import { Mobil, MobilDocument } from '@/schemas/mobil/Mobil';
 import { MerkMobil } from '@/schemas/mobil/mobil_properties/MerkMobil';
 import { BodyStyle } from '@/schemas/mobil/mobil_properties/BodyStyle';
 import { TipeMobil } from '@/schemas/mobil/mobil_properties/TipeMobil';
+import { WarnaMobil } from '@/schemas/mobil/mobil_properties/WarnaMobil';
+import { FuelType } from '@/schemas/mobil/mobil_properties/FuelType';
 
 @Injectable()
 export class MobilService {
@@ -19,6 +21,8 @@ export class MobilService {
     @InjectModel(MerkMobil.name) private merkMobilModel: Model<MerkMobil>,
     @InjectModel(BodyStyle.name) private bodyStyleModel: Model<BodyStyle>,
     @InjectModel(TipeMobil.name) private tipeMobilModel: Model<TipeMobil>,
+    @InjectModel(WarnaMobil.name) private warnaMobilModel: Model<WarnaMobil>,
+    @InjectModel(FuelType.name) private FuelTypeModel: Model<FuelType>,
   ) {}
 
   async getAll(res: Response) {
@@ -30,7 +34,7 @@ export class MobilService {
         model: this.merkMobilModel,
       })
       .populate({
-        path: 'jenis',
+        path: 'bodyStyle',
         select: ['name'],
         model: this.bodyStyleModel,
       })
@@ -38,6 +42,21 @@ export class MobilService {
         path: 'tipe',
         select: ['name'],
         model: this.tipeMobilModel,
+      })
+      .populate({
+        path: 'warnaExterior',
+        select: ['name'],
+        model: this.warnaMobilModel,
+      })
+      .populate({
+        path: 'warnaInterior',
+        select: ['name'],
+        model: this.warnaMobilModel,
+      })
+      .populate({
+        path: 'jenisBahanBakar',
+        select: ['name'],
+        model: this.FuelTypeModel,
       });
 
     return res.json({
@@ -58,15 +77,29 @@ export class MobilService {
         model: this.merkMobilModel,
       })
       .populate({
-        path: 'jenis',
+        path: 'bodyStyle',
         select: ['name'],
-
         model: this.bodyStyleModel,
       })
       .populate({
         path: 'tipe',
         select: ['name'],
         model: this.tipeMobilModel,
+      })
+      .populate({
+        path: 'warnaExterior',
+        select: ['name'],
+        model: this.warnaMobilModel,
+      })
+      .populate({
+        path: 'warnaInterior',
+        select: ['name'],
+        model: this.warnaMobilModel,
+      })
+      .populate({
+        path: 'jenisBahanBakar',
+        select: ['name'],
+        model: this.FuelTypeModel,
       });
 
     if (!mobilData) {
@@ -156,12 +189,12 @@ export class MobilService {
       checkTipeMobil: !!tipe,
     });
 
-    await mobilData.updateOne(body);
+    const updateData = await mobilData.updateOne(body);
 
     res.status(200).json({
       message: 'Data Updated',
       status: '201',
-      data: mobilData,
+      data: updateData,
     });
   }
 
