@@ -29,7 +29,7 @@ import { RequiredPermissions } from '@/modules/common/decorators/Permissions.dec
 import { PermissionsEnum } from '@/modules/common/enum/Permissions.enum';
 import { ObjectIdParams } from '@/modules/common/decorators/ObjectIdParams.decorator';
 
-@Controller('warnaMobil')
+@Controller('warnamobil')
 @UseGuards(JwtGuard)
 export class WarnaMobilController {
   constructor(private readonly warnaMobilService: WarnaMobilService) {}
