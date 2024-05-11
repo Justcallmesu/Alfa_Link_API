@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
   Post,
   Put,
   Req,
@@ -17,14 +16,10 @@ import { JwtGuard } from '@/modules/common/guards/Jwt.Guard';
 import { PermissionsGuard } from '@/modules/common/guards/Permissions.Guard';
 
 // DTO
-import {
-  CreateMerkMobilDto,
-  StatusPajakMobil,
-  UpdateMerkMobilDto,
-} from './MerkMobil.dto';
+import { CreateBodyStyleDto, UpdateBodyStyleDto } from './BodyStyle.dto';
 
 // Services
-import { MerkMobilService } from './MerkMobil.service';
+import { BodyStyleService } from './BodyStyle.service';
 
 // Decorators
 import { RequiredPermissions } from '@/modules/common/decorators/Permissions.decorator';
@@ -33,16 +28,16 @@ import { RequiredPermissions } from '@/modules/common/decorators/Permissions.dec
 import { PermissionsEnum } from '@/modules/common/enum/Permissions.enum';
 import { ObjectIdParams } from '@/modules/common/decorators/ObjectIdParams.decorator';
 
-@Controller('merkmobil')
+@Controller('bodystyle')
 @UseGuards(JwtGuard)
-export class MerkMobilController {
-  constructor(private readonly merkMobilService: MerkMobilService) {}
+export class BodyStyleController {
+  constructor(private readonly bodyStyleService: BodyStyleService) {}
 
   @Get('/')
   //   @UseGuards(PermissionsGuard)
   //   @RequiredPermissions(PermissionsEnum.)
   async findAll(@Req() req: Request, @Res() res: Response) {
-    return await this.merkMobilService.getAll(res);
+    return await this.bodyStyleService.getAll(res);
   }
 
   @Get('/:id')
@@ -51,16 +46,16 @@ export class MerkMobilController {
     @ObjectIdParams() id: string,
     @Res() res: Response,
   ) {
-    await this.merkMobilService.getOne(res, id);
+    await this.bodyStyleService.getOne(res, id);
   }
 
   @Post()
   async createBodyStyle(
     @Req() req: Request,
     @Res() res: Response,
-    @Body() body: CreateMerkMobilDto,
+    @Body() body: CreateBodyStyleDto,
   ) {
-    await this.merkMobilService.createMobil(res, body);
+    await this.bodyStyleService.createMobil(res, body);
   }
 
   @Put('/:id')
@@ -68,9 +63,9 @@ export class MerkMobilController {
     @Req() req: Request,
     @Res() res: Response,
     @ObjectIdParams() id: string,
-    @Body() body: UpdateMerkMobilDto,
+    @Body() body: UpdateBodyStyleDto,
   ) {
-    await this.merkMobilService.updateMobil(res, id, body);
+    await this.bodyStyleService.updateMobil(res, id, body);
   }
 
   @Delete('/:id')
@@ -79,6 +74,6 @@ export class MerkMobilController {
     @ObjectIdParams() id: string,
     @Res() res: Response,
   ) {
-    await this.merkMobilService.deleteMobil(res, id);
+    await this.bodyStyleService.deleteMobil(res, id);
   }
 }

@@ -51,7 +51,7 @@ export class TipeMobilController {
   }
 
   @Post()
-  async createJenisMobil(
+  async createTipeMobil(
     @Req() req: Request,
     @Res() res: Response,
     @Body() body: CreateTipeMobilDto,
