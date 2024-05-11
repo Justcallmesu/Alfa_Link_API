@@ -9,7 +9,7 @@ import { CreateMobilDto, UpdateMobilDto } from './mobil.dto';
 // Schema
 import { Mobil, MobilDocument } from '@/schemas/mobil/Mobil';
 import { MerkMobil } from '@/schemas/mobil/mobil_properties/MerkMobil';
-import { JenisMobil } from '@/schemas/mobil/mobil_properties/JenisMobil';
+import { BodyStyle } from '@/schemas/mobil/mobil_properties/BodyStyle';
 import { TipeMobil } from '@/schemas/mobil/mobil_properties/TipeMobil';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class MobilService {
   constructor(
     @InjectModel(Mobil.name) private mobilModel: Model<Mobil>,
     @InjectModel(MerkMobil.name) private merkMobilModel: Model<MerkMobil>,
-    @InjectModel(JenisMobil.name) private jenisMobilModel: Model<JenisMobil>,
+    @InjectModel(BodyStyle.name) private bodyStyleModel: Model<BodyStyle>,
     @InjectModel(TipeMobil.name) private tipeMobilModel: Model<TipeMobil>,
   ) {}
 
@@ -32,7 +32,7 @@ export class MobilService {
       .populate({
         path: 'jenis',
         select: ['name'],
-        model: this.jenisMobilModel,
+        model: this.bodyStyleModel,
       })
       .populate({
         path: 'tipe',
@@ -61,7 +61,7 @@ export class MobilService {
         path: 'jenis',
         select: ['name'],
 
-        model: this.jenisMobilModel,
+        model: this.bodyStyleModel,
       })
       .populate({
         path: 'tipe',
@@ -84,17 +84,17 @@ export class MobilService {
     body: CreateMobilDto | UpdateMobilDto,
     options: {
       checkTipeMobil?: boolean;
-      checkJenisMobil?: boolean;
+      checkBodyStyle?: boolean;
       checkMerkMobil?: boolean;
     } = {
       checkTipeMobil: true,
-      checkJenisMobil: true,
+      checkBodyStyle: true,
       checkMerkMobil: true,
     },
   ) {
-    const { merk, jenis, tipe } = body;
+    const { merk, bodyStyle, tipe } = body;
 
-    const { checkJenisMobil, checkTipeMobil, checkMerkMobil } = options;
+    const { checkBodyStyle, checkTipeMobil, checkMerkMobil } = options;
 
     if (checkMerkMobil) {
       const isMerkMobilExist = await this.merkMobilModel.findById(merk);
@@ -104,11 +104,11 @@ export class MobilService {
       }
     }
 
-    if (checkJenisMobil) {
-      const isJenisMobilexist = await this.jenisMobilModel.findById(jenis);
+    if (checkBodyStyle) {
+      const isBodyStyleExist = await this.bodyStyleModel.findById(bodyStyle);
 
-      if (!isJenisMobilexist) {
-        throw new NotFoundException('Jenis Mobil Doesnt Exist');
+      if (!isBodyStyleExist) {
+        throw new NotFoundException('Body Style Doesnt Exist');
       }
     }
 
@@ -148,10 +148,10 @@ export class MobilService {
       throw new NotFoundException('Mobil Doesnt Exist');
     }
 
-    const { merk, jenis, tipe } = body;
+    const { merk, bodyStyle, tipe } = body;
 
     await this.checkIsMobilMasterDataExist(body, {
-      checkJenisMobil: !!jenis,
+      checkBodyStyle: !!bodyStyle,
       checkMerkMobil: !!merk,
       checkTipeMobil: !!tipe,
     });

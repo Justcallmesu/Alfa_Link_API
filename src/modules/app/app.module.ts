@@ -19,9 +19,9 @@ import { Permissions, PermissionsSchema } from '@/schemas/auth/Permissions';
 import { Customer, CustomerSchema } from '@/schemas/customer/Customer';
 import { Mobil, MobilSchema } from '@/schemas/mobil/Mobil';
 import {
-  JenisMobil,
-  JenisMobilSchema,
-} from '@/schemas/mobil/mobil_properties/JenisMobil';
+  BodyStyle,
+  BodyStyleSchema,
+} from '@/schemas/mobil/mobil_properties/BodyStyle';
 import {
   MerkMobil,
   MerkMobilSchema,
@@ -54,7 +54,7 @@ import { BankTujuan, BankTujuanSchema } from '@/schemas/BankTujuan/BankTujuan';
       { name: PenjualanCustomer.name, schema: PenjualanCustomerSchema },
       { name: Customer.name, schema: CustomerSchema },
       { name: Mobil.name, schema: MobilSchema },
-      { name: JenisMobil.name, schema: JenisMobilSchema },
+      { name: BodyStyle.name, schema: BodyStyleSchema },
       { name: MerkMobil.name, schema: MerkMobilSchema },
       { name: TipeMobil.name, schema: TipeMobilSchema },
       { name: Penjualan.name, schema: PenjualanSchema },
@@ -79,7 +79,7 @@ import { BankTujuan, BankTujuanSchema } from '@/schemas/BankTujuan/BankTujuan';
       { name: PenjualanCustomer.name, schema: PenjualanCustomerSchema },
       { name: Customer.name, schema: CustomerSchema },
       { name: Mobil.name, schema: MobilSchema },
-      { name: JenisMobil.name, schema: JenisMobilSchema },
+      { name: BodyStyle.name, schema: BodyStyleSchema },
       { name: MerkMobil.name, schema: MerkMobilSchema },
       { name: TipeMobil.name, schema: TipeMobilSchema },
       { name: Penjualan.name, schema: PenjualanSchema },

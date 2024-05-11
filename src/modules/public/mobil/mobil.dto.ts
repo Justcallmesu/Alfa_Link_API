@@ -1,5 +1,5 @@
 import { CheckIsValidObjectId } from '@/modules/common/decorators/Class-Custom-Validator/IsValidObjectId';
-import { JenisMobil } from '@/schemas/mobil/mobil_properties/JenisMobil';
+import { BodyStyle } from '@/schemas/mobil/mobil_properties/BodyStyle';
 import { MerkMobil } from '@/schemas/mobil/mobil_properties/MerkMobil';
 import { TipeMobil } from '@/schemas/mobil/mobil_properties/TipeMobil';
 import {
@@ -33,7 +33,7 @@ export class CreateMobilDto {
 
   @IsNotEmpty()
   @CheckIsValidObjectId('jenis')
-  jenis: JenisMobil;
+  bodyStyle: BodyStyle;
 
   @IsNotEmpty()
   @CheckIsValidObjectId('tipe')
@@ -77,7 +77,7 @@ export class UpdateMobilDto extends CreateMobilDto {
 
   @IsOptional()
   @CheckIsValidObjectId('jenis')
-  jenis: JenisMobil;
+  bodyStyle: BodyStyle;
 
   @IsOptional()
   @CheckIsValidObjectId('tipe')

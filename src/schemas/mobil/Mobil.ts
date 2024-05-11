@@ -3,9 +3,9 @@ import { Types, HydratedDocument } from 'mongoose';
 
 // Schema
 import { MerkMobil } from './mobil_properties/MerkMobil';
-import { JenisMobil } from './mobil_properties/JenisMobil';
 import { TipeMobil } from './mobil_properties/TipeMobil';
 import { Inspeksi } from './inspeksi';
+import { BodyStyle } from './mobil_properties/BodyStyle';
 
 export type MobilDocument = HydratedDocument<Mobil>;
 
@@ -35,10 +35,10 @@ export class Mobil {
 
   @Prop({
     type: Types.ObjectId,
-    required: [true, 'Jenis is required'],
-    ref: 'jenis',
+    required: [true, 'Body Style is required'],
+    ref: 'bodyStyle',
   })
-  jenis: JenisMobil;
+  bodyStyle: BodyStyle;
 
   @Prop({
     type: Types.ObjectId,

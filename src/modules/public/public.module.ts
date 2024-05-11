@@ -7,7 +7,7 @@ import { CustomerModule } from './customer/customer.module';
 /**
  * Mobil
  */
-import { JenisMobilModule } from './mobil_jenis/JenisMobil.Module';
+import { JenisMobilModule } from './body_style/BodyStyle.Module';
 import { MerkMobilModule } from './mobil_merk/MerkMobil.Module';
 import { MobilModule } from './mobil/mobil.module';
 import { TipeMobilModule } from './mobil_tipe/TipeMobil.module';
