@@ -32,6 +32,18 @@ import {
 } from '@/schemas/mobil/mobil_properties/TipeMobil';
 import { Penjualan, PenjualanSchema } from '@/schemas/Penjualan/Penjualan';
 import { BankTujuan, BankTujuanSchema } from '@/schemas/BankTujuan/BankTujuan';
+import {
+  WarnaMobil,
+  WarnaMobilSchema,
+} from '@/schemas/mobil/mobil_properties/WarnaMobil';
+import {
+  FuelType,
+  FuelTypeSchema,
+} from '@/schemas/mobil/mobil_properties/FuelType';
+import {
+  ModelMobil,
+  ModelMobilSchema,
+} from '@/schemas/mobil/mobil_properties/Model';
 
 @Global()
 @Module({
@@ -59,6 +71,9 @@ import { BankTujuan, BankTujuanSchema } from '@/schemas/BankTujuan/BankTujuan';
       { name: TipeMobil.name, schema: TipeMobilSchema },
       { name: Penjualan.name, schema: PenjualanSchema },
       { name: BankTujuan.name, schema: BankTujuanSchema },
+      { name: WarnaMobil.name, schema: WarnaMobilSchema },
+      { name: FuelType.name, schema: FuelTypeSchema },
+      { name: ModelMobil.name, schema: ModelMobilSchema },
     ]),
 
     /**
@@ -84,6 +99,9 @@ import { BankTujuan, BankTujuanSchema } from '@/schemas/BankTujuan/BankTujuan';
       { name: TipeMobil.name, schema: TipeMobilSchema },
       { name: Penjualan.name, schema: PenjualanSchema },
       { name: BankTujuan.name, schema: BankTujuanSchema },
+      { name: WarnaMobil.name, schema: WarnaMobilSchema },
+      { name: FuelType.name, schema: FuelTypeSchema },
+      { name: ModelMobil.name, schema: ModelMobilSchema },
     ]),
   ],
 })

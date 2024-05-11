@@ -12,6 +12,7 @@ import { MerkMobilModule } from './mobil_merk/MerkMobil.Module';
 import { MobilModule } from './mobil/mobil.module';
 import { TipeMobilModule } from './mobil_tipe/TipeMobil.module';
 import { PenjualanModule } from './penjualan/Penjualan.module';
+import { WarnaMobilModule } from './warna_mobil/WarnaMobil.module';
 
 @Global()
 @Module({
@@ -29,6 +30,7 @@ import { PenjualanModule } from './penjualan/Penjualan.module';
     BodyStyleModule,
     MerkMobilModule,
     TipeMobilModule,
+    WarnaMobilModule,
     MobilModule,
 
     /**
