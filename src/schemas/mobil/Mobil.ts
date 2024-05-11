@@ -28,28 +28,42 @@ export class Mobil {
 
   @Prop({
     type: Types.ObjectId,
-    required: [true, 'Merk is required'],
     ref: 'merk',
   })
   merk: MerkMobil;
 
   @Prop({
     type: Types.ObjectId,
-    required: [true, 'Body Style is required'],
     ref: 'bodyStyle',
   })
   bodyStyle: BodyStyle;
 
   @Prop({
     type: Types.ObjectId,
-    required: [true, 'Tipe is required'],
+    ref: 'warnaMobil',
+  })
+  warnaInterior: Types.ObjectId;
+
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'warnaMobil',
+  })
+  warnaExterior: Types.ObjectId;
+
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'fuelType',
+  })
+  jenisBahanBakar: Types.ObjectId;
+
+  @Prop({
+    type: Types.ObjectId,
     ref: 'tipe',
   })
   tipe: TipeMobil;
 
   @Prop({
     type: Number,
-    required: [true, 'Tahun rakit is required'],
   })
   tahunRakit: number;
 
@@ -68,7 +82,7 @@ export class Mobil {
     required: [true, 'No Polisi is required'],
     trim: true,
     minlength: [5, 'Warna must be at least 4 characters'],
-    maxlength: [9, 'Warna must be at most 9 characters'],
+    maxlength: [12, 'Warna must be at most 12 characters'],
   })
   noPolisi: string;
 
@@ -80,7 +94,6 @@ export class Mobil {
 
   @Prop({
     type: String,
-    required: [true, 'Status pajak is required'],
     enum: {
       values: ['Hidup', 'Mati', 'Terblokir'],
       message: 'Status pajak must be either Hidup, Mati, or Terblokir',
@@ -90,7 +103,6 @@ export class Mobil {
 
   @Prop({
     type: Number,
-    required: [true, 'Total pajak is required'],
   })
   totalPajak: number;
 }

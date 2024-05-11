@@ -3,6 +3,7 @@ import { BodyStyle } from '@/schemas/mobil/mobil_properties/BodyStyle';
 import { MerkMobil } from '@/schemas/mobil/mobil_properties/MerkMobil';
 import { TipeMobil } from '@/schemas/mobil/mobil_properties/TipeMobil';
 import {
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -27,24 +28,37 @@ export class CreateMobilDto {
   @IsNotEmpty()
   nama: string;
 
-  @IsNotEmpty()
   @CheckIsValidObjectId('merk')
+  @IsOptional()
   merk: MerkMobil;
 
-  @IsNotEmpty()
   @CheckIsValidObjectId('jenis')
+  @IsOptional()
   bodyStyle: BodyStyle;
 
-  @IsNotEmpty()
   @CheckIsValidObjectId('tipe')
+  @IsOptional()
   tipe: TipeMobil;
 
+  @CheckIsValidObjectId('tipe')
+  @IsOptional()
+  warnaInterior: TipeMobil;
+
+  @CheckIsValidObjectId('tipe')
+  @IsOptional()
+  warnaExterior: TipeMobil;
+
+  @CheckIsValidObjectId('tipe')
+  @IsOptional()
+  jenisBahanBakar: TipeMobil;
+
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   tahunRakit: number;
 
   @IsString()
   @IsNotEmpty()
+  @IsEnum(TransmisiMobil)
   transmisi: TransmisiMobil;
 
   @IsString()
@@ -58,50 +72,6 @@ export class CreateMobilDto {
   harga: number;
 
   @IsString()
-  @IsNotEmpty()
-  statusPajak: StatusPajakMobil;
-
-  @IsNumber()
-  @IsNotEmpty()
-  totalPajak: number;
-}
-
-export class UpdateMobilDto extends CreateMobilDto {
-  @IsString()
-  @IsOptional()
-  nama: string;
-
-  @IsOptional()
-  @CheckIsValidObjectId('merk')
-  merk: MerkMobil;
-
-  @IsOptional()
-  @CheckIsValidObjectId('jenis')
-  bodyStyle: BodyStyle;
-
-  @IsOptional()
-  @CheckIsValidObjectId('tipe')
-  tipe: TipeMobil;
-
-  @IsNumber()
-  @IsOptional()
-  tahunRakit: number;
-
-  @IsString()
-  @IsOptional()
-  transmisi: TransmisiMobil;
-
-  @IsString()
-  @IsOptional()
-  @MinLength(5)
-  @MaxLength(9)
-  noPolisi: string;
-
-  @IsNumber()
-  @IsOptional()
-  harga: number;
-
-  @IsString()
   @IsOptional()
   statusPajak: StatusPajakMobil;
 
@@ -109,3 +79,5 @@ export class UpdateMobilDto extends CreateMobilDto {
   @IsOptional()
   totalPajak: number;
 }
+
+export class UpdateMobilDto extends CreateMobilDto {}
