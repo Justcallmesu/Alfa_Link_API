@@ -15,6 +15,7 @@ import { PenjualanModule } from './penjualan/Penjualan.module';
 import { WarnaMobilModule } from './warna_mobil/WarnaMobil.module';
 import { FuelTypeModule } from './fuel_type/FuelType.module';
 import { ModelMobilModule } from './model_mobil/ModelMobil.module';
+import { InspeksiModule } from './inspeksi/inspeksi.module';
 
 @Global()
 @Module({
@@ -36,6 +37,7 @@ import { ModelMobilModule } from './model_mobil/ModelMobil.module';
     MobilModule,
     FuelTypeModule,
     ModelMobilModule,
+    InspeksiModule,
 
     /**
      * Penjualan

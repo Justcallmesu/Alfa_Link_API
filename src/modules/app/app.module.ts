@@ -44,6 +44,7 @@ import {
   ModelMobil,
   ModelMobilSchema,
 } from '@/schemas/mobil/mobil_properties/Model';
+import { Inspeksi, InspeksiSchema } from '@/schemas/mobil/inspeksi';
 
 @Global()
 @Module({
@@ -74,6 +75,7 @@ import {
       { name: WarnaMobil.name, schema: WarnaMobilSchema },
       { name: FuelType.name, schema: FuelTypeSchema },
       { name: ModelMobil.name, schema: ModelMobilSchema },
+      { name: Inspeksi.name, schema: InspeksiSchema },
     ]),
 
     /**
@@ -102,6 +104,7 @@ import {
       { name: WarnaMobil.name, schema: WarnaMobilSchema },
       { name: FuelType.name, schema: FuelTypeSchema },
       { name: ModelMobil.name, schema: ModelMobilSchema },
+      { name: Inspeksi.name, schema: InspeksiSchema },
     ]),
   ],
 })
