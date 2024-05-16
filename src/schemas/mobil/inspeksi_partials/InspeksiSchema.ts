@@ -5,7 +5,7 @@ export class InspeksiField {
   @Prop({
     type: Boolean,
   })
-  isGood: boolean;
+  isOk: boolean;
 
   @Prop({
     type: String,
