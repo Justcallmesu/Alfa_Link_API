@@ -14,7 +14,13 @@ import {
   MerkMobil,
   MerkMobilDocument,
 } from '@/schemas/mobil/mobil_properties/MerkMobil';
-import { CreateMerkMobilDto, UpdateMerkMobilDto } from './MerkMobil.dto';
+import {
+  CreateMerkMobilDto,
+  MerkMobilFilterEnum,
+  UpdateMerkMobilDto,
+} from './MerkMobil.dto';
+import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
+import queryConstructor from '@/modules/common/function/queryConstructor';
 
 @Injectable()
 export class MerkMobilService {
@@ -22,8 +28,25 @@ export class MerkMobilService {
     @InjectModel(MerkMobil.name) private merkMobilModel: Model<MerkMobil>,
   ) {}
 
-  async getAll(res: Response) {
-    const merkMobilDatas = await this.merkMobilModel.find({});
+  async getAll(res: Response, query: any) {
+    const { filter, pagination, select, sort } = queryConstructor(
+      query,
+      Object.values(MerkMobilFilterEnum),
+    );
+
+    const mongoQueryMeta = await new MongoQuery(
+      this.merkMobilModel,
+      filter,
+      sort,
+      select,
+      pagination,
+    )
+      .filter()
+      .sort()
+      .select()
+      .paginate();
+
+    const merkMobilDatas = await mongoQueryMeta.mongoQuery;
 
     return res.json({
       message: 'Data Fetched',

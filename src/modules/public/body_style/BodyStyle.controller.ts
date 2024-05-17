@@ -5,6 +5,7 @@ import {
   Get,
   Post,
   Put,
+  Query,
   Req,
   Res,
   UseGuards,
@@ -36,8 +37,12 @@ export class BodyStyleController {
   @Get('/')
   //   @UseGuards(PermissionsGuard)
   //   @RequiredPermissions(PermissionsEnum.)
-  async findAll(@Req() req: Request, @Res() res: Response) {
-    return await this.bodyStyleService.getAll(res);
+  async findAll(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Query() query: any,
+  ) {
+    return await this.bodyStyleService.getAll(res, query);
   }
 
   @Get('/:id')

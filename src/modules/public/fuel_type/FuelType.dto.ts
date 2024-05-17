@@ -9,3 +9,7 @@ export class CreateFuelTypeDto {
 }
 
 export interface UpdateFuelTypeDto extends CreateFuelTypeDto {}
+
+export enum FuelTypeFilterEnum {
+  NAME = 'name',
+}

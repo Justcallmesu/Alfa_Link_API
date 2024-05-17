@@ -8,13 +8,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 // DTO
-import { CreateBodyStyleDto, UpdateBodyStyleDto } from './BodyStyle.dto';
+import {
+  BodyStyleFilterEnum,
+  CreateBodyStyleDto,
+  UpdateBodyStyleDto,
+} from './BodyStyle.dto';
 
 // Schema
 import {
   BodyStyle,
   BodyStyleDocument,
 } from '@/schemas/mobil/mobil_properties/BodyStyle';
+import queryConstructor from '@/modules/common/function/queryConstructor';
+import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 
 @Injectable()
 export class BodyStyleService {
@@ -22,8 +28,25 @@ export class BodyStyleService {
     @InjectModel(BodyStyle.name) private BodyStyleModel: Model<BodyStyle>,
   ) {}
 
-  async getAll(res: Response) {
-    const BodyStyleDatas = await this.BodyStyleModel.find({});
+  async getAll(res: Response, query: any) {
+    const { filter, pagination, select, sort } = queryConstructor(
+      query,
+      Object.values(BodyStyleFilterEnum),
+    );
+
+    const mongoQueryMeta = await new MongoQuery(
+      this.BodyStyleModel,
+      filter,
+      sort,
+      select,
+      pagination,
+    )
+      .filter()
+      .sort()
+      .select()
+      .paginate();
+
+    const BodyStyleDatas = await mongoQueryMeta.mongoQuery;
 
     return res.json({
       message: 'Data Fetched',

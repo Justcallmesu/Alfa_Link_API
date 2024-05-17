@@ -8,13 +8,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 // DTO
-import { CreateWarnaMobilDto, UpdateWarnaMobilDto } from './WarnaMobil.dto';
+import {
+  CreateWarnaMobilDto,
+  UpdateWarnaMobilDto,
+  WarnaMobilFilterEnum,
+} from './WarnaMobil.dto';
 
 // Schema
 import {
   WarnaMobil,
   WarnaMobilDocument,
 } from '@/schemas/mobil/mobil_properties/WarnaMobil';
+import queryConstructor from '@/modules/common/function/queryConstructor';
+import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 
 @Injectable()
 export class WarnaMobilService {
@@ -22,8 +28,25 @@ export class WarnaMobilService {
     @InjectModel(WarnaMobil.name) private warnaMobilModel: Model<WarnaMobil>,
   ) {}
 
-  async getAll(res: Response) {
-    const warnaMobilDatas = await this.warnaMobilModel.find({});
+  async getAll(res: Response, query: any) {
+    const { filter, pagination, select, sort } = queryConstructor(
+      query,
+      Object.values(WarnaMobilFilterEnum),
+    );
+
+    const mongoQueryMeta = await new MongoQuery(
+      this.warnaMobilModel,
+      filter,
+      sort,
+      select,
+      pagination,
+    )
+      .filter()
+      .sort()
+      .select()
+      .paginate();
+
+    const warnaMobilDatas = await mongoQueryMeta.mongoQuery;
 
     return res.json({
       message: 'Data Fetched',

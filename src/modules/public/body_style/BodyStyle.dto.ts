@@ -1,11 +1,5 @@
 import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
-export enum StatusPajakMobil {
-  HIDUP = 'Hidup',
-  MATI = ' Mati',
-  TERBLOKIR = 'Terblokir',
-}
-
 export class CreateBodyStyleDto {
   @IsString()
   @IsNotEmpty()
@@ -15,3 +9,7 @@ export class CreateBodyStyleDto {
 }
 
 export interface UpdateBodyStyleDto extends CreateBodyStyleDto {}
+
+export enum BodyStyleFilterEnum {
+  NAME = 'name',
+}

@@ -9,3 +9,7 @@ export class CreateModelMobilDto {
 }
 
 export interface UpdateModelMobilDto extends CreateModelMobilDto {}
+
+export enum ModelMobilFilterEnum {
+  NAME = 'name',
+}

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   Res,
   UseGuards,
@@ -17,11 +18,7 @@ import { JwtGuard } from '@/modules/common/guards/Jwt.Guard';
 import { PermissionsGuard } from '@/modules/common/guards/Permissions.Guard';
 
 // DTO
-import {
-  CreateMerkMobilDto,
-  StatusPajakMobil,
-  UpdateMerkMobilDto,
-} from './MerkMobil.dto';
+import { CreateMerkMobilDto, UpdateMerkMobilDto } from './MerkMobil.dto';
 
 // Services
 import { MerkMobilService } from './MerkMobil.service';
@@ -41,8 +38,12 @@ export class MerkMobilController {
   @Get('/')
   //   @UseGuards(PermissionsGuard)
   //   @RequiredPermissions(PermissionsEnum.)
-  async findAll(@Req() req: Request, @Res() res: Response) {
-    return await this.merkMobilService.getAll(res);
+  async findAll(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Query() query: any,
+  ) {
+    return await this.merkMobilService.getAll(res, query);
   }
 
   @Get('/:id')

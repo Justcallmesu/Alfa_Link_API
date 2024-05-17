@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   Res,
   UseGuards,
@@ -37,8 +38,12 @@ export class TipeMobilController {
   @Get('/')
   //   @UseGuards(PermissionsGuard)
   //   @RequiredPermissions(PermissionsEnum.)
-  async findAll(@Req() req: Request, @Res() res: Response) {
-    return await this.tipeMobilService.getAll(res);
+  async findAll(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Query() query: any,
+  ) {
+    return await this.tipeMobilService.getAll(res, query);
   }
 
   @Get('/:id')

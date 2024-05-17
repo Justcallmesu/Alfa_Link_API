@@ -8,13 +8,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 // DTO
-import { CreateTipeMobilDto, UpdateTipeMobilDto } from './TipeMobil.dto';
+import {
+  CreateTipeMobilDto,
+  TipeMobilFilterEnum,
+  UpdateTipeMobilDto,
+} from './TipeMobil.dto';
 
 // Schema
 import {
   TipeMobil,
   TipeMobilDocument,
 } from '@/schemas/mobil/mobil_properties/TipeMobil';
+import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
+import queryConstructor from '@/modules/common/function/queryConstructor';
 
 @Injectable()
 export class TipeMobilservice {
@@ -22,8 +28,25 @@ export class TipeMobilservice {
     @InjectModel(TipeMobil.name) private tipeMobilModel: Model<TipeMobil>,
   ) {}
 
-  async getAll(res: Response) {
-    const tipeMobilDatas = await this.tipeMobilModel.find({});
+  async getAll(res: Response, query: any) {
+    const { filter, pagination, select, sort } = queryConstructor(
+      query,
+      Object.values(TipeMobilFilterEnum),
+    );
+
+    const mongoQueryMeta = await new MongoQuery(
+      this.tipeMobilModel,
+      filter,
+      sort,
+      select,
+      pagination,
+    )
+      .filter()
+      .sort()
+      .select()
+      .paginate();
+
+    const tipeMobilDatas = await mongoQueryMeta.mongoQuery;
 
     return res.json({
       message: 'Data Fetched',

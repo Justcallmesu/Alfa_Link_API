@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   Res,
   UseGuards,
@@ -37,8 +38,8 @@ export class FuelTypeController {
   @Get('/')
   //   @UseGuards(PermissionsGuard)
   //   @RequiredPermissions(PermissionsEnum.)
-  async findAll(@Req() req: Request, @Res() res: Response) {
-    return await this.fuelTypeService.getAll(res);
+  async findAll(@Res() res: Response, @Query() query: any) {
+    return await this.fuelTypeService.getAll(res, query);
   }
 
   @Get('/:id')

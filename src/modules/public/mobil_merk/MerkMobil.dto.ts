@@ -10,12 +10,6 @@ import {
   minLength,
 } from 'class-validator';
 
-export enum StatusPajakMobil {
-  HIDUP = 'Hidup',
-  MATI = ' Mati',
-  TERBLOKIR = 'Terblokir',
-}
-
 export class CreateMerkMobilDto {
   @IsString()
   @IsNotEmpty()
@@ -25,3 +19,7 @@ export class CreateMerkMobilDto {
 }
 
 export interface UpdateMerkMobilDto extends CreateMerkMobilDto {}
+
+export enum MerkMobilFilterEnum {
+  NAME = 'name',
+}

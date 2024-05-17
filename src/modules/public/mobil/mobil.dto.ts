@@ -82,3 +82,12 @@ export class CreateMobilDto {
 }
 
 export class UpdateMobilDto extends CreateMobilDto {}
+
+export enum MobilFilterEnum {
+  NAMA = 'nama',
+  MERK = 'merk',
+  BODY_STYLE = 'bodyStyle',
+  TIPE = 'tipe',
+  WARNA_INTERIOR = 'warnaInterior',
+  WARNA_EXTERIOR = 'warnaExterior',
+}

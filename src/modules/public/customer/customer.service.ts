@@ -17,7 +17,7 @@ import {
 // Schema
 import { Customer, CustomerDocument } from '@/schemas/customer/Customer';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
-import customerQueryConstructor from './customerQuery.constructor';
+import customerQueryConstructor from '../../common/function/queryConstructor';
 
 @Injectable()
 export class CustomerService {

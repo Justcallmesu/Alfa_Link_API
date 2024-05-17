@@ -8,13 +8,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 // DTO
-import { CreateFuelTypeDto, UpdateFuelTypeDto } from './FuelType.dto';
+import {
+  CreateFuelTypeDto,
+  FuelTypeFilterEnum,
+  UpdateFuelTypeDto,
+} from './FuelType.dto';
 
 // Schema
 import {
   FuelType,
   FuelTypeDocument,
 } from '@/schemas/mobil/mobil_properties/FuelType';
+import queryConstructor from '@/modules/common/function/queryConstructor';
+import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 
 @Injectable()
 export class FuelTypeService {
@@ -22,8 +28,25 @@ export class FuelTypeService {
     @InjectModel(FuelType.name) private fuelTypeModel: Model<FuelType>,
   ) {}
 
-  async getAll(res: Response) {
-    const fuelTypeDatas = await this.fuelTypeModel.find({});
+  async getAll(res: Response, query: any) {
+    const { filter, pagination, select, sort } = queryConstructor(
+      query,
+      Object.values(FuelTypeFilterEnum),
+    );
+
+    const mongoQueryMeta = await new MongoQuery(
+      this.fuelTypeModel,
+      filter,
+      sort,
+      select,
+      pagination,
+    )
+      .filter()
+      .sort()
+      .select()
+      .paginate();
+
+    const fuelTypeDatas = await mongoQueryMeta.mongoQuery;
 
     return res.json({
       message: 'Data Fetched',

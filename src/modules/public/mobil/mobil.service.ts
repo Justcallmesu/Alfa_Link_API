@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 // DTO
-import { CreateMobilDto, UpdateMobilDto } from './mobil.dto';
+import { CreateMobilDto, MobilFilterEnum, UpdateMobilDto } from './mobil.dto';
 
 // Schema
 import { Mobil, MobilDocument } from '@/schemas/mobil/Mobil';
@@ -13,6 +13,9 @@ import { BodyStyle } from '@/schemas/mobil/mobil_properties/BodyStyle';
 import { TipeMobil } from '@/schemas/mobil/mobil_properties/TipeMobil';
 import { WarnaMobil } from '@/schemas/mobil/mobil_properties/WarnaMobil';
 import { FuelType } from '@/schemas/mobil/mobil_properties/FuelType';
+import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
+import queryConstructor from '@/modules/common/function/queryConstructor';
+import { BodyStyleFilterEnum } from '../body_style/BodyStyle.dto';
 
 @Injectable()
 export class MobilService {
@@ -25,9 +28,25 @@ export class MobilService {
     @InjectModel(FuelType.name) private FuelTypeModel: Model<FuelType>,
   ) {}
 
-  async getAll(res: Response) {
-    const mobilDatas = await this.mobilModel
-      .find({})
+  async getAll(res: Response, query: any) {
+    const { filter, pagination, select, sort } = queryConstructor(
+      query,
+      Object.values(MobilFilterEnum),
+    );
+
+    const mongoQueryMeta = await new MongoQuery(
+      this.mobilModel,
+      filter,
+      sort,
+      select,
+      pagination,
+    )
+      .filter()
+      .sort()
+      .select()
+      .paginate();
+
+    const mobilDatas = await mongoQueryMeta.mongoQuery
       .populate({
         path: 'merk',
         select: ['name'],

@@ -8,13 +8,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 // DTO
-import { CreateModelMobilDto, UpdateModelMobilDto } from './ModelMobil.dto';
+import {
+  CreateModelMobilDto,
+  ModelMobilFilterEnum,
+  UpdateModelMobilDto,
+} from './ModelMobil.dto';
 
 // Schema
 import {
   ModelMobil,
   ModelMobilDocument,
 } from '@/schemas/mobil/mobil_properties/Model';
+import queryConstructor from '@/modules/common/function/queryConstructor';
+import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 
 @Injectable()
 export class ModelMobilService {
@@ -22,8 +28,25 @@ export class ModelMobilService {
     @InjectModel(ModelMobil.name) private modelMobilModel: Model<ModelMobil>,
   ) {}
 
-  async getAll(res: Response) {
-    const modelMobilDatas = await this.modelMobilModel.find({});
+  async getAll(res: Response, query: any) {
+    const { filter, pagination, select, sort } = queryConstructor(
+      query,
+      Object.values(ModelMobilFilterEnum),
+    );
+
+    const mongoQueryMeta = await new MongoQuery(
+      this.modelMobilModel,
+      filter,
+      sort,
+      select,
+      pagination,
+    )
+      .filter()
+      .sort()
+      .select()
+      .paginate();
+
+    const modelMobilDatas = await mongoQueryMeta.mongoQuery;
 
     return res.json({
       message: 'Data Fetched',

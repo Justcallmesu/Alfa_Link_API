@@ -9,3 +9,7 @@ export class CreateWarnaMobilDto {
 }
 
 export interface UpdateWarnaMobilDto extends CreateWarnaMobilDto {}
+
+export enum WarnaMobilFilterEnum {
+  NAME = 'name',
+}
