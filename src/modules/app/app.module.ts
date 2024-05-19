@@ -76,6 +76,7 @@ import { Inspeksi, InspeksiSchema } from '@/schemas/mobil/inspeksi';
       { name: FuelType.name, schema: FuelTypeSchema },
       { name: ModelMobil.name, schema: ModelMobilSchema },
       { name: Inspeksi.name, schema: InspeksiSchema },
+      { name: BankTujuan.name, schema: BankTujuanSchema },
     ]),
 
     /**
@@ -105,6 +106,7 @@ import { Inspeksi, InspeksiSchema } from '@/schemas/mobil/inspeksi';
       { name: FuelType.name, schema: FuelTypeSchema },
       { name: ModelMobil.name, schema: ModelMobilSchema },
       { name: Inspeksi.name, schema: InspeksiSchema },
+      { name: BankTujuan.name, schema: BankTujuanSchema },
     ]),
   ],
 })

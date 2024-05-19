@@ -16,6 +16,7 @@ import { WarnaMobilModule } from './warna_mobil/WarnaMobil.module';
 import { FuelTypeModule } from './fuel_type/FuelType.module';
 import { ModelMobilModule } from './model_mobil/ModelMobil.module';
 import { InspeksiModule } from './inspeksi/inspeksi.module';
+import { BankTujuanModule } from './bank_tujuan/BankTujuan.module';
 
 @Global()
 @Module({
@@ -43,6 +44,7 @@ import { InspeksiModule } from './inspeksi/inspeksi.module';
      * Penjualan
      */
     PenjualanModule,
+    BankTujuanModule,
   ],
   controllers: [],
   providers: [],

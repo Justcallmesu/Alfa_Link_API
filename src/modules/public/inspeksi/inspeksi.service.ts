@@ -28,7 +28,7 @@ export class InspeksiService {
   async findAll(res: Response, query: any) {
     const InspeksiAggregation = parseAggregation(
       query,
-      Object.keys(InspeksiFilterEnum),
+      Object.values(InspeksiFilterEnum),
       [
         {
           from: 'mobil',
