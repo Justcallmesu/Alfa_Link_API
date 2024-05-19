@@ -1,5 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
-import { Model, Query } from 'mongoose';
+import { Aggregate, Model, Query } from 'mongoose';
 
 /**
  * Interface
@@ -13,6 +13,7 @@ export class MongoQuery {
    * Public
    */
   public mongoQuery: Query<any, any>;
+  public aggregateQuery: Aggregate<any[]>;
   public meta: PaginationMeta;
 
   /**
@@ -40,6 +41,11 @@ export class MongoQuery {
 
   filter() {
     this.mongoQuery = this.model.find(this.filterQuery);
+    return this;
+  }
+
+  aggregation(aggregation: Array<any>) {
+    this.aggregateQuery = this.model.aggregate(aggregation);
     return this;
   }
 

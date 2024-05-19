@@ -15,7 +15,6 @@ import { WarnaMobil } from '@/schemas/mobil/mobil_properties/WarnaMobil';
 import { FuelType } from '@/schemas/mobil/mobil_properties/FuelType';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import queryConstructor from '@/modules/common/function/queryConstructor';
-import { BodyStyleFilterEnum } from '../body_style/BodyStyle.dto';
 
 @Injectable()
 export class MobilService {
@@ -29,54 +28,30 @@ export class MobilService {
   ) {}
 
   async getAll(res: Response, query: any) {
-    const { filter, pagination, select, sort } = queryConstructor(
+    const { filter, pagination, select, sort, aggregation } = queryConstructor(
       query,
       Object.values(MobilFilterEnum),
+      'Aggregation',
+      [
+        {
+          from: 'merkMobil',
+          localField: 'merk',
+          foreignfield: '_id',
+          as: 'merk',
+          fieldToSearch: 'name',
+        },
+      ],
     );
 
-    const mongoQueryMeta = await new MongoQuery(
+    const mongoQueryMeta = new MongoQuery(
       this.mobilModel,
-      filter,
+      filter!,
       sort,
-      select,
-      pagination,
-    )
-      .filter()
-      .sort()
-      .select()
-      .paginate();
+      select!,
+      pagination!,
+    ).aggregation(aggregation);
 
-    const mobilDatas = await mongoQueryMeta.mongoQuery
-      .populate({
-        path: 'merk',
-        select: ['name'],
-        model: this.merkMobilModel,
-      })
-      .populate({
-        path: 'bodyStyle',
-        select: ['name'],
-        model: this.bodyStyleModel,
-      })
-      .populate({
-        path: 'tipe',
-        select: ['name'],
-        model: this.tipeMobilModel,
-      })
-      .populate({
-        path: 'warnaExterior',
-        select: ['name'],
-        model: this.warnaMobilModel,
-      })
-      .populate({
-        path: 'warnaInterior',
-        select: ['name'],
-        model: this.warnaMobilModel,
-      })
-      .populate({
-        path: 'jenisBahanBakar',
-        select: ['name'],
-        model: this.FuelTypeModel,
-      });
+    const mobilDatas = await mongoQueryMeta.aggregateQuery.exec();
 
     return res.json({
       message: 'Data Fetched',
