@@ -20,17 +20,17 @@ export class MongoQuery {
    * Private
    */
   private model: Model<any>;
-  private filterQuery: object;
+  private filterQuery?: object;
   private sortQuery: MongoSort | undefined;
-  private selectQuery: string;
-  private pagination: Pagination = { page: 1, limit: 10 };
+  private selectQuery?: string;
+  private pagination?: Pagination = { page: 1, limit: 10 };
 
   constructor(
     model: Model<any>,
-    filterQuery: object,
-    sort: MongoSort | undefined,
-    select: string,
-    pagination: Pagination,
+    filterQuery?: object,
+    sort?: MongoSort | undefined,
+    select?: string,
+    pagination?: Pagination,
   ) {
     this.model = model;
     this.filterQuery = filterQuery;
@@ -40,7 +40,7 @@ export class MongoQuery {
   }
 
   filter() {
-    this.mongoQuery = this.model.find(this.filterQuery);
+    this.mongoQuery = this.model.find(this.filterQuery!);
     return this;
   }
 
@@ -55,12 +55,12 @@ export class MongoQuery {
   }
 
   select() {
-    this.mongoQuery = this.mongoQuery.select(this.selectQuery);
+    this.mongoQuery = this.mongoQuery.select(this.selectQuery!);
     return this;
   }
 
   async paginate() {
-    const { page, limit } = this.pagination;
+    const { page, limit } = this.pagination!;
     const skip = (page - 1) * limit;
 
     this.mongoQuery = this.mongoQuery.skip(skip).limit(limit);

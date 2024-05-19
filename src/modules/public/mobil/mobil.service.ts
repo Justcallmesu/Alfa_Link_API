@@ -14,7 +14,7 @@ import { TipeMobil } from '@/schemas/mobil/mobil_properties/TipeMobil';
 import { WarnaMobil } from '@/schemas/mobil/mobil_properties/WarnaMobil';
 import { FuelType } from '@/schemas/mobil/mobil_properties/FuelType';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
-import queryConstructor from '@/modules/common/function/queryConstructor';
+import parseAggregation from '@/modules/common/function/aggregationConstructor';
 
 @Injectable()
 export class MobilService {
@@ -28,10 +28,9 @@ export class MobilService {
   ) {}
 
   async getAll(res: Response, query: any) {
-    const { filter, pagination, select, sort, aggregation } = queryConstructor(
+    const aggregation = parseAggregation(
       query,
       Object.values(MobilFilterEnum),
-      'Aggregation',
       [
         {
           from: 'merkMobil',
@@ -50,13 +49,9 @@ export class MobilService {
       ],
     );
 
-    const mongoQueryMeta = new MongoQuery(
-      this.mobilModel,
-      filter!,
-      sort,
-      select!,
-      pagination!,
-    ).aggregation(aggregation);
+    const mongoQueryMeta = new MongoQuery(this.mobilModel).aggregation(
+      aggregation,
+    );
 
     const mobilDatas = await mongoQueryMeta.aggregateQuery.exec();
 
