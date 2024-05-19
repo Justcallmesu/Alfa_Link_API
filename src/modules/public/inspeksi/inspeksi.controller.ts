@@ -9,7 +9,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { InspeksiService } from './inspeksi.service';
-import { Response } from 'express';
+import { Response, query } from 'express';
 import { ObjectIdParams } from '@/modules/common/decorators/ObjectIdParams.decorator';
 import { CreateInspeksiDTO, UpdateInspeksiDTO } from './inspeksi.dto';
 
@@ -18,8 +18,8 @@ export class InspeksiController {
   constructor(private readonly inspeksiService: InspeksiService) {}
 
   @Get()
-  async findAll(@Res() res: Response) {
-    return this.inspeksiService.findAll(res);
+  async findAll(@Res() res: Response, @Query() query: any) {
+    return this.inspeksiService.findAll(res, query);
   }
 
   @Get(':id')

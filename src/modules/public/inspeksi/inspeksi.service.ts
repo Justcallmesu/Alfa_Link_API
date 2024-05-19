@@ -10,7 +10,13 @@ import { Response } from 'express';
 // Schema
 import { Inspeksi, InspeksiDocument } from '@/schemas/mobil/inspeksi';
 import { Mobil, MobilDocument } from '@/schemas/mobil/Mobil';
-import { CreateInspeksiDTO, UpdateInspeksiDTO } from './inspeksi.dto';
+import {
+  CreateInspeksiDTO,
+  InspeksiFilterEnum,
+  UpdateInspeksiDTO,
+} from './inspeksi.dto';
+import parseAggregation from '@/modules/common/function/aggregationConstructor';
+import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 
 @Injectable()
 export class InspeksiService {
@@ -19,10 +25,24 @@ export class InspeksiService {
     @InjectModel(Mobil.name) private readonly mobilModel: Model<Mobil>,
   ) {}
 
-  async findAll(res: Response) {
-    const inspeksiDatas: InspeksiDocument[] = await this.inspeksiModel
-      .find()
-      .populate({ path: 'mobil', model: this.mobilModel });
+  async findAll(res: Response, query: any) {
+    const InspeksiAggregation = parseAggregation(
+      query,
+      Object.keys(InspeksiFilterEnum),
+      [
+        {
+          from: 'mobil',
+          localField: 'mobil',
+          foreignfield: '_id',
+          as: 'mobil',
+          fieldToSearch: 'nama',
+        },
+      ],
+    );
+
+    const inspeksiDatas = await new MongoQuery(this.inspeksiModel).aggregation(
+      InspeksiAggregation,
+    ).aggregateQuery;
 
     res.status(200).json({
       message: 'Data Fetched',

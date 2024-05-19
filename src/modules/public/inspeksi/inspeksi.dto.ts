@@ -306,3 +306,7 @@ export class CreateInspeksiDTO {
 }
 
 export class UpdateInspeksiDTO extends CreateInspeksiDTO {}
+
+export enum InspeksiFilterEnum {
+  mobil = 'mobil',
+}
