@@ -40,6 +40,13 @@ export class MobilService {
           as: 'merk',
           fieldToSearch: 'name',
         },
+        {
+          from: 'tipeMobil',
+          localField: 'tipe',
+          foreignfield: '_id',
+          as: 'tipe',
+          fieldToSearch: 'name',
+        },
       ],
     );
 

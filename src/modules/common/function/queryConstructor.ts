@@ -38,20 +38,16 @@ function parseAggregation(
   const lookupAggregation: Array<any> = [];
   const matchAggregation: Array<any> = [];
   const unwindArray: Array<any> = [];
-
   /**
    * Convert Field Into Object Id
    */
-  aggregationLookup?.forEach((key) => {
-    convertedField['$addFields'] = {
-      [key.as]: {
-        $toObjectId: `$${key.localField}`,
-      },
+  aggregationLookup?.forEach((value) => {
+    convertedField.$addFields[value.as] = {
+      $toObjectId: `$${value.localField}`,
     };
   });
 
   aggregation.push(convertedField);
-
   /**
    * Lookup the data
    */
@@ -78,7 +74,6 @@ function parseAggregation(
     });
   }
   aggregation.push(...unwindArray);
-
   /**
    * Filter
    */
@@ -91,6 +86,7 @@ function parseAggregation(
           },
         },
       });
+      delete query[value.as];
     }
   });
 
@@ -107,7 +103,7 @@ function parseAggregation(
   });
 
   aggregation.push(...matchAggregation);
-
+  console.log(aggregation);
   /**
    * Pagination
    */
@@ -150,16 +146,14 @@ export default function (
   query: StringObject | QueryInterface,
   queryEnum: Array<string>,
   type: 'Filter' | 'Aggregation' = 'Filter',
-  aggregationLookup?: [
-    {
-      from: string;
-      localField: string;
-      foreignfield: string;
-      as: string;
-      fieldToSearch: string;
-      search?: string;
-    },
-  ],
+  aggregationLookup: {
+    from: string;
+    localField: string;
+    foreignfield: string;
+    as: string;
+    fieldToSearch: string;
+    search?: string;
+  }[],
 ) {
   /**
    * Store Query Temporary
