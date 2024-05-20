@@ -35,8 +35,8 @@ export class BodyStyleController {
   constructor(private readonly bodyStyleService: BodyStyleService) {}
 
   @Get('/')
-  //   @UseGuards(PermissionsGuard)
-  //   @RequiredPermissions(PermissionsEnum.)
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_BODY_STYLE)
   async findAll(
     @Req() req: Request,
     @Res() res: Response,
@@ -46,6 +46,8 @@ export class BodyStyleController {
   }
 
   @Get('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_BODY_STYLE)
   async getOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,
@@ -55,6 +57,8 @@ export class BodyStyleController {
   }
 
   @Post()
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.CREATE_BODY_STYLE)
   async createBodyStyle(
     @Req() req: Request,
     @Res() res: Response,
@@ -64,6 +68,8 @@ export class BodyStyleController {
   }
 
   @Put('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.UPDATE_BODY_STYLE)
   async updateOne(
     @Req() req: Request,
     @Res() res: Response,
@@ -74,6 +80,8 @@ export class BodyStyleController {
   }
 
   @Delete('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.DELETE_BODY_STYLE)
   async deleteOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,

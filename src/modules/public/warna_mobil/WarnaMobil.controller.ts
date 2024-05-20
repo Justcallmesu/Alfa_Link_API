@@ -36,8 +36,8 @@ export class WarnaMobilController {
   constructor(private readonly warnaMobilService: WarnaMobilService) {}
 
   @Get('/')
-  //   @UseGuards(PermissionsGuard)
-  //   @RequiredPermissions(PermissionsEnum.)
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_WARNA)
   async findAll(
     @Req() req: Request,
     @Res() res: Response,
@@ -47,6 +47,8 @@ export class WarnaMobilController {
   }
 
   @Get('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_WARNA)
   async getOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,
@@ -56,6 +58,8 @@ export class WarnaMobilController {
   }
 
   @Post()
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.CREATE_WARNA)
   async createWarnaMobil(
     @Req() req: Request,
     @Res() res: Response,
@@ -65,6 +69,8 @@ export class WarnaMobilController {
   }
 
   @Put('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.UPDATE_WARNA)
   async updateOne(
     @Req() req: Request,
     @Res() res: Response,
@@ -75,6 +81,8 @@ export class WarnaMobilController {
   }
 
   @Delete('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.DELETE_WARNA)
   async deleteOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,

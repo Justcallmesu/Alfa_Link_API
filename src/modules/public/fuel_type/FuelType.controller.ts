@@ -36,13 +36,15 @@ export class FuelTypeController {
   constructor(private readonly fuelTypeService: FuelTypeService) {}
 
   @Get('/')
-  //   @UseGuards(PermissionsGuard)
-  //   @RequiredPermissions(PermissionsEnum.)
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_FUEL_TYPE)
   async findAll(@Res() res: Response, @Query() query: any) {
     return await this.fuelTypeService.getAll(res, query);
   }
 
   @Get('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_FUEL_TYPE)
   async getOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,
@@ -52,6 +54,8 @@ export class FuelTypeController {
   }
 
   @Post()
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.CREATE_FUEL_TYPE)
   async createFuelType(
     @Req() req: Request,
     @Res() res: Response,
@@ -61,6 +65,8 @@ export class FuelTypeController {
   }
 
   @Put('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.UPDATE_FUEL_TYPE)
   async updateOne(
     @Req() req: Request,
     @Res() res: Response,
@@ -71,6 +77,8 @@ export class FuelTypeController {
   }
 
   @Delete('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.DELETE_FUEL_TYPE)
   async deleteOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,

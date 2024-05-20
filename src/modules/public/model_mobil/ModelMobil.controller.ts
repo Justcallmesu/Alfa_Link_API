@@ -37,8 +37,8 @@ export class ModelMobilController {
   constructor(private readonly modelMobilService: ModelMobilService) {}
 
   @Get('/')
-  //   @UseGuards(PermissionsGuard)
-  //   @RequiredPermissions(PermissionsEnum.)
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_MODEL)
   async findAll(
     @Req() req: Request,
     @Res() res: Response,
@@ -48,6 +48,8 @@ export class ModelMobilController {
   }
 
   @Get('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_MODEL)
   async getOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,
@@ -57,6 +59,8 @@ export class ModelMobilController {
   }
 
   @Post()
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.CREATE_MODEL)
   async createWarnaMobil(
     @Req() req: Request,
     @Res() res: Response,
@@ -66,6 +70,8 @@ export class ModelMobilController {
   }
 
   @Put('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.UPDATE_MODEL)
   async updateOne(
     @Req() req: Request,
     @Res() res: Response,
@@ -76,6 +82,8 @@ export class ModelMobilController {
   }
 
   @Delete('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.DELETE_MODEL)
   async deleteOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,

@@ -44,7 +44,7 @@ export class PermissionsGuard implements CanActivate {
 
     const isPermissioned = permissions_id.some((value) => {
       const data: Permissions = value as unknown as Permissions;
-      return ReflectorPermissions?.includes(data.permission_name as string);
+      return ReflectorPermissions?.includes(data.permission_name);
     });
 
     if (!isPermissioned) {

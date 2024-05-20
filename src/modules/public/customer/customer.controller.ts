@@ -36,13 +36,15 @@ export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
   @Get('/')
-  //   @UseGuards(PermissionsGuard)
-  //   @RequiredPermissions(PermissionsEnum.)
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_CUSTOMER)
   async findAll(@Res() res: Response, @Query() query: any) {
     return await this.customerService.getAll(res, query);
   }
 
   @Get('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_CUSTOMER)
   async getOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,
@@ -52,6 +54,8 @@ export class CustomerController {
   }
 
   @Post()
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.CREATE_CUSTOMER)
   async createCustomer(
     @Req() req: Request,
     @Res() res: Response,
@@ -61,6 +65,8 @@ export class CustomerController {
   }
 
   @Put('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.UPDATE_CUSTOMER)
   async updateOne(
     @Req() req: Request,
     @Res() res: Response,
@@ -71,6 +77,8 @@ export class CustomerController {
   }
 
   @Delete('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.DELETE_CUSTOMER)
   async deleteOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,

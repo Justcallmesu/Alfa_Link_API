@@ -36,8 +36,8 @@ export class MerkMobilController {
   constructor(private readonly merkMobilService: MerkMobilService) {}
 
   @Get('/')
-  //   @UseGuards(PermissionsGuard)
-  //   @RequiredPermissions(PermissionsEnum.)
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_MERK)
   async findAll(
     @Req() req: Request,
     @Res() res: Response,
@@ -47,6 +47,8 @@ export class MerkMobilController {
   }
 
   @Get('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_MERK)
   async getOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,
@@ -56,6 +58,8 @@ export class MerkMobilController {
   }
 
   @Post()
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.CREATE_MERK)
   async createBodyStyle(
     @Req() req: Request,
     @Res() res: Response,
@@ -65,6 +69,8 @@ export class MerkMobilController {
   }
 
   @Put('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.UPDATE_MERK)
   async updateOne(
     @Req() req: Request,
     @Res() res: Response,
@@ -75,6 +81,8 @@ export class MerkMobilController {
   }
 
   @Delete('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.DELETE_MERK)
   async deleteOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,

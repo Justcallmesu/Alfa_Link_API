@@ -36,8 +36,8 @@ export class TipeMobilController {
   constructor(private readonly tipeMobilService: TipeMobilservice) {}
 
   @Get('/')
-  //   @UseGuards(PermissionsGuard)
-  //   @RequiredPermissions(PermissionsEnum.)
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_TIPE)
   async findAll(
     @Req() req: Request,
     @Res() res: Response,
@@ -47,6 +47,8 @@ export class TipeMobilController {
   }
 
   @Get('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.READ_TIPE)
   async getOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,
@@ -56,6 +58,8 @@ export class TipeMobilController {
   }
 
   @Post()
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.CREATE_TIPE)
   async createTipeMobil(
     @Req() req: Request,
     @Res() res: Response,
@@ -65,6 +69,8 @@ export class TipeMobilController {
   }
 
   @Put('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.UPDATE_TIPE)
   async updateOne(
     @Req() req: Request,
     @Res() res: Response,
@@ -75,6 +81,8 @@ export class TipeMobilController {
   }
 
   @Delete('/:id')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.DELETE_TIPE)
   async deleteOne(
     @Req() req: Request,
     @ObjectIdParams() id: string,
