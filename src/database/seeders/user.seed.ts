@@ -19,6 +19,7 @@ export class UserSeed {
     const role_id = await this.RolesModel.findOne({
       role_name: 'Super Admin',
     }).select('_id');
+
     // User Data
     const data = [
       {
@@ -32,7 +33,9 @@ export class UserSeed {
     try {
       Logger.log('User Seeding Started');
 
-      await this.UserModel.deleteMany({});
+      await this.UserModel.deleteOne({
+        username: 'admin',
+      });
       await this.UserModel.insertMany(data);
     } catch (error) {
       log.error('User Seeding Failed');

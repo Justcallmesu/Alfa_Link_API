@@ -19,6 +19,13 @@ export class Permissions {
     immutable: true,
   })
   permission_description: string;
+
+  @Prop({
+    type: String,
+    required: [true, 'Permission Group is required'],
+    immutable: true,
+  })
+  permission_group: string;
 }
 
 export const PermissionsSchema = SchemaFactory.createForClass(Permissions);

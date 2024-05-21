@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 
 // Schema
 import { Permissions } from '@/schemas/auth/Permissions';
+import { PermissionsEnum } from '@/modules/common/enum/Permissions.enum';
 
 @Injectable()
 export class PermissionsSeed {
@@ -14,40 +15,25 @@ export class PermissionsSeed {
   public async seed() {
     const log = new Logger('PermissionsSeed');
 
+    const getPermissionGroupName = (permission: string) => {
+      const permissionGroup = permission.split('_');
+
+      if (permissionGroup.length === 1) return permissionGroup[0];
+      else
+        return permissionGroup
+          .filter((_, index) => {
+            return index !== 0;
+          })
+          .join(' ');
+    };
+
     // Permissions Data
-    const data = [
-      {
-        permission_name: 'Create_User',
-        permission_description: 'Create User Permission',
-      },
-      {
-        permission_name: 'Read_User',
-        permission_description: 'Read User Permission',
-      },
-      {
-        permission_name: 'Update_User',
-        permission_description: 'Update User Permission',
-      },
-      {
-        permission_name: 'Delete_User',
-        permission_description: 'Delete User Permission',
-      },
-      {
-        permission_name: 'Create_Role',
-        permission_description: 'Create Role Permission',
-      },
-      {
-        permission_name: 'Read_Role',
-        permission_description: 'Read Role Permission',
-      },
-      {
-        permission_name: 'Update_Role',
-        permission_description: 'Update Role Permission',
-      },
-      {
-        permission_name: 'Delete_Role',
-        permission_description: 'Delete Role Permission',
-      },
+    const data: Permissions[] = [
+      ...Object.entries(PermissionsEnum).map(([key, value]) => ({
+        permission_name: value,
+        permission_description: `${value.split('_').join(' ')} Permission`,
+        permission_group: getPermissionGroupName(value),
+      })),
     ];
 
     try {
