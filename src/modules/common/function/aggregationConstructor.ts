@@ -76,6 +76,7 @@ function parseUnwind(aggregationLookup: any) {
     unwindArray.push({
       $unwind: {
         path: `$${lookup.as}`,
+        preserveNullAndEmptyArrays: true,
       },
     });
   }
@@ -147,6 +148,7 @@ function parseAggregation(
   });
 
   aggregation.push(...matchAggregation);
+
   /**
    * Pagination
    */
@@ -163,7 +165,6 @@ function parseAggregation(
       $sort: parseSort(sort),
     });
   }
-
   return aggregation;
 }
 
