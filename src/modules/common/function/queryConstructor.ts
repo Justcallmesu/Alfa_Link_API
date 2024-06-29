@@ -42,7 +42,7 @@ export default function (
   /**
    * All Query
    */
-  const { sort, limit, page, select } = query as QueryInterface;
+  const { sort, limit = 10, page = 1, select } = query as QueryInterface;
 
   /**
    * Query Parsed

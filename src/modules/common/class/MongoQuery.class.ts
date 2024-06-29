@@ -70,6 +70,7 @@ export class MongoQuery {
     this.meta = {
       page: +page,
       limit: +limit,
+      itemsCount: itemsCount,
       totalPage: Math.ceil(itemsCount / limit),
     };
 

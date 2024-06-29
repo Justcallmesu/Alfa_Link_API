@@ -17,6 +17,7 @@ import {
   UpdateBankTujuanDto,
 } from './BankTujuan.dto';
 import { Response } from 'express';
+import { getPagination } from '@/modules/common/function/pagination';
 
 @Injectable()
 export class BankTujuanService {
@@ -48,6 +49,7 @@ export class BankTujuanService {
       message: 'Data Fetched',
       status: '200',
       data: bankTujuanDatas,
+      meta: await getPagination(bankTujuanDatas, pagination),
     });
   }
 

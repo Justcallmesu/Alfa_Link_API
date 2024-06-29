@@ -21,6 +21,7 @@ import {
 } from './MerkMobil.dto';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import queryConstructor from '@/modules/common/function/queryConstructor';
+import { getPagination } from '@/modules/common/function/pagination';
 
 @Injectable()
 export class MerkMobilService {
@@ -52,6 +53,7 @@ export class MerkMobilService {
       message: 'Data Fetched',
       status: '200',
       data: merkMobilDatas,
+      meta: await getPagination(merkMobilDatas, pagination),
     });
   }
 

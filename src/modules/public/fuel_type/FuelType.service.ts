@@ -21,6 +21,7 @@ import {
 } from '@/schemas/mobil/mobil_properties/FuelType';
 import queryConstructor from '@/modules/common/function/queryConstructor';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
+import { getPagination } from '@/modules/common/function/pagination';
 
 @Injectable()
 export class FuelTypeService {
@@ -52,6 +53,7 @@ export class FuelTypeService {
       message: 'Data Fetched',
       status: '200',
       data: fuelTypeDatas,
+      meta: await getPagination(fuelTypeDatas, pagination),
     });
   }
 

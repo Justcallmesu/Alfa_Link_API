@@ -21,6 +21,7 @@ import {
 } from '@/schemas/mobil/mobil_properties/TipeMobil';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import queryConstructor from '@/modules/common/function/queryConstructor';
+import { getPagination } from '@/modules/common/function/pagination';
 
 @Injectable()
 export class TipeMobilservice {
@@ -52,6 +53,7 @@ export class TipeMobilservice {
       message: 'Data Fetched',
       status: '200',
       data: tipeMobilDatas,
+      meta: await getPagination(tipeMobilDatas, pagination),
     });
   }
 

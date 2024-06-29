@@ -21,6 +21,7 @@ import {
 } from '@/schemas/mobil/mobil_properties/WarnaMobil';
 import queryConstructor from '@/modules/common/function/queryConstructor';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
+import { getPagination } from '@/modules/common/function/pagination';
 
 @Injectable()
 export class WarnaMobilService {
@@ -52,6 +53,7 @@ export class WarnaMobilService {
       message: 'Data Fetched',
       status: '200',
       data: warnaMobilDatas,
+      meta: await getPagination(warnaMobilDatas, pagination),
     });
   }
 

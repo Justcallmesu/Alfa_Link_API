@@ -18,6 +18,7 @@ import {
 import { Customer, CustomerDocument } from '@/schemas/customer/Customer';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import customerQueryConstructor from '../../common/function/queryConstructor';
+import { getPagination } from '@/modules/common/function/pagination';
 
 @Injectable()
 export class CustomerService {
@@ -49,7 +50,7 @@ export class CustomerService {
       message: 'Data Fetched',
       status: '200',
       data: customerDatas,
-      meta: mongoQueryMeta.meta,
+      meta: await getPagination(customerDatas, pagination),
     });
   }
 

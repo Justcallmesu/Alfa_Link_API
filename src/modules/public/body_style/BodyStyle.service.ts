@@ -21,6 +21,7 @@ import {
 } from '@/schemas/mobil/mobil_properties/BodyStyle';
 import queryConstructor from '@/modules/common/function/queryConstructor';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
+import { getPagination } from '@/modules/common/function/pagination';
 
 @Injectable()
 export class BodyStyleService {
@@ -52,6 +53,7 @@ export class BodyStyleService {
       message: 'Data Fetched',
       status: '200',
       data: BodyStyleDatas,
+      meta: await getPagination(BodyStyleDatas, pagination),
     });
   }
 
