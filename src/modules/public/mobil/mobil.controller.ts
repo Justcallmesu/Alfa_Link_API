@@ -18,7 +18,7 @@ import { JwtGuard } from '@/modules/common/guards/Jwt.Guard';
 import { PermissionsGuard } from '@/modules/common/guards/Permissions.Guard';
 
 // DTO
-import { CreateMobilDto, UpdateMobilDto } from './mobil.dto';
+import { CreateMobilDto, MobilQueryDto, UpdateMobilDto } from './mobil.dto';
 
 // Services
 import { MobilService } from './mobil.service';
@@ -41,7 +41,7 @@ export class MobilController {
   async findAll(
     @Req() req: Request,
     @Res() res: Response,
-    @Query() query: any,
+    @Query() query: MobilQueryDto,
   ) {
     return await this.mobilService.getAll(res, query);
   }

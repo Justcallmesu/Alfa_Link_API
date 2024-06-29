@@ -4,7 +4,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 // DTO
-import { CreateMobilDto, MobilFilterEnum, UpdateMobilDto } from './mobil.dto';
+import {
+  CreateMobilDto,
+  MobilFilterEnum,
+  MobilQueryDto,
+  UpdateMobilDto,
+} from './mobil.dto';
 
 // Schema
 import { Mobil, MobilDocument } from '@/schemas/mobil/Mobil';
@@ -15,6 +20,7 @@ import { WarnaMobil } from '@/schemas/mobil/mobil_properties/WarnaMobil';
 import { FuelType } from '@/schemas/mobil/mobil_properties/FuelType';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import parseAggregation from '@/modules/common/function/aggregationConstructor';
+import { aggregationPagination } from '@/modules/common/function/pagination';
 
 @Injectable()
 export class MobilService {
@@ -27,9 +33,15 @@ export class MobilService {
     @InjectModel(FuelType.name) private FuelTypeModel: Model<FuelType>,
   ) {}
 
-  async getAll(res: Response, query: any) {
+  async getAll(res: Response, query: MobilQueryDto) {
+    const { page = 1, limit = 10 } = query;
+
     const aggregation = parseAggregation(
-      query,
+      {
+        ...query,
+        page,
+        limit,
+      },
       Object.values(MobilFilterEnum),
       [
         {
@@ -83,10 +95,20 @@ export class MobilService {
 
     const mobilDatas = await mongoQueryMeta.aggregateQuery.exec();
 
+    const paginationMeta = await aggregationPagination<Mobil>(
+      mobilDatas,
+      this.mobilModel,
+      {
+        page,
+        limit,
+      },
+    );
+
     return res.json({
       message: 'Data Fetched',
       status: '200',
       data: mobilDatas,
+      meta: paginationMeta,
     });
   }
 

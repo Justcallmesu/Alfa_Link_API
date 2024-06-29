@@ -13,10 +13,12 @@ import { Mobil, MobilDocument } from '@/schemas/mobil/Mobil';
 import {
   CreateInspeksiDTO,
   InspeksiFilterEnum,
+  InspeksiQueryDto,
   UpdateInspeksiDTO,
 } from './inspeksi.dto';
 import parseAggregation from '@/modules/common/function/aggregationConstructor';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
+import { aggregationPagination } from '@/modules/common/function/pagination';
 
 @Injectable()
 export class InspeksiService {
@@ -25,9 +27,11 @@ export class InspeksiService {
     @InjectModel(Mobil.name) private readonly mobilModel: Model<Mobil>,
   ) {}
 
-  async findAll(res: Response, query: any) {
+  async findAll(res: Response, query: InspeksiQueryDto) {
+    const { page = 1, limit = 10 } = query;
+
     const InspeksiAggregation = parseAggregation(
-      query,
+      { ...query, page, limit },
       Object.values(InspeksiFilterEnum),
       [
         {
@@ -44,10 +48,17 @@ export class InspeksiService {
       InspeksiAggregation,
     ).aggregateQuery;
 
+    const paginationMeta = await aggregationPagination<Inspeksi>(
+      inspeksiDatas,
+      this.inspeksiModel,
+      { page, limit },
+    );
+
     res.status(200).json({
       message: 'Data Fetched',
       status: 200,
       data: inspeksiDatas,
+      meta: paginationMeta,
     });
   }
 

@@ -8,6 +8,7 @@ import {
 import { Type } from 'class-transformer';
 import { Types } from 'mongoose';
 import { CheckIsValidObjectId } from '@/modules/common/decorators/Class-Custom-Validator/IsValidObjectId';
+import { Pagination } from '@/modules/common/interface/Pagination/Pagination.interface';
 
 class InspeksiFieldDTO {
   @IsString()
@@ -309,4 +310,10 @@ export class UpdateInspeksiDTO extends CreateInspeksiDTO {}
 
 export enum InspeksiFilterEnum {
   mobil = 'mobil',
+}
+
+export class InspeksiQueryDto extends Pagination {
+  @IsOptional()
+  @CheckIsValidObjectId('mobil')
+  mobil: string;
 }

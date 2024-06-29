@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Post,
   Put,
   Query,
@@ -12,19 +13,25 @@ import {
 import { InspeksiService } from './inspeksi.service';
 import { Response, query } from 'express';
 import { ObjectIdParams } from '@/modules/common/decorators/ObjectIdParams.decorator';
-import { CreateInspeksiDTO, UpdateInspeksiDTO } from './inspeksi.dto';
+import {
+  CreateInspeksiDTO,
+  InspeksiQueryDto,
+  UpdateInspeksiDTO,
+} from './inspeksi.dto';
 import { RequiredPermissions } from '@/modules/common/decorators/Permissions.decorator';
 import { PermissionsEnum } from '@/modules/common/enum/Permissions.enum';
 import { PermissionsGuard } from '@/modules/common/guards/Permissions.Guard';
+import { JwtGuard } from '@/modules/common/guards/Jwt.Guard';
 
 @Controller('inspeksi')
+@UseGuards(JwtGuard)
 export class InspeksiController {
   constructor(private readonly inspeksiService: InspeksiService) {}
 
   @Get()
   @UseGuards(PermissionsGuard)
   @RequiredPermissions(PermissionsEnum.READ_INSPEKSI)
-  async findAll(@Res() res: Response, @Query() query: any) {
+  async findAll(@Res() res: Response, @Query() query: InspeksiQueryDto) {
     return this.inspeksiService.findAll(res, query);
   }
 
@@ -56,7 +63,7 @@ export class InspeksiController {
   async update(
     @Res() res: Response,
     @ObjectIdParams()
-    @Query('id')
+    @Param('id')
     id: string,
     @Body() updateInspeksiData: UpdateInspeksiDTO,
   ) {
@@ -69,7 +76,7 @@ export class InspeksiController {
   async delete(
     @Res() res: Response,
     @ObjectIdParams()
-    @Query('id')
+    @Param('id')
     id: string,
   ) {
     return this.inspeksiService.delete(res, id);

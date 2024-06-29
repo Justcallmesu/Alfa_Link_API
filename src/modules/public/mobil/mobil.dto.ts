@@ -1,4 +1,5 @@
 import { CheckIsValidObjectId } from '@/modules/common/decorators/Class-Custom-Validator/IsValidObjectId';
+import { Pagination } from '@/modules/common/interface/Pagination/Pagination.interface';
 import { BodyStyle } from '@/schemas/mobil/mobil_properties/BodyStyle';
 import { FuelType } from '@/schemas/mobil/mobil_properties/FuelType';
 import { MerkMobil } from '@/schemas/mobil/mobil_properties/MerkMobil';
@@ -90,4 +91,42 @@ export enum MobilFilterEnum {
   TIPE = 'tipe',
   WARNA_INTERIOR = 'warnaInterior',
   WARNA_EXTERIOR = 'warnaExterior',
+}
+
+export class MobilQueryDto extends Pagination {
+  @IsOptional()
+  @IsString()
+  nama: string;
+
+  @IsOptional()
+  @CheckIsValidObjectId('merk')
+  merk: string;
+
+  @IsOptional()
+  @CheckIsValidObjectId('jenis')
+  bodyStyle: string;
+
+  @IsOptional()
+  @CheckIsValidObjectId('tipe')
+  tipe: string;
+
+  @IsOptional()
+  @CheckIsValidObjectId('warnaInterior')
+  warnaInterior: string;
+
+  @IsOptional()
+  @CheckIsValidObjectId('warnaExterior')
+  warnaExterior: string;
+
+  @IsOptional()
+  @CheckIsValidObjectId('fuelType')
+  jenisBahanBakar: string;
+
+  @IsOptional()
+  @IsNumber()
+  tahunRakit: number;
+
+  @IsOptional()
+  @IsEnum(TransmisiMobil)
+  transmisi: TransmisiMobil;
 }
