@@ -28,7 +28,7 @@ import {
 import { GenerateTokenType } from '@/modules/common/enum/GenerateTokenType.enum';
 
 // Functions
-import GenerateToken from '@/modules/common/function/GenerateToken.function';
+import GenerateToken from '@/modules/common/function/generateToken.function';
 import ResetToken from '@/modules/common/function/ResetToken.function';
 import { CookiesJWT } from '@/modules/common/interface/CookiesJWT.interface';
 import { JwtGuardDto } from '@/modules/common/dto/JwtGuard.dto';
