@@ -68,8 +68,8 @@ export class MongoQuery {
     const itemsCount = await this.model.countDocuments(this.filterQuery);
 
     this.meta = {
-      page,
-      limit,
+      page: +page,
+      limit: +limit,
       totalPage: Math.ceil(itemsCount / limit),
     };
 
