@@ -15,6 +15,7 @@ export async function aggregationPagination<T>(
     page: +page,
     limit: +limit,
     itemsCount: data.length,
+    totalItems: documentCount,
     totalPage: Math.ceil(documentCount / +limit),
   };
 }
@@ -22,13 +23,15 @@ export async function aggregationPagination<T>(
 export async function getPagination<T>(
   data: Array<T>,
   paginationQuery: Pagination,
+  model: Model<T>,
 ): Promise<PaginationMeta> {
   const { limit, page } = paginationQuery;
-
+  const documentCount = await model.countDocuments({});
   return {
     page: +page,
     limit: +limit,
     itemsCount: data.length,
-    totalPage: Math.ceil(data.length / +limit),
+    totalItems: documentCount,
+    totalPage: Math.ceil(documentCount / +limit),
   };
 }

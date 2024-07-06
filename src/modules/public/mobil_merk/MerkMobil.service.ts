@@ -53,7 +53,11 @@ export class MerkMobilService {
       message: 'Data Fetched',
       status: '200',
       data: merkMobilDatas,
-      meta: await getPagination(merkMobilDatas, pagination),
+      meta: await getPagination(
+        merkMobilDatas,
+        pagination,
+        this.merkMobilModel,
+      ),
     });
   }
 

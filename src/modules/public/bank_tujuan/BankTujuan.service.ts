@@ -49,7 +49,11 @@ export class BankTujuanService {
       message: 'Data Fetched',
       status: '200',
       data: bankTujuanDatas,
-      meta: await getPagination(bankTujuanDatas, pagination),
+      meta: await getPagination(
+        bankTujuanDatas,
+        pagination,
+        this.bankTujuanModel,
+      ),
     });
   }
 

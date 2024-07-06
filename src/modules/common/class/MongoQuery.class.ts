@@ -74,7 +74,7 @@ export class MongoQuery {
       totalPage: Math.ceil(itemsCount / limit),
     };
 
-    if (page > this.meta.totalPage) {
+    if (page - 1 > this.meta.totalPage) {
       throw new BadRequestException(
         `${this.model.modelName} Pagination is Out of Bound`,
       );

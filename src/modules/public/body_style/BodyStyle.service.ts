@@ -53,7 +53,11 @@ export class BodyStyleService {
       message: 'Data Fetched',
       status: '200',
       data: BodyStyleDatas,
-      meta: await getPagination(BodyStyleDatas, pagination),
+      meta: await getPagination(
+        BodyStyleDatas,
+        pagination,
+        this.BodyStyleModel,
+      ),
     });
   }
 

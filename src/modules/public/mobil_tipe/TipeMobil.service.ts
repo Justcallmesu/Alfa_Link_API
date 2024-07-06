@@ -53,7 +53,11 @@ export class TipeMobilservice {
       message: 'Data Fetched',
       status: '200',
       data: tipeMobilDatas,
-      meta: await getPagination(tipeMobilDatas, pagination),
+      meta: await getPagination(
+        tipeMobilDatas,
+        pagination,
+        this.tipeMobilModel,
+      ),
     });
   }
 

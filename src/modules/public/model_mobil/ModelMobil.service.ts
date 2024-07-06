@@ -53,7 +53,11 @@ export class ModelMobilService {
       message: 'Data Fetched',
       status: '200',
       data: modelMobilDatas,
-      meta: await getPagination(modelMobilDatas, pagination),
+      meta: await getPagination(
+        modelMobilDatas,
+        pagination,
+        this.modelMobilModel,
+      ),
     });
   }
 

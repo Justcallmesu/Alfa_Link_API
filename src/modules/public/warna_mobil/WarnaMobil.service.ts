@@ -53,7 +53,11 @@ export class WarnaMobilService {
       message: 'Data Fetched',
       status: '200',
       data: warnaMobilDatas,
-      meta: await getPagination(warnaMobilDatas, pagination),
+      meta: await getPagination(
+        warnaMobilDatas,
+        pagination,
+        this.warnaMobilModel,
+      ),
     });
   }
 

@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsDate,
   IsEmail,
   IsNotEmpty,
   IsOptional,
@@ -15,22 +16,33 @@ export class CreateCustomerDto {
   @MaxLength(100)
   fullName: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  @IsEmail()
+  nik: string;
+
+  @IsOptional()
+  @IsString()
   email: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   birthPlace: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   birthDate: Date;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   address: string;
+
+  @IsOptional()
+  @IsString()
+  phoneNumber: string;
+
+  @IsOptional()
+  @IsString()
+  whatsappNumber: string;
 
   @IsOptional()
   @IsBoolean()

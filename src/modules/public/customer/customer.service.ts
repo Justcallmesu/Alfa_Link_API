@@ -50,7 +50,7 @@ export class CustomerService {
       message: 'Data Fetched',
       status: '200',
       data: customerDatas,
-      meta: await getPagination(customerDatas, pagination),
+      meta: await getPagination(customerDatas, pagination, this.customerModel),
     });
   }
 
@@ -76,7 +76,7 @@ export class CustomerService {
     if (isExist?.length) {
       throw new ConflictException('There is Existing data with same name');
     }
-
+    console.log(body);
     const customerData = await this.customerModel.create(body);
 
     res.status(201).json({

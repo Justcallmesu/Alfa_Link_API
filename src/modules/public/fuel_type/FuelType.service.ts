@@ -53,7 +53,7 @@ export class FuelTypeService {
       message: 'Data Fetched',
       status: '200',
       data: fuelTypeDatas,
-      meta: await getPagination(fuelTypeDatas, pagination),
+      meta: await getPagination(fuelTypeDatas, pagination, this.fuelTypeModel),
     });
   }
 
