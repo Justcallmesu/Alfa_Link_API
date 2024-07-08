@@ -10,24 +10,23 @@ export class BankTujuan {
     required: [true, 'Nama Bank is required'],
     trim: true,
   })
-  namaBank: string;
+  bankName: string;
 
   @Prop({
     type: String,
     required: [true, 'No Rekening Is Required'],
   })
-  noRekening: string;
+  bankNumber: string;
 
   @Prop({
     type: String,
     required: [true, 'Nama Pemilik Rekening is required'],
     trim: true,
   })
-  namaPemilikRekening: string;
+  bankOwnerName: string;
 }
 
 export const BankTujuanSchema = SchemaFactory.createForClass(BankTujuan);
 
-BankTujuanSchema.index({ namaBank: 1 }, { unique: true });
-BankTujuanSchema.index({ noRekening: 1 }, { unique: true });
-BankTujuanSchema.index({ namaPemilikRekening: 1 });
+BankTujuanSchema.index({ bankName: 1 }, { unique: true });
+BankTujuanSchema.index({ bankNumber: 1 }, { unique: true });

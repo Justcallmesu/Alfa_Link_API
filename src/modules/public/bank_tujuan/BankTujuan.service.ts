@@ -76,7 +76,7 @@ export class BankTujuanService {
 
   async create(res: Response, body: CreateBankTujuanDto) {
     const isExist = await this.bankTujuanModel.findOne({
-      namaBank: body.namaBank,
+      namaBank: body.bankName,
     });
 
     if (isExist) {

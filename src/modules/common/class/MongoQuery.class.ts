@@ -71,6 +71,7 @@ export class MongoQuery {
       page: +page,
       limit: +limit,
       itemsCount: itemsCount,
+      totalItems: itemsCount,
       totalPage: Math.ceil(itemsCount / limit),
     };
 

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { BankTujuanController } from './BankTujuan.contoller';
+import { BankTujuanController } from './BankTujuan.controller';
 import { BankTujuanService } from './BankTujuan.service';
 
 @Module({

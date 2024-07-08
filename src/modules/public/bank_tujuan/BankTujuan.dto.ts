@@ -3,19 +3,19 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateBankTujuanDto {
   @IsString()
   @IsNotEmpty()
-  namaBank: string;
+  bankName: string;
 
   @IsString()
   @IsNotEmpty()
-  noRekening: string;
+  bankNumber: string;
 
   @IsString()
   @IsNotEmpty()
-  namaPemilikRekening: string;
+  bankOwnerName: string;
 }
 
 export class UpdateBankTujuanDto extends CreateBankTujuanDto {}
 
 export enum BankTujuanFilterEnum {
-  NAMA_BANK = 'namaBank',
+  BANK_NAME = 'bankName',
 }
