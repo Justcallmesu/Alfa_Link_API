@@ -18,7 +18,11 @@ import { JwtGuard } from '@/modules/common/guards/Jwt.Guard';
 import { PermissionsGuard } from '@/modules/common/guards/Permissions.Guard';
 
 // DTO
-import { CreateMobilDto, MobilQueryDto, UpdateMobilDto } from './mobil.dto';
+import {
+  CreateMobilDto,
+  UpdateMobilDto,
+  UpdateMobilStatusDto,
+} from './mobil.dto';
 
 // Services
 import { MobilService } from './mobil.service';
@@ -41,7 +45,7 @@ export class MobilController {
   async findAll(
     @Req() req: Request,
     @Res() res: Response,
-    @Query() query: MobilQueryDto,
+    @Query() query: any,
   ) {
     return await this.mobilService.getAll(res, query);
   }
@@ -66,6 +70,18 @@ export class MobilController {
     @Body() body: CreateMobilDto,
   ) {
     await this.mobilService.createMobil(res, body);
+  }
+
+  @Put('/:id/status')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.UPDATE_MOBIL)
+  async updateStatus(
+    @Req() req: Request,
+    @Res() res: Response,
+    @ObjectIdParams() id: string,
+    @Body() body: UpdateMobilStatusDto,
+  ) {
+    await this.mobilService.updateStatus(res, id, body);
   }
 
   @Put('/:id')

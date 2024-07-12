@@ -14,6 +14,7 @@ export function CheckIsValidObjectId(property: string) {
       },
       validator: {
         validate(value: string) {
+          if (!value) return true;
           return isValidObjectId(value);
         },
       },

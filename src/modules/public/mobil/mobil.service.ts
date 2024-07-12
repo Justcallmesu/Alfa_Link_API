@@ -8,7 +8,9 @@ import {
   CreateMobilDto,
   MobilFilterEnum,
   MobilQueryDto,
+  StatusMobil,
   UpdateMobilDto,
+  UpdateMobilStatusDto,
 } from './mobil.dto';
 
 // Schema
@@ -159,47 +161,6 @@ export class MobilService {
     });
   }
 
-  private async checkIsMobilMasterDataExist(
-    body: CreateMobilDto | UpdateMobilDto,
-    options: {
-      checkTipeMobil?: boolean;
-      checkBodyStyle?: boolean;
-      checkMerkMobil?: boolean;
-    } = {
-      checkTipeMobil: true,
-      checkBodyStyle: true,
-      checkMerkMobil: true,
-    },
-  ) {
-    const { merk, bodyStyle, tipe } = body;
-
-    const { checkBodyStyle, checkTipeMobil, checkMerkMobil } = options;
-
-    if (checkMerkMobil) {
-      const isMerkMobilExist = await this.merkMobilModel.findById(merk);
-
-      if (!isMerkMobilExist) {
-        throw new NotFoundException('Merk Mobil Doesnt Exist');
-      }
-    }
-
-    if (checkBodyStyle) {
-      const isBodyStyleExist = await this.bodyStyleModel.findById(bodyStyle);
-
-      if (!isBodyStyleExist) {
-        throw new NotFoundException('Body Style Doesnt Exist');
-      }
-    }
-
-    if (checkTipeMobil) {
-      const isTipeMobilExist = await this.tipeMobilModel.findById(tipe);
-
-      if (!isTipeMobilExist) {
-        throw new NotFoundException('Tipe Mobil Doesnt Exist');
-      }
-    }
-  }
-
   async createMobil(res: Response, body: CreateMobilDto) {
     const isMobilWithSameNoPolisiExist = await this.mobilModel.findOne({
       no_polisi: body.noPolisi,
@@ -210,8 +171,11 @@ export class MobilService {
     }
 
     await this.checkIsMobilMasterDataExist(body);
+    const convertedData: CreateMobilDto =
+      await this.convertEmptyStringToNull(body);
+    convertedData.status = StatusMobil.NEW;
 
-    const mobilData = await this.mobilModel.create(body);
+    const mobilData = await this.mobilModel.create(convertedData);
 
     res.status(201).json({
       message: 'Data Created',
@@ -229,18 +193,34 @@ export class MobilService {
 
     const { merk, bodyStyle, tipe } = body;
 
-    await this.checkIsMobilMasterDataExist(body, {
-      checkBodyStyle: !!bodyStyle,
-      checkMerkMobil: !!merk,
-      checkTipeMobil: !!tipe,
-    });
+    await this.checkIsMobilMasterDataExist(body);
+    const convertedData: CreateMobilDto =
+      await this.convertEmptyStringToNull(body);
 
-    const updateData = await mobilData.updateOne(body);
+    const updateData = await mobilData.updateOne(convertedData);
 
     res.status(200).json({
       message: 'Data Updated',
       status: '201',
       data: updateData,
+    });
+  }
+
+  async updateStatus(res: Response, id: string, body: UpdateMobilStatusDto) {
+    const mobilData: MobilDocument | null = await this.mobilModel.findById(id);
+
+    if (!mobilData) {
+      throw new NotFoundException('Mobil Doesnt Exist');
+    }
+
+    mobilData.status = body.status;
+
+    await mobilData.save();
+
+    res.status(200).json({
+      message: 'Data Updated',
+      status: '200',
+      data: mobilData,
     });
   }
 
@@ -257,5 +237,81 @@ export class MobilService {
       message: 'Data Deleted',
       status: '204',
     });
+  }
+
+  private async convertEmptyStringToNull(body: CreateMobilDto) {
+    const convertedData = { ...body };
+
+    for (const key in convertedData) {
+      if (convertedData[key] === '') {
+        convertedData[key] = null;
+      }
+    }
+
+    return convertedData;
+  }
+
+  private async checkIsMobilMasterDataExist(
+    body: CreateMobilDto | UpdateMobilDto,
+  ) {
+    const {
+      merk,
+      bodyStyle,
+      tipe,
+      warnaExterior,
+      warnaInterior,
+      jenisBahanBakar,
+    } = body;
+
+    if (merk) {
+      const isMerkMobilExist = await this.merkMobilModel.findById(merk);
+
+      if (!isMerkMobilExist) {
+        throw new NotFoundException('Merk Mobil Doesnt Exist');
+      }
+    }
+
+    if (bodyStyle) {
+      const isBodyStyleExist = await this.bodyStyleModel.findById(bodyStyle);
+
+      if (!isBodyStyleExist) {
+        throw new NotFoundException('Body Style Doesnt Exist');
+      }
+    }
+
+    if (tipe) {
+      const isTipeMobilExist = await this.tipeMobilModel.findById(tipe);
+
+      if (!isTipeMobilExist) {
+        throw new NotFoundException('Tipe Mobil Doesnt Exist');
+      }
+    }
+
+    if (warnaExterior) {
+      const isWarnaExteriorExist =
+        await this.warnaMobilModel.findById(warnaExterior);
+
+      if (!isWarnaExteriorExist) {
+        throw new NotFoundException('Warna Exterior Doesnt Exist');
+      }
+    }
+
+    if (warnaInterior) {
+      const isWarnaInteriorExist =
+        await this.warnaMobilModel.findById(warnaInterior);
+
+      if (!isWarnaInteriorExist) {
+        throw new NotFoundException('Warna Interior Doesnt Exist');
+      }
+    }
+
+    if (jenisBahanBakar) {
+      const isFuelTypeExist =
+        await this.FuelTypeModel.findById(jenisBahanBakar);
+
+      if (!isFuelTypeExist) {
+        throw new NotFoundException('Fuel Type Doesnt Exist');
+      }
+    }
   }
 }

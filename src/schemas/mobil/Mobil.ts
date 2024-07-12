@@ -6,6 +6,7 @@ import { MerkMobil } from './mobil_properties/MerkMobil';
 import { TipeMobil } from './mobil_properties/TipeMobil';
 import { Inspeksi } from './inspeksi';
 import { BodyStyle } from './mobil_properties/BodyStyle';
+import { StatusMobil } from '@/modules/public/mobil/mobil.dto';
 
 export type MobilDocument = HydratedDocument<Mobil>;
 
@@ -81,8 +82,6 @@ export class Mobil {
     type: String,
     required: [true, 'No Polisi is required'],
     trim: true,
-    minlength: [5, 'Warna must be at least 4 characters'],
-    maxlength: [12, 'Warna must be at most 12 characters'],
   })
   noPolisi: string;
 
@@ -105,6 +104,16 @@ export class Mobil {
     type: Number,
   })
   totalPajak: number;
+
+  @Prop({
+    type: String,
+    enum: {
+      values: Object.values(StatusMobil),
+      message: 'Status Mobil not valid',
+      default: StatusMobil.NEW,
+    },
+  })
+  status: StatusMobil;
 }
 
 export const MobilSchema = SchemaFactory.createForClass(Mobil);

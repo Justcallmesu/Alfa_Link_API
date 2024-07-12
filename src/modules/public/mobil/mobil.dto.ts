@@ -25,6 +25,15 @@ export enum TransmisiMobil {
   MT = 'MT',
 }
 
+export enum StatusMobil {
+  NEW = 'Baru',
+  INSPECTION = 'Inspeksi',
+  Ready = 'Siap',
+  SERVICE = 'Servis',
+  POST = 'Sedang Dijual',
+  SOLD = 'Terjual',
+}
+
 export class CreateMobilDto {
   @IsString()
   @IsNotEmpty()
@@ -34,7 +43,7 @@ export class CreateMobilDto {
   @IsOptional()
   merk: MerkMobil;
 
-  @CheckIsValidObjectId('jenis')
+  @CheckIsValidObjectId('bodyStyle')
   @IsOptional()
   bodyStyle: BodyStyle;
 
@@ -66,7 +75,6 @@ export class CreateMobilDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  @MaxLength(9)
   noPolisi: string;
 
   @IsNumber()
@@ -80,9 +88,23 @@ export class CreateMobilDto {
   @IsNumber()
   @IsOptional()
   totalPajak: number;
+
+  @IsOptional()
+  @IsEnum(StatusMobil)
+  status: StatusMobil;
 }
 
-export class UpdateMobilDto extends CreateMobilDto {}
+export class UpdateMobilDto extends CreateMobilDto {
+  @IsOptional()
+  @IsEnum(StatusMobil)
+  status: StatusMobil;
+}
+
+export class UpdateMobilStatusDto {
+  @IsNotEmpty()
+  @IsEnum(StatusMobil)
+  status: StatusMobil;
+}
 
 export enum MobilFilterEnum {
   NAMA = 'nama',
@@ -91,6 +113,9 @@ export enum MobilFilterEnum {
   TIPE = 'tipe',
   WARNA_INTERIOR = 'warnaInterior',
   WARNA_EXTERIOR = 'warnaExterior',
+  JENIS_BAHAN_BAKAR = 'jenisBahanBakar',
+  TAHUN_RAKIT = 'tahunRakit',
+  TRANSMISI = 'transmisi',
 }
 
 export class MobilQueryDto extends Pagination {
