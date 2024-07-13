@@ -112,6 +112,7 @@ export class Mobil {
       message: 'Status Mobil not valid',
       default: StatusMobil.NEW,
     },
+    default: StatusMobil.NEW,
   })
   status: StatusMobil;
 }

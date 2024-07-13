@@ -31,7 +31,7 @@ export class InspeksiController {
   @Get()
   @UseGuards(PermissionsGuard)
   @RequiredPermissions(PermissionsEnum.READ_INSPEKSI)
-  async findAll(@Res() res: Response, @Query() query: InspeksiQueryDto) {
+  async findAll(@Res() res: Response, @Query() query: any) {
     return this.inspeksiService.findAll(res, query);
   }
 
