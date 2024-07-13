@@ -47,18 +47,53 @@ function parseLookup(
         as: string;
         fieldToSearch: string;
         search?: string;
+        nestedLookups?: Array<{
+          from: string;
+          localField: string;
+          foreignfield: string;
+          as: string;
+        }>;
       }>
     | undefined,
 ) {
   const lookupAggregation: Array<any> = [];
 
   for (const lookup of aggregationLookup ?? []) {
-    lookupAggregation.push({
+    const aggregatedLookup: {
+      $lookup: {
+        from: string;
+        localField: string;
+        foreignField: string;
+        as: string;
+        pipeline?: Array<any>;
+      };
+    } = {
       $lookup: {
         from: lookup.from,
         localField: lookup.localField,
         foreignField: lookup.foreignfield,
         as: lookup.as,
+      },
+    };
+
+    if (lookup.nestedLookups && lookup.nestedLookups.length > 0) {
+      aggregatedLookup.$lookup.pipeline = lookup.nestedLookups.map(
+        (nestedLookup) => ({
+          $lookup: {
+            from: nestedLookup.from,
+            localField: nestedLookup.localField,
+            foreignField: nestedLookup.foreignfield,
+            as: nestedLookup.as,
+          },
+        }),
+      );
+    }
+
+    lookupAggregation.push(aggregatedLookup);
+    lookupAggregation.push({
+      $unwind: {
+        path: `$${lookup.as}`,
+        preserveNullAndEmptyArrays: true,
       },
     });
   }
@@ -95,6 +130,12 @@ function parseAggregation(
         as: string;
         fieldToSearch: string;
         search?: string;
+        nestedLookups?: Array<{
+          from: string;
+          localField: string;
+          foreignfield: string;
+          as: string;
+        }>;
       }>
     | undefined,
 ) {
