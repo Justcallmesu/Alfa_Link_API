@@ -1,6 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
 import { InspeksiField } from './inspeksi_partials/InspeksiSchema';
+import { InspeksiStatus } from '@/modules/common/enum/Inspeksi/Inspeksi';
 
 export type InspeksiDocument = HydratedDocument<Inspeksi>;
 
@@ -15,6 +16,17 @@ export class Inspeksi {
     ref: 'mobil',
   })
   mobil: Types.ObjectId;
+
+  @Prop({
+    type: String,
+    enum: {
+      values: Object.values(InspeksiStatus),
+      message: 'Status Mobil not valid',
+      default: InspeksiStatus.BARU,
+    },
+    default: InspeksiStatus.BARU,
+  })
+  status: InspeksiStatus;
 
   @Prop({
     type: String,
@@ -43,6 +55,11 @@ export class Inspeksi {
     type: InspeksiField,
   })
   klakson: InspeksiField;
+
+  @Prop({
+    type: InspeksiField,
+  })
+  karpet: InspeksiField;
 
   @Prop({
     type: InspeksiField,
@@ -112,7 +129,7 @@ export class Inspeksi {
   @Prop({
     type: InspeksiField,
   })
-  catBawhBesi: InspeksiField;
+  catBawahBesi: InspeksiField;
 
   @Prop({
     type: InspeksiField,

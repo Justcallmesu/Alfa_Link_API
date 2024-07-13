@@ -19,16 +19,28 @@ import {
 import parseAggregation from '@/modules/common/function/aggregationConstructor';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import { aggregationPagination } from '@/modules/common/function/pagination';
+import { MerkMobil } from '@/schemas/mobil/mobil_properties/MerkMobil';
+import { BodyStyle } from '@/schemas/mobil/mobil_properties/BodyStyle';
+import { TipeMobil } from '@/schemas/mobil/mobil_properties/TipeMobil';
+import { WarnaMobil } from '@/schemas/mobil/mobil_properties/WarnaMobil';
+import { FuelType } from '@/schemas/mobil/mobil_properties/FuelType';
 
 @Injectable()
 export class InspeksiService {
   constructor(
     @InjectModel(Inspeksi.name) private readonly inspeksiModel: Model<Inspeksi>,
     @InjectModel(Mobil.name) private readonly mobilModel: Model<Mobil>,
+    @InjectModel(MerkMobil.name) private merkMobilModel: Model<MerkMobil>,
+    @InjectModel(BodyStyle.name) private bodyStyleModel: Model<BodyStyle>,
+    @InjectModel(TipeMobil.name) private tipeMobilModel: Model<TipeMobil>,
+    @InjectModel(WarnaMobil.name) private warnaMobilModel: Model<WarnaMobil>,
+    @InjectModel(FuelType.name) private FuelTypeModel: Model<FuelType>,
   ) {}
 
   async findAll(res: Response, query: InspeksiQueryDto) {
     const { page = 1, limit = 10 } = query;
+
+    console.log(query);
 
     const InspeksiAggregation = parseAggregation(
       { ...query, page, limit },
@@ -40,6 +52,44 @@ export class InspeksiService {
           foreignfield: '_id',
           as: 'mobil',
           fieldToSearch: 'nama',
+          nestedLookups: [
+            {
+              from: 'merkMobil',
+              localField: 'merk',
+              foreignfield: '_id',
+              as: 'merk',
+            },
+            {
+              from: 'bodyStyle',
+              localField: 'bodyStyle',
+              foreignfield: '_id',
+              as: 'bodyStyle',
+            },
+            {
+              from: 'tipeMobil',
+              localField: 'tipe',
+              foreignfield: '_id',
+              as: 'tipe',
+            },
+            {
+              from: 'WarnaMobil',
+              localField: 'warnaInterior',
+              foreignfield: '_id',
+              as: 'warnaInterior',
+            },
+            {
+              from: 'WarnaMobil',
+              localField: 'warnaExterior',
+              foreignfield: '_id',
+              as: 'warnaExterior',
+            },
+            {
+              from: 'fuelType',
+              localField: 'jenisBahanBakar',
+              foreignfield: '_id',
+              as: 'jenisBahanBakar',
+            },
+          ],
         },
       ],
     );
@@ -63,8 +113,44 @@ export class InspeksiService {
   }
 
   async findOne(res: Response, id: string) {
-    const inspeksiData: InspeksiDocument | null =
-      await this.inspeksiModel.findById(id);
+    const inspeksiData: InspeksiDocument | null = await this.inspeksiModel
+      .findById(id)
+      .populate({
+        path: 'mobil',
+        model: this.mobilModel,
+        populate: [
+          {
+            path: 'merk',
+            select: ['name'],
+            model: this.merkMobilModel,
+          },
+          {
+            path: 'bodyStyle',
+            select: ['name'],
+            model: this.bodyStyleModel,
+          },
+          {
+            path: 'tipe',
+            select: ['name'],
+            model: this.tipeMobilModel,
+          },
+          {
+            path: 'warnaExterior',
+            select: ['name'],
+            model: this.warnaMobilModel,
+          },
+          {
+            path: 'warnaInterior',
+            select: ['name'],
+            model: this.warnaMobilModel,
+          },
+          {
+            path: 'jenisBahanBakar',
+            select: ['name'],
+            model: this.FuelTypeModel,
+          },
+        ],
+      });
 
     if (!inspeksiData)
       throw new NotFoundException('Data inspeksi Tidak Ditemukan');

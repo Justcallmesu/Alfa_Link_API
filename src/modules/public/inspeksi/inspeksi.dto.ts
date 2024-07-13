@@ -43,6 +43,10 @@ export class CreateInspeksiDTO {
 
   @ValidateNested()
   @Type(() => InspeksiFieldDTO)
+  karpet: InspeksiFieldDTO;
+
+  @ValidateNested()
+  @Type(() => InspeksiFieldDTO)
   klakson: InspeksiFieldDTO;
 
   @ValidateNested()
@@ -99,7 +103,7 @@ export class CreateInspeksiDTO {
 
   @ValidateNested()
   @Type(() => InspeksiFieldDTO)
-  catBawhBesi: InspeksiFieldDTO;
+  catBawahBesi: InspeksiFieldDTO;
 
   @ValidateNested()
   @Type(() => InspeksiFieldDTO)
@@ -313,7 +317,7 @@ export enum InspeksiFilterEnum {
 }
 
 export class InspeksiQueryDto extends Pagination {
-  @IsOptional()
   @CheckIsValidObjectId('mobil')
+  @IsOptional()
   mobil: string;
 }
