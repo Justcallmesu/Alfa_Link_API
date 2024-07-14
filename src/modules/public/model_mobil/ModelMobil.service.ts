@@ -22,11 +22,13 @@ import {
 import queryConstructor from '@/modules/common/function/queryConstructor';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import { getPagination } from '@/modules/common/function/pagination';
+import { Mobil } from '@/schemas/mobil/Mobil';
 
 @Injectable()
 export class ModelMobilService {
   constructor(
     @InjectModel(ModelMobil.name) private modelMobilModel: Model<ModelMobil>,
+    @InjectModel(Mobil.name) private mobilModel: Model<Mobil>,
   ) {}
 
   async getAll(res: Response, query: any) {
@@ -68,7 +70,7 @@ export class ModelMobilService {
       });
 
     if (!modelMobilData) {
-      throw new NotFoundException('Model Mobil Does Not Found');
+      throw new NotFoundException('Model Mobil Tidak Ditemukan');
     }
 
     res.json({
@@ -82,7 +84,7 @@ export class ModelMobilService {
     const isExist = await this.modelMobilModel.findOne({ name: body.name });
 
     if (isExist) {
-      throw new ConflictException('Model Mobil Already Exist');
+      throw new ConflictException('Model Mobil Sudah Dibuat');
     }
 
     const modelMobilData = await this.modelMobilModel.create(body);
@@ -98,13 +100,13 @@ export class ModelMobilService {
       await this.modelMobilModel.findById(id);
 
     if (!modelMobilData) {
-      throw new NotFoundException('Model Mobil Doesnt Exist');
+      throw new NotFoundException('Model Mobil Tidak Ditemukan');
     }
 
     const updatedData = await modelMobilData.updateOne(body);
 
     res.status(200).json({
-      message: 'Data Updated',
+      message: 'Data Diedit',
       status: '201',
       data: updatedData,
     });
@@ -115,13 +117,21 @@ export class ModelMobilService {
       await this.modelMobilModel.findById(id);
 
     if (!modelMobilData) {
-      throw new NotFoundException('Model Mobil Doesnt Exist');
+      throw new NotFoundException('Model Mobil Tidak Ditemukan');
+    }
+
+    const isUsed = await this.mobilModel.findOne({
+      jenisBahanBakar: id,
+    });
+
+    if (isUsed) {
+      throw new ConflictException('Model Mobil Sedang Digunakan');
     }
 
     await modelMobilData.deleteOne();
 
     res.status(204).json({
-      message: 'Data Deleted',
+      message: 'Data Dihapus',
       status: '204',
     });
   }

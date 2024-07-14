@@ -22,11 +22,13 @@ import {
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import queryConstructor from '@/modules/common/function/queryConstructor';
 import { getPagination } from '@/modules/common/function/pagination';
+import { Mobil } from '@/schemas/mobil/Mobil';
 
 @Injectable()
 export class TipeMobilservice {
   constructor(
     @InjectModel(TipeMobil.name) private tipeMobilModel: Model<TipeMobil>,
+    @InjectModel(Mobil.name) private mobilModel: Model<Mobil>,
   ) {}
 
   async getAll(res: Response, query: any) {
@@ -68,7 +70,7 @@ export class TipeMobilservice {
       });
 
     if (!tipeMobilData) {
-      throw new NotFoundException('Tipe Mobil Does Not Found');
+      throw new NotFoundException('Tipe Mobil Tidak Ditemukan');
     }
 
     res.json({
@@ -82,7 +84,7 @@ export class TipeMobilservice {
     const isExist = await this.tipeMobilModel.findOne({ name: body.name });
 
     if (isExist) {
-      throw new ConflictException('Tipe Mobil Already Exist');
+      throw new ConflictException('Tipe Mobil Sudah Dibuat');
     }
 
     const tipeMobilData = await this.tipeMobilModel.create(body);
@@ -98,13 +100,13 @@ export class TipeMobilservice {
       await this.tipeMobilModel.findById(id);
 
     if (!tipeMobilData) {
-      throw new NotFoundException('Tipe Mobil Doesnt Exist');
+      throw new NotFoundException('Tipe Mobil Tidak Ditemukan');
     }
 
     const updatedData = await tipeMobilData.updateOne(body);
 
     res.status(200).json({
-      message: 'Data Updated',
+      message: 'Data Diedit',
       status: '201',
       data: updatedData,
     });
@@ -115,13 +117,21 @@ export class TipeMobilservice {
       await this.tipeMobilModel.findById(id);
 
     if (!tipeMobilData) {
-      throw new NotFoundException('Tipe Mobil Doesnt Exist');
+      throw new NotFoundException('Tipe Mobil Tidak Ditemukan');
+    }
+
+    const isUsed = await this.mobilModel.findOne({
+      tipe: id,
+    });
+
+    if (isUsed) {
+      throw new ConflictException('Tipe Mobil Sedang Digunakan');
     }
 
     await tipeMobilData.deleteOne();
 
     res.status(204).json({
-      message: 'Data Deleted',
+      message: 'Data Dihapus',
       status: '204',
     });
   }

@@ -259,7 +259,7 @@ export class PenjualanService {
     const updateData = await dataPenjualan.updateOne(updatePenjualan);
 
     res.status(200).json({
-      message: 'Data Updated',
+      message: 'Data Diedit',
       status: 200,
     });
   }
@@ -287,7 +287,7 @@ export class PenjualanService {
     }
 
     res.status(200).json({
-      message: 'Data Deleted',
+      message: 'Data Dihapus',
       status: 200,
     });
   }

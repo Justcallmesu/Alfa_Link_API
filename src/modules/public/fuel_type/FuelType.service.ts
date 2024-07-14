@@ -22,11 +22,13 @@ import {
 import queryConstructor from '@/modules/common/function/queryConstructor';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import { getPagination } from '@/modules/common/function/pagination';
+import { Mobil } from '@/schemas/mobil/Mobil';
 
 @Injectable()
 export class FuelTypeService {
   constructor(
     @InjectModel(FuelType.name) private fuelTypeModel: Model<FuelType>,
+    @InjectModel(Mobil.name) private mobilModel: Model<Mobil>,
   ) {}
 
   async getAll(res: Response, query: any) {
@@ -64,7 +66,7 @@ export class FuelTypeService {
       });
 
     if (!fuelTypeData) {
-      throw new NotFoundException('Fuel Type Does Not Found');
+      throw new NotFoundException('Fuel Type Tidak Ditemukan');
     }
 
     res.json({
@@ -78,7 +80,7 @@ export class FuelTypeService {
     const isExist = await this.fuelTypeModel.findOne({ name: body.name });
 
     if (isExist) {
-      throw new ConflictException('Fuel Type Already Exist');
+      throw new ConflictException('Fuel Type Sudah Dibuat');
     }
 
     const fuelTypeData = await this.fuelTypeModel.create(body);
@@ -94,13 +96,13 @@ export class FuelTypeService {
       await this.fuelTypeModel.findById(id);
 
     if (!fuelTypeData) {
-      throw new NotFoundException('Fuel Type Doesnt Exist');
+      throw new NotFoundException('Fuel Type Tidak Ditemukan');
     }
 
     const updatedData = await fuelTypeData.updateOne(body);
 
     res.status(200).json({
-      message: 'Data Updated',
+      message: 'Data Diedit',
       status: '201',
       data: updatedData,
     });
@@ -111,13 +113,21 @@ export class FuelTypeService {
       await this.fuelTypeModel.findById(id);
 
     if (!fuelTypeData) {
-      throw new NotFoundException('Fuel Type Doesnt Exist');
+      throw new NotFoundException('Jenis Bahan Bakar Tidak Ada');
+    }
+
+    const isUsed = await this.mobilModel.findOne({
+      jenisBahanBakar: id,
+    });
+
+    if (isUsed) {
+      throw new ConflictException('Jenis Bahan Bakar Sedang Digunakan');
     }
 
     await fuelTypeData.deleteOne();
 
     res.status(204).json({
-      message: 'Data Deleted',
+      message: 'Data Dihapus',
       status: '204',
     });
   }

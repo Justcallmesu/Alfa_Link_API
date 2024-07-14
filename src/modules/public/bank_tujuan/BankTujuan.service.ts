@@ -18,12 +18,16 @@ import {
 } from './BankTujuan.dto';
 import { Response } from 'express';
 import { getPagination } from '@/modules/common/function/pagination';
+import { Penjualan } from '@/schemas/Penjualan/Penjualan';
 
 @Injectable()
 export class BankTujuanService {
   constructor(
     @InjectModel(BankTujuan.name)
     private readonly bankTujuanModel: Model<BankTujuan>,
+
+    @InjectModel(Penjualan.name)
+    private readonly penjualanModel: Model<Penjualan>,
   ) {}
   async getAll(res: Response, query: any) {
     const { filter, pagination, select, sort } = queryConstructor(
@@ -64,7 +68,7 @@ export class BankTujuanService {
       });
 
     if (!bankTujuanData) {
-      throw new NotFoundException('Bank Tujuan Does Not Found');
+      throw new NotFoundException('Bank Tujuan Tidak Ditemukan');
     }
 
     res.json({
@@ -80,7 +84,7 @@ export class BankTujuanService {
     });
 
     if (isExist) {
-      throw new ConflictException('Bank Tujuan Already Exist');
+      throw new ConflictException('Bank Tujuan Sudah Dibuat');
     }
 
     const bankTujuanData = await this.bankTujuanModel.create(body);
@@ -97,13 +101,13 @@ export class BankTujuanService {
       await this.bankTujuanModel.findById(id);
 
     if (!bankTujuanData) {
-      throw new NotFoundException('Bank Tujuan Doesnt Exist');
+      throw new NotFoundException('Bank Tujuan Tidak Ditemukan');
     }
 
     const updatedData = await bankTujuanData.updateOne(body);
 
     res.status(200).json({
-      message: 'Data Updated',
+      message: 'Data Diedit',
       status: '201',
       data: updatedData,
     });
@@ -114,13 +118,21 @@ export class BankTujuanService {
       await this.bankTujuanModel.findById(id);
 
     if (!bankTujuanData) {
-      throw new NotFoundException('Bank Tujuan Doesnt Exist');
+      throw new NotFoundException('Bank Tujuan Tidak Ditemukan');
+    }
+
+    const isUsed = await this.penjualanModel.findOne({ bankTujuan: id });
+
+    if (isUsed) {
+      throw new ConflictException(
+        'Data Tidak Bisa Dihapus Data Sedang Digunakan',
+      );
     }
 
     await bankTujuanData.deleteOne();
 
     res.status(204).json({
-      message: 'Data Deleted',
+      message: 'Data Dihapus',
       status: '204',
     });
   }

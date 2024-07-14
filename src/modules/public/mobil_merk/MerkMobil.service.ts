@@ -22,11 +22,13 @@ import {
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import queryConstructor from '@/modules/common/function/queryConstructor';
 import { getPagination } from '@/modules/common/function/pagination';
+import { Mobil } from '@/schemas/mobil/Mobil';
 
 @Injectable()
 export class MerkMobilService {
   constructor(
     @InjectModel(MerkMobil.name) private merkMobilModel: Model<MerkMobil>,
+    @InjectModel(Mobil.name) private mobilModel: Model<Mobil>,
   ) {}
 
   async getAll(res: Response, query: any) {
@@ -68,7 +70,7 @@ export class MerkMobilService {
       });
 
     if (!merkMobilData) {
-      throw new NotFoundException('Body Style Does Not Found');
+      throw new NotFoundException('Body Style Tidak Ditemukan');
     }
 
     res.json({
@@ -82,7 +84,7 @@ export class MerkMobilService {
     const isExist = await this.merkMobilModel.findOne({ name: body.name });
 
     if (isExist) {
-      throw new ConflictException('Body Style Already Exist');
+      throw new ConflictException('Body Style Sudah Dibuat');
     }
 
     const merkMobilData = await this.merkMobilModel.create(body);
@@ -99,13 +101,13 @@ export class MerkMobilService {
       await this.merkMobilModel.findById(id);
 
     if (!merkMobilData) {
-      throw new NotFoundException('Body Style Doesnt Exist');
+      throw new NotFoundException('Body Style Tidak Ditemukan');
     }
 
     const updatedData = await merkMobilData.updateOne(body);
 
     res.status(200).json({
-      message: 'Data Updated',
+      message: 'Data Diedit',
       status: '201',
       data: updatedData,
     });
@@ -116,13 +118,21 @@ export class MerkMobilService {
       await this.merkMobilModel.findById(id);
 
     if (!merkMobilData) {
-      throw new NotFoundException('Body Style Doesnt Exist');
+      throw new NotFoundException('Body Style Tidak Ditemukan');
+    }
+
+    const isUsed = await this.mobilModel.findOne({
+      merk: id,
+    });
+
+    if (isUsed) {
+      throw new ConflictException('Data Sedang Digunakan');
     }
 
     await merkMobilData.deleteOne();
 
     res.status(204).json({
-      message: 'Data Deleted',
+      message: 'Data Dihapus',
       status: '204',
     });
   }

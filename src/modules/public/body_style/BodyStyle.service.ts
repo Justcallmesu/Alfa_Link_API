@@ -22,11 +22,13 @@ import {
 import queryConstructor from '@/modules/common/function/queryConstructor';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import { getPagination } from '@/modules/common/function/pagination';
+import { Mobil } from '@/schemas/mobil/Mobil';
 
 @Injectable()
 export class BodyStyleService {
   constructor(
     @InjectModel(BodyStyle.name) private BodyStyleModel: Model<BodyStyle>,
+    @InjectModel(Mobil.name) private mobilModel: Model<Mobil>,
   ) {}
 
   async getAll(res: Response, query: any) {
@@ -68,7 +70,7 @@ export class BodyStyleService {
       });
 
     if (!BodyStyleData) {
-      throw new NotFoundException('Body Style Does Not Found');
+      throw new NotFoundException('Body Style Tidak Ditemukan');
     }
 
     res.json({
@@ -82,7 +84,7 @@ export class BodyStyleService {
     const isExist = await this.BodyStyleModel.findOne({ name: body.name });
 
     if (isExist) {
-      throw new ConflictException('Body Style Already Exist');
+      throw new ConflictException('Body Style Sudah Dibuat');
     }
 
     const BodyStyleData = await this.BodyStyleModel.create(body);
@@ -99,13 +101,13 @@ export class BodyStyleService {
       await this.BodyStyleModel.findById(id);
 
     if (!BodyStyleData) {
-      throw new NotFoundException('Body Style Doesnt Exist');
+      throw new NotFoundException('Body Style Tidak Ditemukan');
     }
 
     const updatedData = await BodyStyleData.updateOne(body);
 
     res.status(200).json({
-      message: 'Data Updated',
+      message: 'Data Diedit',
       status: '201',
       data: updatedData,
     });
@@ -116,13 +118,21 @@ export class BodyStyleService {
       await this.BodyStyleModel.findById(id);
 
     if (!BodyStyleData) {
-      throw new NotFoundException('Body Style Doesnt Exist');
+      throw new NotFoundException('Body Style Tidak Ada');
+    }
+
+    const isUsed = await this.mobilModel.findOne({
+      bodyStyle: id,
+    });
+
+    if (isUsed) {
+      throw new ConflictException('Body Style Sedang Digunakan');
     }
 
     await BodyStyleData.deleteOne();
 
     res.status(204).json({
-      message: 'Data Deleted',
+      message: 'Data Dihapus',
       status: '204',
     });
   }

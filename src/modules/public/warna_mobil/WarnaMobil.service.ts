@@ -22,11 +22,13 @@ import {
 import queryConstructor from '@/modules/common/function/queryConstructor';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import { getPagination } from '@/modules/common/function/pagination';
+import { Mobil } from '@/schemas/mobil/Mobil';
 
 @Injectable()
 export class WarnaMobilService {
   constructor(
     @InjectModel(WarnaMobil.name) private warnaMobilModel: Model<WarnaMobil>,
+    @InjectModel(Mobil.name) private mobilModel: Model<Mobil>,
   ) {}
 
   async getAll(res: Response, query: any) {
@@ -68,7 +70,7 @@ export class WarnaMobilService {
       });
 
     if (!warnaMobilData) {
-      throw new NotFoundException('Warna Mobil Does Not Found');
+      throw new NotFoundException('Warna Mobil Tidak Ditemukan');
     }
 
     res.json({
@@ -82,7 +84,7 @@ export class WarnaMobilService {
     const isExist = await this.warnaMobilModel.findOne({ name: body.name });
 
     if (isExist) {
-      throw new ConflictException('Warna Mobil Already Exist');
+      throw new ConflictException('Warna Mobil Sudah Dibuat');
     }
 
     const warnaMobilData = await this.warnaMobilModel.create(body);
@@ -98,13 +100,13 @@ export class WarnaMobilService {
       await this.warnaMobilModel.findById(id);
 
     if (!warnaMobilData) {
-      throw new NotFoundException('Warna Mobil Doesnt Exist');
+      throw new NotFoundException('Warna Mobil Tidak Ditemukan');
     }
 
     const updatedData = await warnaMobilData.updateOne(body);
 
     res.status(200).json({
-      message: 'Data Updated',
+      message: 'Data Diedit',
       status: '201',
       data: updatedData,
     });
@@ -115,13 +117,21 @@ export class WarnaMobilService {
       await this.warnaMobilModel.findById(id);
 
     if (!warnaMobilData) {
-      throw new NotFoundException('Warna Mobil Doesnt Exist');
+      throw new NotFoundException('Warna Mobil Tidak Ditemukan');
+    }
+
+    const isUsed = await this.mobilModel.findOne({
+      jenisBahanBakar: id,
+    });
+
+    if (isUsed) {
+      throw new ConflictException('Warna Mobil Sedang Digunakan');
     }
 
     await warnaMobilData.deleteOne();
 
     res.status(204).json({
-      message: 'Data Deleted',
+      message: 'Data Dihapus',
       status: '204',
     });
   }

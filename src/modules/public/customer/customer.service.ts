@@ -19,11 +19,13 @@ import { Customer, CustomerDocument } from '@/schemas/customer/Customer';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import customerQueryConstructor from '../../common/function/queryConstructor';
 import { getPagination } from '@/modules/common/function/pagination';
+import { Penjualan } from '@/schemas/Penjualan/Penjualan';
 
 @Injectable()
 export class CustomerService {
   constructor(
     @InjectModel(Customer.name) private customerModel: Model<Customer>,
+    @InjectModel(Penjualan.name) private penjualanModel: Model<Penjualan>,
   ) {}
 
   async getAll(res: Response, query: any) {
@@ -59,7 +61,7 @@ export class CustomerService {
       await this.customerModel.findOne({ _id: id });
 
     if (!customerData) {
-      throw new NotFoundException('Customer Does Not Found');
+      throw new NotFoundException('Customer Tidak Ditemukan');
     }
 
     res.json({
@@ -91,13 +93,13 @@ export class CustomerService {
       await this.customerModel.findById(id);
 
     if (!customerData) {
-      throw new NotFoundException('Customer Doesnt Exist');
+      throw new NotFoundException('Customer Tidak Ditemukan');
     }
 
     await customerData.updateOne(body);
 
     res.status(200).json({
-      message: 'Data Updated',
+      message: 'Data Diedit',
       status: '201',
       data: customerData,
     });
@@ -108,13 +110,19 @@ export class CustomerService {
       await this.customerModel.findById(id);
 
     if (!customerData) {
-      throw new NotFoundException('Customer Doesnt Exist');
+      throw new NotFoundException('Customer Tidak Ditemukan');
+    }
+
+    const isUsed = await this.penjualanModel.findOne({ customer: id });
+
+    if (isUsed) {
+      throw new ConflictException('Data Customer Sedang Digunakan');
     }
 
     await customerData.deleteOne();
 
     res.status(204).json({
-      message: 'Data Deleted',
+      message: 'Data Dihapus',
       status: '204',
     });
   }

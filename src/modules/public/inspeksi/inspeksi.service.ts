@@ -204,7 +204,7 @@ export class InspeksiService {
     await inspeksiData.updateOne(updateInspeksiData);
 
     res.status(200).json({
-      message: 'Data Updated',
+      message: 'Data Diedit',
       status: 200,
     });
   }
@@ -216,10 +216,18 @@ export class InspeksiService {
     if (!inspeksiData)
       throw new NotFoundException('Data inspeksi Tidak Ditemukan');
 
+    const checkIsMobilExist: MobilDocument | null =
+      await this.mobilModel.findById(inspeksiData.mobil);
+
+    if (!checkIsMobilExist)
+      throw new NotFoundException('Data Mobil Tidak Ditemukan');
+
+    await checkIsMobilExist.updateOne({ inspeksi: null });
+
     await inspeksiData.deleteOne();
 
     res.status(200).json({
-      message: 'Data Deleted',
+      message: 'Data Dihapus',
       status: 200,
     });
   }

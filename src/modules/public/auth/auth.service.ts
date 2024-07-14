@@ -95,7 +95,7 @@ export class AuthService {
 
     if (isExist) {
       throw new ConflictException(
-        'There is Username or Name that is already exist',
+        'There is Username or Name that is Sudah Dibuat',
       );
     }
 
