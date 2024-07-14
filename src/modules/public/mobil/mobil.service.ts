@@ -165,7 +165,7 @@ export class MobilService {
 
   async createMobil(res: Response, body: CreateMobilDto) {
     const isMobilWithSameNoPolisiExist = await this.mobilModel.findOne({
-      no_polisi: body.noPolisi,
+      noPolisi: body.noPolisi,
     });
 
     if (isMobilWithSameNoPolisiExist) {
@@ -191,6 +191,15 @@ export class MobilService {
 
     if (!mobilData) {
       throw new NotFoundException('Mobil Tidak Ditemukan');
+    }
+
+    const isMobilWithSameNoPolisiExist = await this.mobilModel.findOne({
+      _id: { $ne: id },
+      noPolisi: body.noPolisi,
+    });
+
+    if (isMobilWithSameNoPolisiExist) {
+      throw new NotFoundException('Mobil Dengan No Polisi Sama Sudah Dibuat');
     }
 
     const { merk, bodyStyle, tipe } = body;
