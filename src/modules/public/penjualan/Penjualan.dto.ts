@@ -41,6 +41,10 @@ export class CreatePenjualanDto {
   @IsOptional()
   isDP: boolean;
 
+  @IsOptional()
+  @CheckIsValidObjectId('bankTujuan')
+  bankTujuan: string;
+
   @IsNumber()
   @Optional()
   totalDP: number;
@@ -48,9 +52,14 @@ export class CreatePenjualanDto {
   @IsNumber()
   @Optional()
   totalTerbayar: number;
+}
 
-  @IsString()
+export enum PenjualanFilterEnum {
+  mobil = 'mobil',
+}
+
+export class UpdatePenjualanDto extends CreatePenjualanDto {
+  @IsOptional()
   @IsEnum(PenjualanStatus)
   status: PenjualanStatus;
 }
-export class UpdatePenjualanDto extends CreatePenjualanDto {}

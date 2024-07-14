@@ -40,12 +40,17 @@ export class InspeksiService {
   async findAll(res: Response, query: InspeksiQueryDto) {
     const { page = 1, limit = 10 } = query;
 
-    console.log(query);
-
     const InspeksiAggregation = parseAggregation(
       { ...query, page, limit },
       Object.values(InspeksiFilterEnum),
       [
+        {
+          from: 'bankTujuan',
+          localField: 'bankTujuan',
+          foreignfield: '_id',
+          as: 'bankTujuan',
+          fieldToSearch: 'name',
+        },
         {
           from: 'mobil',
           localField: 'mobil',

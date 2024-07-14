@@ -2,6 +2,7 @@ export enum PenjualanStatus {
   /**
    * General
    */
+  BARU = 'Baru',
   CHECKING = 'Customer Checking Mobil',
   MOBIL_DISERAHKAN = 'Mobil Diserahkan',
   SELESAI = 'Selesai',

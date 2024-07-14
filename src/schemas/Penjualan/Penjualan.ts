@@ -16,6 +16,13 @@ export class Penjualan {
   mobil: Types.ObjectId;
 
   @Prop({
+    type: Types.ObjectId,
+    required: [true, 'Customer is required'],
+    ref: 'customer',
+  })
+  customer: Types.ObjectId;
+
+  @Prop({
     type: String,
     required: [true, 'Metode Pembayaran is required'],
     enum: {
@@ -31,7 +38,7 @@ export class Penjualan {
     trim: true,
     ref: 'BankTujuan',
   })
-  BankTujuan: Types.ObjectId;
+  bankTujuan: Types.ObjectId;
 
   @Prop({
     type: Number,
@@ -58,16 +65,12 @@ export class Penjualan {
   totalTerbayar: number;
 
   @Prop({
-    type: Number,
-    required: [true, 'Total Sisa is required'],
-  })
-  totalSisa: number;
-
-  @Prop({
     type: String,
     enum: {
       values: Object.entries(PenjualanStatus).map(([, value]) => value),
+      default: PenjualanStatus.BARU,
     },
+    default: PenjualanStatus.BARU,
   })
   status: PenjualanStatus;
 
