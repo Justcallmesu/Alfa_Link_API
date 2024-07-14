@@ -17,11 +17,17 @@ import { FuelTypeModule } from './fuel_type/FuelType.module';
 import { ModelMobilModule } from './model_mobil/ModelMobil.module';
 import { InspeksiModule } from './inspeksi/inspeksi.module';
 import { BankTujuanModule } from './bank_tujuan/BankTujuan.module';
+import { UserModule } from './users/Users.module';
+import { RolesModule } from './roles/Roles.module';
+import { PermissionsModule } from './permissions/Permissions.module';
 
 @Global()
 @Module({
   imports: [
     AuthModule,
+    UserModule,
+    RolesModule,
+    PermissionsModule,
 
     /**
      * Customer

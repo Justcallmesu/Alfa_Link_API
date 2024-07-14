@@ -26,7 +26,7 @@ export class UserSeed {
         name: 'Suwanto Ardi Winata',
         username: 'admin',
         password: 'superadmin',
-        role_id,
+        role_id: role_id?._id,
       },
     ];
 

@@ -59,28 +59,6 @@ export class User {
   })
   date_created: Date;
 
-  @Prop({
-    type: Date,
-    default: Date.now(),
-  })
-  date_updated: Date;
-
-  @Prop({
-    type: Date,
-    default: '',
-  })
-  date_deleted: Date;
-
-  @Prop({
-    type: String,
-    enum: {
-      values: ['active', 'inactive', 'deleted'],
-      message: 'Invalid status',
-    },
-    default: 'active',
-  })
-  user_status: string;
-
   comparePassword: (candidatePassword: string) => Promise<boolean>;
 
   compareRefreshToken: (candidateRefreshToken: string) => Promise<boolean>;

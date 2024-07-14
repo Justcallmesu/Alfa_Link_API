@@ -160,7 +160,7 @@ export class AuthService {
       );
     }
 
-    if (await !isExist.comparePassword(body.oldPassword)) {
+    if (!(await isExist.comparePassword(body.oldPassword))) {
       throw new HttpException('Old Password is incorrect', 400);
     }
 

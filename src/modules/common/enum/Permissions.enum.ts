@@ -10,6 +10,9 @@ export enum PermissionsEnum {
   UPDATE_ROLE = 'Update_Role',
   DELETE_ROLE = 'Delete_Role',
 
+  // Permissions
+  READ_PERMISSION = 'Read_Permission',
+
   // Customer
   CREATE_CUSTOMER = 'Create_Customer',
   READ_CUSTOMER = 'Read_Customer',
