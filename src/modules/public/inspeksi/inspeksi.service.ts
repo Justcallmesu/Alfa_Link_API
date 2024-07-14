@@ -15,6 +15,7 @@ import {
   InspeksiFilterEnum,
   InspeksiQueryDto,
   UpdateInspeksiDTO,
+  updateInspeksiStatusDto,
 } from './inspeksi.dto';
 import parseAggregation from '@/modules/common/function/aggregationConstructor';
 import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
@@ -193,6 +194,25 @@ export class InspeksiService {
   async update(
     res: Response,
     updateInspeksiData: UpdateInspeksiDTO,
+    id: string,
+  ) {
+    const inspeksiData: InspeksiDocument | null =
+      await this.inspeksiModel.findById(id);
+
+    if (!inspeksiData)
+      throw new NotFoundException('Data inspeksi Tidak Ditemukan');
+
+    await inspeksiData.updateOne(updateInspeksiData);
+
+    res.status(200).json({
+      message: 'Data Diedit',
+      status: 200,
+    });
+  }
+
+  async UpdateStatus(
+    res: Response,
+    updateInspeksiData: updateInspeksiStatusDto,
     id: string,
   ) {
     const inspeksiData: InspeksiDocument | null =

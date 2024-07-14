@@ -116,6 +116,7 @@ export enum MobilFilterEnum {
   JENIS_BAHAN_BAKAR = 'jenisBahanBakar',
   TAHUN_RAKIT = 'tahunRakit',
   TRANSMISI = 'transmisi',
+  STATUS = 'status',
 }
 
 export class MobilQueryDto extends Pagination {

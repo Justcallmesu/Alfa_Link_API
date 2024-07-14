@@ -12,7 +12,11 @@ import {
 } from '@nestjs/common';
 
 import { PenjualanService } from './Penjualan.service';
-import { CreatePenjualanDto, UpdatePenjualanDto } from './Penjualan.dto';
+import {
+  CreatePenjualanDto,
+  UpdatePenjualanDto,
+  UpdatePenjualanStatus,
+} from './Penjualan.dto';
 import { JwtGuard } from '@/modules/common/guards/Jwt.Guard';
 import { ObjectIdParams } from '@/modules/common/decorators/ObjectIdParams.decorator';
 import { Response, query } from 'express';
@@ -68,6 +72,19 @@ export class PenjualanController {
       id,
       updatePenjualan,
     );
+  }
+
+  @Put(':id/status')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.UPDATE_PENJUALAN)
+  async updateStatus(
+    @Res() res: Response,
+    @ObjectIdParams()
+    @Param('id')
+    id: string,
+    @Body() updatePenjualan: UpdatePenjualanStatus,
+  ) {
+    return this.penjualanService.UpdateStatus(res, updatePenjualan, id);
   }
 
   @Delete(':id')

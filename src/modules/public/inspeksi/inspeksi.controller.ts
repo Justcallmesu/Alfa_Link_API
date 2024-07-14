@@ -17,6 +17,7 @@ import {
   CreateInspeksiDTO,
   InspeksiQueryDto,
   UpdateInspeksiDTO,
+  updateInspeksiStatusDto,
 } from './inspeksi.dto';
 import { RequiredPermissions } from '@/modules/common/decorators/Permissions.decorator';
 import { PermissionsEnum } from '@/modules/common/enum/Permissions.enum';
@@ -68,6 +69,19 @@ export class InspeksiController {
     @Body() updateInspeksiData: UpdateInspeksiDTO,
   ) {
     return this.inspeksiService.update(res, updateInspeksiData, id);
+  }
+
+  @Put(':id/status')
+  @UseGuards(PermissionsGuard)
+  @RequiredPermissions(PermissionsEnum.UPDATE_INSPEKSI)
+  async updateStatus(
+    @Res() res: Response,
+    @ObjectIdParams()
+    @Param('id')
+    id: string,
+    @Body() updateInspeksiData: updateInspeksiStatusDto,
+  ) {
+    return this.inspeksiService.UpdateStatus(res, updateInspeksiData, id);
   }
 
   @Delete(':id')

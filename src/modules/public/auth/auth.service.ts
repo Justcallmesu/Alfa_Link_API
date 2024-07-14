@@ -139,11 +139,12 @@ export class AuthService {
       throw new HttpException('User not found', 404);
     }
 
-    await user.updateOne(body);
+    const updatedData = await user.updateOne(body, { new: true });
 
     res.json({
       message: 'User Updated',
       status: 200,
+      data: updatedData,
     });
   }
 
@@ -203,7 +204,8 @@ export class AuthService {
       process.env.JWT_REFRESH_SECRET as string,
     ) as JwtGuardDto;
 
-    const foundUser = await this.UserModel.findById(id);
+    const foundUser =
+      await this.UserModel.findById(id).select('+refresh_token');
 
     if (!foundUser) {
       throw new UnauthorizedException(

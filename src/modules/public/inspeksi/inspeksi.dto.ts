@@ -4,11 +4,13 @@ import {
   ValidateNested,
   IsBoolean,
   IsNotEmpty,
+  IsEnum,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Types } from 'mongoose';
 import { CheckIsValidObjectId } from '@/modules/common/decorators/Class-Custom-Validator/IsValidObjectId';
 import { Pagination } from '@/modules/common/interface/Pagination/Pagination.interface';
+import { InspeksiStatus } from '@/modules/common/enum/Inspeksi/Inspeksi';
 
 class InspeksiFieldDTO {
   @IsString()
@@ -311,6 +313,12 @@ export class CreateInspeksiDTO {
 }
 
 export class UpdateInspeksiDTO extends CreateInspeksiDTO {}
+
+export class updateInspeksiStatusDto {
+  @IsNotEmpty()
+  @IsEnum(InspeksiStatus)
+  status: InspeksiStatus;
+}
 
 export enum InspeksiFilterEnum {
   mobil = 'mobil',

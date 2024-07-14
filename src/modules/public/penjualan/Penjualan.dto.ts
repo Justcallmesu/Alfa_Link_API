@@ -58,6 +58,12 @@ export enum PenjualanFilterEnum {
   mobil = 'mobil',
 }
 
+export class UpdatePenjualanStatus {
+  @IsNotEmpty()
+  @IsEnum(PenjualanStatus)
+  status: PenjualanStatus;
+}
+
 export class UpdatePenjualanDto extends CreatePenjualanDto {
   @IsOptional()
   @IsEnum(PenjualanStatus)

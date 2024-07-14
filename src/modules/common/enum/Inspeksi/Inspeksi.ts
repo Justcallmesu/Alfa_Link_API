@@ -1,8 +1,8 @@
 export enum InspeksiStatus {
   BARU = 'Mobil baru',
-  CUCI = 'CUCI Mobil',
-  POLES = 'POLES Mobil',
-  BENGKEL = 'SERVIS Mobil',
+  CUCI = 'Cuci Mobil',
+  POLES = 'Poles Mobil',
+  BENGKEL = 'Servis Mobil',
   INSPEKSI = 'Inspeksi Mobil',
   SELESAI = 'Selesai',
 }

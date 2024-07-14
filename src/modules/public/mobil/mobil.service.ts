@@ -39,7 +39,6 @@ export class MobilService {
 
   async getAll(res: Response, query: MobilQueryDto) {
     const { page = 1, limit = 10 } = query;
-
     const aggregation = parseAggregation(
       {
         ...query,
