@@ -86,13 +86,14 @@ export class UsersService {
       throw new NotFoundException('Role Tidak Ditemukan');
     }
 
-    const userData = await this.userModel.findByIdAndUpdate(id, body, {
-      new: true,
-    });
+    const userData = await this.userModel.findById(id);
 
     if (!userData) {
       throw new NotFoundException('User not found');
     }
+
+    userData.set(body);
+    await userData.save();
 
     return res.json({
       message: 'User Updated',
