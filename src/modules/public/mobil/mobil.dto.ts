@@ -3,6 +3,7 @@ import { Pagination } from '@/modules/common/interface/Pagination/Pagination.int
 import { BodyStyle } from '@/schemas/mobil/mobil_properties/BodyStyle';
 import { FuelType } from '@/schemas/mobil/mobil_properties/FuelType';
 import { MerkMobil } from '@/schemas/mobil/mobil_properties/MerkMobil';
+import { ModelMobil } from '@/schemas/mobil/mobil_properties/Model';
 import { TipeMobil } from '@/schemas/mobil/mobil_properties/TipeMobil';
 import {
   IsEnum,
@@ -62,6 +63,10 @@ export class CreateMobilDto {
   @CheckIsValidObjectId('fuelType')
   @IsOptional()
   jenisBahanBakar: FuelType;
+
+  @CheckIsValidObjectId('fuelType')
+  @IsOptional()
+  modelMobilModel: ModelMobil;
 
   @IsNumber()
   @IsOptional()

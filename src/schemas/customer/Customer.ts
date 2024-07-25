@@ -72,12 +72,6 @@ export class Customer {
     trim: true,
   })
   whatsappNumber: string;
-
-  @Prop({
-    type: Boolean,
-    default: false,
-  })
-  subscribeNews: boolean;
 }
 
 export const CustomerSchema = SchemaFactory.createForClass(Customer);

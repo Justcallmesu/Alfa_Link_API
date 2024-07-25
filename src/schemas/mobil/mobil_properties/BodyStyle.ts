@@ -13,12 +13,6 @@ export class BodyStyle {
     maxlength: [50, 'Body Style must be at most 50 characters'],
   })
   name: string;
-
-  @Prop({
-    type: String,
-    trim: true,
-  })
-  imageUrl: string;
 }
 
 export const BodyStyleSchema = SchemaFactory.createForClass(BodyStyle);

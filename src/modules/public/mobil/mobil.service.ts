@@ -24,6 +24,7 @@ import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
 import parseAggregation from '@/modules/common/function/aggregationConstructor';
 import { aggregationPagination } from '@/modules/common/function/pagination';
 import { Penjualan } from '@/schemas/Penjualan/Penjualan';
+import { ModelMobil } from '@/schemas/mobil/mobil_properties/Model';
 
 @Injectable()
 export class MobilService {
@@ -35,6 +36,7 @@ export class MobilService {
     @InjectModel(WarnaMobil.name) private warnaMobilModel: Model<WarnaMobil>,
     @InjectModel(FuelType.name) private FuelTypeModel: Model<FuelType>,
     @InjectModel(Penjualan.name) private penjualanModel: Model<Penjualan>,
+    @InjectModel(ModelMobil.name) private modelMobilModel: Model<ModelMobil>,
   ) {}
 
   async getAll(res: Response, query: MobilQueryDto) {
@@ -66,6 +68,13 @@ export class MobilService {
           localField: 'tipe',
           foreignfield: '_id',
           as: 'tipe',
+          fieldToSearch: 'name',
+        },
+        {
+          from: 'modelMobil',
+          localField: 'model',
+          foreignfield: '_id',
+          as: 'model',
           fieldToSearch: 'name',
         },
         {
@@ -134,6 +143,11 @@ export class MobilService {
         path: 'tipe',
         select: ['name'],
         model: this.tipeMobilModel,
+      })
+      .populate({
+        path: 'model',
+        select: ['name'],
+        model: this.modelMobilModel,
       })
       .populate({
         path: 'warnaExterior',

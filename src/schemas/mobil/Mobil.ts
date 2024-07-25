@@ -7,6 +7,7 @@ import { TipeMobil } from './mobil_properties/TipeMobil';
 import { Inspeksi } from './inspeksi';
 import { BodyStyle } from './mobil_properties/BodyStyle';
 import { StatusMobil } from '@/modules/public/mobil/mobil.dto';
+import { ModelMobil } from './mobil_properties/Model';
 
 export type MobilDocument = HydratedDocument<Mobil>;
 
@@ -56,6 +57,12 @@ export class Mobil {
     ref: 'fuelType',
   })
   jenisBahanBakar: Types.ObjectId;
+
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'modelMobil',
+  })
+  model: ModelMobil;
 
   @Prop({
     type: Types.ObjectId,
