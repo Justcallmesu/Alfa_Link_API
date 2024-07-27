@@ -7,7 +7,6 @@ export type CustomerDocument = HydratedDocument<Customer>;
 export class Customer {
   @Prop({
     type: String,
-    unique: true,
     required: [true, 'Customer Full name is required'],
     minlength: [3, 'Customer Full name is too short'],
     maxlength: [100, 'Customer Full name is too long'],
@@ -17,6 +16,7 @@ export class Customer {
 
   @Prop({
     type: String,
+    unique: true,
     required: [true, 'Customer NIK is required'],
     minlength: [3, 'Customer NIK is too short'],
     maxlength: [100, 'Customer NIK is too long'],

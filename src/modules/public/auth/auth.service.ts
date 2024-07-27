@@ -73,7 +73,7 @@ export class AuthService {
       AccessCookiesConfig(),
     );
 
-    user.refresh_token = refreshToken as string;
+    user.refreshToken = refreshToken as string;
 
     await user.save();
 
@@ -115,7 +115,7 @@ export class AuthService {
 
     ResetToken(res);
 
-    await this.UserModel.findByIdAndUpdate(_id, { refresh_token: '' });
+    await this.UserModel.findByIdAndUpdate(_id, { refreshToken: '' });
 
     res.status(200).end();
   }
@@ -175,7 +175,7 @@ export class AuthService {
       await isExist.save();
 
       ResetToken(res);
-      await this.UserModel.findByIdAndUpdate(_id, { refresh_token: '' });
+      await this.UserModel.findByIdAndUpdate(_id, { refreshToken: '' });
 
       return res.json({
         message: 'Password Updated',
@@ -204,8 +204,7 @@ export class AuthService {
       process.env.JWT_REFRESH_SECRET as string,
     ) as JwtGuardDto;
 
-    const foundUser =
-      await this.UserModel.findById(id).select('+refresh_token');
+    const foundUser = await this.UserModel.findById(id).select('+refreshToken');
 
     if (!foundUser) {
       throw new UnauthorizedException(
@@ -221,7 +220,7 @@ export class AuthService {
       );
     }
 
-    foundUser.refresh_token = GenerateToken(GenerateTokenType.REFRESH_TOKEN, {
+    foundUser.refreshToken = GenerateToken(GenerateTokenType.REFRESH_TOKEN, {
       id: foundUser._id,
     }) as string;
 
@@ -229,7 +228,7 @@ export class AuthService {
 
     res.cookie(
       'refresh_token_jwt',
-      foundUser.refresh_token,
+      foundUser.refreshToken,
       RefreshCookiesConfig(),
     );
 

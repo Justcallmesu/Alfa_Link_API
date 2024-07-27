@@ -25,7 +25,7 @@ export class UsersService {
       this.userModel,
       filter,
       sort,
-      `${select ?? ''} +role_id`,
+      `${select ?? ''} +roleId`,
       pagination,
     )
       .filter()
@@ -34,7 +34,7 @@ export class UsersService {
       .paginate();
 
     const userDatas = await mongoQueryMeta.mongoQuery.populate({
-      path: 'role_id',
+      path: 'roleId',
       model: this.rolesModel,
     });
 
@@ -48,7 +48,7 @@ export class UsersService {
 
   async getOne(res: Response, id: string) {
     const userData = await this.userModel.findById(id).populate({
-      path: 'role_id',
+      path: 'roleId',
       model: this.rolesModel,
     });
 
@@ -64,7 +64,7 @@ export class UsersService {
   }
 
   async create(res: Response, body: CreateUserDto) {
-    const isRoleExist = await this.rolesModel.findById(body.role_id);
+    const isRoleExist = await this.rolesModel.findById(body.roleId);
 
     if (!isRoleExist) {
       throw new NotFoundException('Role Tidak Ditemukan');
@@ -80,7 +80,7 @@ export class UsersService {
   }
 
   async update(res: Response, id: string, body: UpdateuserDto) {
-    const isRoleExist = await this.rolesModel.findById(body.role_id);
+    const isRoleExist = await this.rolesModel.findById(body.roleId);
 
     if (!isRoleExist) {
       throw new NotFoundException('Role Tidak Ditemukan');

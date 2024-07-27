@@ -15,7 +15,7 @@ export class Roles {
     trim: true,
     unique: true,
   })
-  role_name: string;
+  roleName: string;
 
   @Prop({
     type: String,
@@ -24,23 +24,23 @@ export class Roles {
     maxlength: [100, 'Role description is too long'],
     trim: true,
   })
-  role_description: string;
+  roleDescription: string;
 
   @Prop({
     type: Array<Types.ObjectId>,
     required: [true, 'Role permissions are required'],
     ref: 'permissions',
   })
-  permissions_id: Permissions[];
+  permissionsId: Permissions[];
 
   @Prop({
     type: Date,
     default: Date.now(),
     immutable: true,
   })
-  date_created: Date;
+  dateCreated: Date;
 }
 
 export const RolesSchema = SchemaFactory.createForClass(Roles);
 
-RolesSchema.index({ role_name: 1 }, { unique: true });
+RolesSchema.index({ roleName: 1 }, { unique: true });

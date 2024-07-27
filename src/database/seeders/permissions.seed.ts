@@ -30,11 +30,13 @@ export class PermissionsSeed {
     // Permissions Data
     const data: Permissions[] = [
       ...Object.entries(PermissionsEnum).map(([key, value]) => ({
-        permission_name: value,
-        permission_description: `${value.split('_').join(' ')} Permission`,
-        permission_group: getPermissionGroupName(value),
+        permissionName: value,
+        permissionDescription: `${value.split('_').join(' ')} Permission`,
+        permissionGroup: getPermissionGroupName(value),
       })),
     ];
+
+    console.log(data);
 
     try {
       Logger.log('Permissions Seeding Started');
