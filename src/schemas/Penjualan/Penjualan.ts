@@ -1,9 +1,6 @@
+import { PenjualanStatus } from '@/modules/common/enum/penjualan/PenjualanEnum';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
-
-// Schema
-import { Mobil } from '../mobil/Mobil';
-import { HistoryPembayaran } from '../customer/HistoryPembayaran';
 
 export type PenjualanDocument = HydratedDocument<Penjualan>;
 
@@ -13,49 +10,83 @@ export type PenjualanDocument = HydratedDocument<Penjualan>;
 export class Penjualan {
   @Prop({
     type: Types.ObjectId,
-    required: [true, 'ID Customer is required'],
+    required: [true, 'Mobil is required'],
     ref: 'mobil',
   })
-  id_mobil: Mobil;
+  mobil: Types.ObjectId;
 
   @Prop({
     type: Types.ObjectId,
-    required: [true, 'ID History is required'],
-    ref: 'history_pembayaran',
+    required: [true, 'Customer is required'],
+    ref: 'customer',
   })
-  id_history: HistoryPembayaran;
+  customer: Types.ObjectId;
 
   @Prop({
     type: String,
     required: [true, 'Metode Pembayaran is required'],
     enum: {
       values: ['Cash', 'Kredit'],
-      message: 'jenis_pembayaran must be either "Cash" or "Kredit"',
+      message: 'Metode Pembayaran must be either "Cash" or "Kredit"',
     },
     trim: true,
   })
-  metode_pembayaran: string;
+  metodePembayaran: string;
+
+  @Prop({
+    type: Types.ObjectId,
+    trim: true,
+    ref: 'BankTujuan',
+  })
+  bankTujuan: Types.ObjectId;
 
   @Prop({
     type: Number,
     required: [true, 'Total Harga is required'],
   })
-  total_harga: number;
+  totalHarga: number;
+
+  @Prop({
+    type: Boolean,
+    default: false,
+  })
+  isDP: boolean;
+
+  @Prop({
+    type: Number,
+    default: 0,
+  })
+  totalDP: number;
+
+  @Prop({
+    type: Number,
+    default: 0,
+  })
+  totalTerbayar: number;
+
+  @Prop({
+    type: String,
+    enum: {
+      values: Object.entries(PenjualanStatus).map(([, value]) => value),
+      default: PenjualanStatus.BARU,
+    },
+    default: PenjualanStatus.BARU,
+  })
+  status: PenjualanStatus;
 
   @Prop({
     type: Date,
     required: true,
   })
-  date_penjualan: Date;
+  tanggalPenjualan: Date;
 }
 
-export const PembayaranSchema = SchemaFactory.createForClass(Penjualan);
+export const PenjualanSchema = SchemaFactory.createForClass(Penjualan);
 
 // Indexing
-PembayaranSchema.index({ id_mobil: 1, id_history: 1 }, { unique: true });
+PenjualanSchema.index({ mobil: 1 }, { unique: true });
 
-PembayaranSchema.index({ date_penjualan: 1 });
-PembayaranSchema.index({ metode_pembayaran: 1 });
+PenjualanSchema.index({ tanggalPenjualan: 1 });
+PenjualanSchema.index({ metodePembayaran: 1 });
 
-PembayaranSchema.index({ id_history: 1 });
-PembayaranSchema.index({ id_mobil: 1 });
+PenjualanSchema.index({ mobil: 1 });

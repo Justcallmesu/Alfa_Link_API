@@ -19,9 +19,9 @@ export class RolesSeed {
     // Roles Data
     const data = [
       {
-        role_name: 'Super Admin',
-        role_description: 'Super Admin Role, Full Access',
-        permissions_id: [
+        roleName: 'Super Admin',
+        roleDescription: 'Super Admin Role, Full Access',
+        permissionsId: [
           ...(await this.PermissionsModel.find({}).select('_id')).map(
             (v) => v._id,
           ),

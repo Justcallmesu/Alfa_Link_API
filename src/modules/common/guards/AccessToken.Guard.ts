@@ -3,7 +3,7 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { UserDocument } from '@/schemas/auth/User';
 
 import { Response, Request } from 'express';
-import GenerateToken from '../function/GenerateToken.function';
+import GenerateToken from '../function/generateToken.function';
 import { AccessCookiesConfig } from '../config/CookiesConfig';
 import { GenerateTokenType } from '../enum/GenerateTokenType.enum';
 

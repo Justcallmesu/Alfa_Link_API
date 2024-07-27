@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 export type MerkMobilDocument = HydratedDocument<MerkMobil>;
 
-@Schema({ collection: 'merk_mobil' })
+@Schema({ collection: 'merkMobil' })
 export class MerkMobil {
   @Prop({
     type: String,
@@ -12,10 +12,10 @@ export class MerkMobil {
     minlength: [3, 'Merk must be at least 3 characters'],
     maxlength: [50, 'Merk must be at most 50 characters'],
   })
-  merk: string;
+  name: string;
 }
 
 export const MerkMobilSchema = SchemaFactory.createForClass(MerkMobil);
 
 //  Indexing
-MerkMobilSchema.index({ merk: 1 }, { unique: true });
+MerkMobilSchema.index({ name: 1 }, { unique: true });

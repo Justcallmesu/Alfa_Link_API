@@ -28,7 +28,7 @@ import {
 import { GenerateTokenType } from '@/modules/common/enum/GenerateTokenType.enum';
 
 // Functions
-import GenerateToken from '@/modules/common/function/GenerateToken.function';
+import GenerateToken from '@/modules/common/function/generateToken.function';
 import ResetToken from '@/modules/common/function/ResetToken.function';
 import { CookiesJWT } from '@/modules/common/interface/CookiesJWT.interface';
 import { JwtGuardDto } from '@/modules/common/dto/JwtGuard.dto';
@@ -73,7 +73,7 @@ export class AuthService {
       AccessCookiesConfig(),
     );
 
-    user.refresh_token = refreshToken as string;
+    user.refreshToken = refreshToken as string;
 
     await user.save();
 
@@ -95,7 +95,7 @@ export class AuthService {
 
     if (isExist) {
       throw new ConflictException(
-        'There is Username or Name that is already exist',
+        'There is Username or Name that is Sudah Dibuat',
       );
     }
 
@@ -115,7 +115,7 @@ export class AuthService {
 
     ResetToken(res);
 
-    await this.UserModel.findByIdAndUpdate(_id, { refresh_token: '' });
+    await this.UserModel.findByIdAndUpdate(_id, { refreshToken: '' });
 
     res.status(200).end();
   }
@@ -139,11 +139,12 @@ export class AuthService {
       throw new HttpException('User not found', 404);
     }
 
-    await user.updateOne(body);
+    const updatedData = await user.updateOne(body, { new: true });
 
     res.json({
       message: 'User Updated',
       status: 200,
+      data: updatedData,
     });
   }
 
@@ -160,7 +161,7 @@ export class AuthService {
       );
     }
 
-    if (await !isExist.comparePassword(body.oldPassword)) {
+    if (!(await isExist.comparePassword(body.oldPassword))) {
       throw new HttpException('Old Password is incorrect', 400);
     }
 
@@ -174,7 +175,7 @@ export class AuthService {
       await isExist.save();
 
       ResetToken(res);
-      await this.UserModel.findByIdAndUpdate(_id, { refresh_token: '' });
+      await this.UserModel.findByIdAndUpdate(_id, { refreshToken: '' });
 
       return res.json({
         message: 'Password Updated',
@@ -203,7 +204,7 @@ export class AuthService {
       process.env.JWT_REFRESH_SECRET as string,
     ) as JwtGuardDto;
 
-    const foundUser = await this.UserModel.findById(id);
+    const foundUser = await this.UserModel.findById(id).select('+refreshToken');
 
     if (!foundUser) {
       throw new UnauthorizedException(
@@ -219,7 +220,7 @@ export class AuthService {
       );
     }
 
-    foundUser.refresh_token = GenerateToken(GenerateTokenType.REFRESH_TOKEN, {
+    foundUser.refreshToken = GenerateToken(GenerateTokenType.REFRESH_TOKEN, {
       id: foundUser._id,
     }) as string;
 
@@ -227,7 +228,7 @@ export class AuthService {
 
     res.cookie(
       'refresh_token_jwt',
-      foundUser.refresh_token,
+      foundUser.refreshToken,
       RefreshCookiesConfig(),
     );
 

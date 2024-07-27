@@ -42,7 +42,7 @@ export class User {
     select: false,
     unqiue: true,
   })
-  refresh_token: string;
+  refreshToken: string;
 
   @Prop({
     type: Types.ObjectId,
@@ -50,36 +50,14 @@ export class User {
     select: false,
     ref: 'roles',
   })
-  role_id: Roles;
+  roleId: Roles;
 
   @Prop({
     type: Date,
     default: Date.now(),
     immutable: true,
   })
-  date_created: Date;
-
-  @Prop({
-    type: Date,
-    default: Date.now(),
-  })
-  date_updated: Date;
-
-  @Prop({
-    type: Date,
-    default: '',
-  })
-  date_deleted: Date;
-
-  @Prop({
-    type: String,
-    enum: {
-      values: ['active', 'inactive', 'deleted'],
-      message: 'Invalid status',
-    },
-    default: 'active',
-  })
-  user_status: string;
+  dateCreated: Date;
 
   comparePassword: (candidatePassword: string) => Promise<boolean>;
 
@@ -99,7 +77,7 @@ UserSchema.method(
 UserSchema.method(
   'compareRefreshToken',
   async function (candidateRefreshToken: string): Promise<boolean> {
-    return await compare(candidateRefreshToken, this.refresh_token);
+    return await compare(candidateRefreshToken, this.refreshToken);
   },
 );
 
@@ -114,9 +92,9 @@ UserSchema.pre('save', async function (next) {
     this.password = await hash(this.password, salt);
   }
 
-  if (this.isModified('refresh_token')) {
+  if (this.isModified('refreshToken')) {
     const salt = await genSalt(11);
-    this.refresh_token = await hash(this.refresh_token, salt);
+    this.refreshToken = await hash(this.refreshToken, salt);
   }
 
   next();

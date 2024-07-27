@@ -16,8 +16,17 @@ export class Customer {
 
   @Prop({
     type: String,
-    required: [true, 'Customer email is required'],
-    minlength: [3, 'Customer email is too short'],
+    unique: true,
+    required: [true, 'Customer NIK is required'],
+    minlength: [3, 'Customer NIK is too short'],
+    maxlength: [100, 'Customer NIK is too long'],
+    trim: true,
+  })
+  nik: string;
+
+  @Prop({
+    type: String,
+    required: false,
     maxlength: [100, 'Customer email is too long'],
     trim: true,
   })
@@ -25,19 +34,18 @@ export class Customer {
 
   @Prop({
     type: String,
-    required: [true, 'Customer birth_place is required'],
-    minlength: [3, 'Customer birth_place is too short'],
-    maxlength: [100, 'Customer birth_place is too long'],
+    required: false,
+    maxlength: [100, 'Customer birthPlace is too long'],
     trim: true,
   })
-  birth_place: string;
+  birthPlace: string;
 
   @Prop({
     type: Date,
-    required: [true, 'Customer Date is required'],
+    required: false,
     trim: true,
   })
-  birth_date: Date;
+  birthDate: Date;
 
   @Prop({
     type: String,
@@ -49,17 +57,26 @@ export class Customer {
   address: string;
 
   @Prop({
-    type: Boolean,
-    default: false,
+    type: String,
+    required: [true, 'Customer phone number is required'],
+    minlength: [3, 'Customer phone number is too short'],
+    maxlength: [100, 'Customer phone number is too long'],
+    trim: true,
   })
-  subscribe_news: boolean;
+  phoneNumber: string;
+
+  @Prop({
+    type: String,
+    required: false,
+    maxlength: [100, 'Customer whatsapp number is too long'],
+    trim: true,
+  })
+  whatsappNumber: string;
 }
 
 export const CustomerSchema = SchemaFactory.createForClass(Customer);
 
 // Indexing
-CustomerSchema.index({ fullname: 1, email: 1 }, { unique: true });
-CustomerSchema.index({ fullname: 1 }, { unique: true });
+CustomerSchema.index({ fullName: 1 }, { unique: true });
 
-CustomerSchema.index({ email: 1 }, { unique: true });
-CustomerSchema.index({ subscribe_news: 1 }, { unique: true });
+CustomerSchema.index({ subscribeNews: 1 });
