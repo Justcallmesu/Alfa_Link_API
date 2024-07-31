@@ -20,12 +20,12 @@ export class RolesService {
   ) {}
   async findAll(res: Response, query: any) {
     const { filter, pagination, select, sort } = queryConstructor(query, [
-      'role_name',
+      'roleName',
     ]);
 
     const mongoQueryMeta = await new MongoQuery(
       this.roleModel,
-      { ...filter, role_name: { $ne: 'Super Admin' } },
+      { ...filter, roleName: { $ne: 'Super Admin' } },
       sort,
       select,
       pagination,
@@ -47,7 +47,7 @@ export class RolesService {
 
   async getOne(res: Response, id: string) {
     const roleData = await this.roleModel.findById(id).populate({
-      path: 'permissions_id',
+      path: 'permissionsId',
       model: this.permissionsModel,
     });
 
@@ -95,7 +95,7 @@ export class RolesService {
       throw new NotFoundException('Role Tidak Ditemukan');
     }
 
-    const isRoleUsed = await this.userModel.findOne({ role_id: id });
+    const isRoleUsed = await this.userModel.findOne({ roleId: id });
 
     if (isRoleUsed) {
       throw new NotFoundException('Role Sudah Digunakan');

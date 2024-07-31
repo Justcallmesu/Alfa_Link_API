@@ -19,9 +19,9 @@ export class CreateUserDto {
   password: string;
 
   @IsNotEmpty()
-  @CheckIsValidObjectId('role_id')
+  @CheckIsValidObjectId('roleId')
   @IsString()
-  role_id: string;
+  roleId: string;
 }
 
 export class UpdateuserDto extends CreateUserDto {}

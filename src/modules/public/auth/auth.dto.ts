@@ -41,7 +41,7 @@ export class createUserDto {
 
   @IsString()
   @IsNotEmpty()
-  role_id: string;
+  roleId: string;
 }
 
 export class updateUserDto {
@@ -49,7 +49,7 @@ export class updateUserDto {
 
   username?: string;
 
-  role_id?: string;
+  roleId?: string;
 }
 
 export class updatePasswordDto {

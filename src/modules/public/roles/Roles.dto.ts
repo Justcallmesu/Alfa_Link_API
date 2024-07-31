@@ -11,17 +11,17 @@ export class CreateRoleDto {
   @IsNotEmpty()
   @MinLength(3)
   @MaxLength(50)
-  role_name: string;
+  roleName: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
   @MaxLength(100)
-  role_description: string;
+  roleDescription: string;
 
   @IsArray()
   @IsNotEmpty()
-  permissions_id: string[];
+  permissionsId: string[];
 }
 
 export class UpdateRoleDto extends CreateRoleDto {}

@@ -16,8 +16,8 @@ export class UserSeed {
   public async seed() {
     const log = new Logger('UserSeed');
 
-    const role_id = await this.RolesModel.findOne({
-      role_name: 'Super Admin',
+    const roleId = await this.RolesModel.findOne({
+      roleName: 'Super Admin',
     }).select('_id');
 
     // User Data
@@ -26,7 +26,7 @@ export class UserSeed {
         name: 'Suwanto Ardi Winata',
         username: 'admin',
         password: 'superadmin',
-        role_id: role_id?._id,
+        roleId: roleId?._id,
       },
     ];
 

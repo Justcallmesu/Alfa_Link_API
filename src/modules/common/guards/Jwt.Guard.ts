@@ -42,16 +42,16 @@ export class JwtGuard implements CanActivate {
         data.id as string,
       )
         .select(
-          '+role_id -date_created -date_updated -date_deleted +refresh_token -__v -password  -user_status',
+          '+roleId -dateCreated -date_updated -date_deleted +refreshToken -__v -password  -user_status',
         )
         .populate({
-          path: 'role_id' as string,
+          path: 'roleId' as string,
           model: this.RolesModel,
-          select: ['role_name', 'permissions_id'],
+          select: ['roleName', 'permissionsId'],
 
           // Populate Permissions
           populate: {
-            path: 'permissions_id' as string,
+            path: 'permissionsId' as string,
             model: this.PermissionsModel,
           },
         })) as User;

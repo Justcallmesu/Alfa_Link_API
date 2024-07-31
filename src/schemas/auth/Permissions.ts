@@ -11,21 +11,21 @@ export class Permissions {
     unique: true,
     immutable: true,
   })
-  permission_name: string;
+  permissionName: string;
 
   @Prop({
     type: String,
     required: [true, 'Permission description is required'],
     immutable: true,
   })
-  permission_description: string;
+  permissionDescription: string;
 
   @Prop({
     type: String,
     required: [true, 'Permission Group is required'],
     immutable: true,
   })
-  permission_group: string;
+  permissionGroup: string;
 }
 
 export const PermissionsSchema = SchemaFactory.createForClass(Permissions);
