@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Response } from 'express';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { Response } from "express";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
 
 // DTO
 import {
@@ -11,20 +11,21 @@ import {
   StatusMobil,
   UpdateMobilDto,
   UpdateMobilStatusDto,
-} from './mobil.dto';
+} from "./mobil.dto";
 
 // Schema
-import { Mobil, MobilDocument } from '@/schemas/mobil/Mobil';
-import { MerkMobil } from '@/schemas/mobil/mobil_properties/MerkMobil';
-import { BodyStyle } from '@/schemas/mobil/mobil_properties/BodyStyle';
-import { TipeMobil } from '@/schemas/mobil/mobil_properties/TipeMobil';
-import { WarnaMobil } from '@/schemas/mobil/mobil_properties/WarnaMobil';
-import { FuelType } from '@/schemas/mobil/mobil_properties/FuelType';
-import { MongoQuery } from '@/modules/common/class/MongoQuery.class';
-import parseAggregation from '@/modules/common/function/aggregationConstructor';
-import { aggregationPagination } from '@/modules/common/function/pagination';
-import { Penjualan } from '@/schemas/Penjualan/Penjualan';
-import { ModelMobil } from '@/schemas/mobil/mobil_properties/Model';
+import { Mobil, MobilDocument } from "@/schemas/mobil/Mobil";
+import { MerkMobil } from "@/schemas/mobil/mobil_properties/MerkMobil";
+import { BodyStyle } from "@/schemas/mobil/mobil_properties/BodyStyle";
+import { TipeMobil } from "@/schemas/mobil/mobil_properties/TipeMobil";
+import { WarnaMobil } from "@/schemas/mobil/mobil_properties/WarnaMobil";
+import { FuelType } from "@/schemas/mobil/mobil_properties/FuelType";
+import { MongoQuery } from "@/modules/common/class/MongoQuery.class";
+import parseAggregation from "@/modules/common/function/aggregationConstructor";
+import { aggregationPagination } from "@/modules/common/function/pagination";
+import { Penjualan } from "@/schemas/Penjualan/Penjualan";
+import { ModelMobil } from "@/schemas/mobil/mobil_properties/Model";
+import { Inspeksi } from "@/schemas/mobil/inspeksi";
 
 @Injectable()
 export class MobilService {
@@ -36,11 +37,23 @@ export class MobilService {
     @InjectModel(WarnaMobil.name) private warnaMobilModel: Model<WarnaMobil>,
     @InjectModel(FuelType.name) private FuelTypeModel: Model<FuelType>,
     @InjectModel(Penjualan.name) private penjualanModel: Model<Penjualan>,
-    @InjectModel(ModelMobil.name) private modelMobilModel: Model<ModelMobil>,
+    @InjectModel(ModelMobil.name) private modelMobilModel: Model<ModelMobil>
   ) {}
 
   async getAll(res: Response, query: MobilQueryDto) {
     const { page = 1, limit = 10 } = query;
+    const customQuery: Array<any> = [];
+
+    if (query.isNotInspected) {
+      customQuery.push({
+        $match: {
+          inspeksi: {
+            $eq: null,
+          },
+        },
+      });
+    }
+
     const aggregation = parseAggregation(
       {
         ...query,
@@ -50,59 +63,60 @@ export class MobilService {
       Object.values(MobilFilterEnum),
       [
         {
-          from: 'merkMobil',
-          localField: 'merk',
-          foreignfield: '_id',
-          as: 'merk',
-          fieldToSearch: 'name',
+          from: "merkMobil",
+          localField: "merk",
+          foreignfield: "_id",
+          as: "merk",
+          fieldToSearch: "name",
         },
         {
-          from: 'bodyStyle',
-          localField: 'bodyStyle',
-          foreignfield: '_id',
-          as: 'bodyStyle',
-          fieldToSearch: 'name',
+          from: "bodyStyle",
+          localField: "bodyStyle",
+          foreignfield: "_id",
+          as: "bodyStyle",
+          fieldToSearch: "name",
         },
         {
-          from: 'tipeMobil',
-          localField: 'tipe',
-          foreignfield: '_id',
-          as: 'tipe',
-          fieldToSearch: 'name',
+          from: "tipeMobil",
+          localField: "tipe",
+          foreignfield: "_id",
+          as: "tipe",
+          fieldToSearch: "name",
         },
         {
-          from: 'modelMobil',
-          localField: 'model',
-          foreignfield: '_id',
-          as: 'model',
-          fieldToSearch: 'name',
+          from: "modelMobil",
+          localField: "model",
+          foreignfield: "_id",
+          as: "model",
+          fieldToSearch: "name",
         },
         {
-          from: 'WarnaMobil',
-          localField: 'warnaInterior',
-          foreignfield: '_id',
-          as: 'warnaInterior',
-          fieldToSearch: 'name',
+          from: "WarnaMobil",
+          localField: "warnaInterior",
+          foreignfield: "_id",
+          as: "warnaInterior",
+          fieldToSearch: "name",
         },
         {
-          from: 'WarnaMobil',
-          localField: 'warnaExterior',
-          foreignfield: '_id',
-          as: 'warnaExterior',
-          fieldToSearch: 'name',
+          from: "WarnaMobil",
+          localField: "warnaExterior",
+          foreignfield: "_id",
+          as: "warnaExterior",
+          fieldToSearch: "name",
         },
         {
-          from: 'fuelType',
-          localField: 'jenisBahanBakar',
-          foreignfield: '_id',
-          as: 'jenisBahanBakar',
-          fieldToSearch: 'name',
+          from: "fuelType",
+          localField: "jenisBahanBakar",
+          foreignfield: "_id",
+          as: "jenisBahanBakar",
+          fieldToSearch: "name",
         },
       ],
+      customQuery
     );
 
     const mongoQueryMeta = new MongoQuery(this.mobilModel).aggregation(
-      aggregation,
+      aggregation
     );
 
     const mobilDatas = await mongoQueryMeta.aggregateQuery.exec();
@@ -113,12 +127,12 @@ export class MobilService {
       {
         page,
         limit,
-      },
+      }
     );
 
     return res.json({
-      message: 'Data Fetched',
-      status: '200',
+      message: "Data Fetched",
+      status: "200",
       data: mobilDatas,
       meta: paginationMeta,
     });
@@ -130,48 +144,48 @@ export class MobilService {
         _id: id,
       })
       .populate({
-        path: 'merk',
-        select: ['name'],
+        path: "merk",
+        select: ["name"],
         model: this.merkMobilModel,
       })
       .populate({
-        path: 'bodyStyle',
-        select: ['name'],
+        path: "bodyStyle",
+        select: ["name"],
         model: this.bodyStyleModel,
       })
       .populate({
-        path: 'tipe',
-        select: ['name'],
+        path: "tipe",
+        select: ["name"],
         model: this.tipeMobilModel,
       })
       .populate({
-        path: 'model',
-        select: ['name'],
+        path: "model",
+        select: ["name"],
         model: this.modelMobilModel,
       })
       .populate({
-        path: 'warnaExterior',
-        select: ['name'],
+        path: "warnaExterior",
+        select: ["name"],
         model: this.warnaMobilModel,
       })
       .populate({
-        path: 'warnaInterior',
-        select: ['name'],
+        path: "warnaInterior",
+        select: ["name"],
         model: this.warnaMobilModel,
       })
       .populate({
-        path: 'jenisBahanBakar',
-        select: ['name'],
+        path: "jenisBahanBakar",
+        select: ["name"],
         model: this.FuelTypeModel,
       });
 
     if (!mobilData) {
-      throw new NotFoundException('Mobil Tidak Ditemukan');
+      throw new NotFoundException("Mobil Tidak Ditemukan");
     }
 
     res.json({
-      message: 'Data Fetched',
-      status: '200',
+      message: "Data Fetched",
+      status: "200",
       data: mobilData,
     });
   }
@@ -182,7 +196,7 @@ export class MobilService {
     });
 
     if (isMobilWithSameNoPolisiExist) {
-      throw new NotFoundException('Mobil Dengan No Polisi Sama Sudah Dibuat');
+      throw new NotFoundException("Mobil Dengan No Polisi Sama Sudah Dibuat");
     }
 
     await this.checkIsMobilMasterDataExist(body);
@@ -193,8 +207,8 @@ export class MobilService {
     const mobilData = await this.mobilModel.create(convertedData);
 
     res.status(201).json({
-      message: 'Data Created',
-      status: '201',
+      message: "Data Created",
+      status: "201",
       data: mobilData,
     });
   }
@@ -203,7 +217,7 @@ export class MobilService {
     const mobilData: MobilDocument | null = await this.mobilModel.findById(id);
 
     if (!mobilData) {
-      throw new NotFoundException('Mobil Tidak Ditemukan');
+      throw new NotFoundException("Mobil Tidak Ditemukan");
     }
 
     const isMobilWithSameNoPolisiExist = await this.mobilModel.findOne({
@@ -212,7 +226,7 @@ export class MobilService {
     });
 
     if (isMobilWithSameNoPolisiExist) {
-      throw new NotFoundException('Mobil Dengan No Polisi Sama Sudah Dibuat');
+      throw new NotFoundException("Mobil Dengan No Polisi Sama Sudah Dibuat");
     }
 
     const { merk, bodyStyle, tipe } = body;
@@ -224,8 +238,8 @@ export class MobilService {
     const updateData = await mobilData.updateOne(convertedData);
 
     res.status(200).json({
-      message: 'Data Diedit',
-      status: '201',
+      message: "Data Diedit",
+      status: "201",
       data: updateData,
     });
   }
@@ -234,7 +248,7 @@ export class MobilService {
     const mobilData: MobilDocument | null = await this.mobilModel.findById(id);
 
     if (!mobilData) {
-      throw new NotFoundException('Mobil Tidak Ditemukan');
+      throw new NotFoundException("Mobil Tidak Ditemukan");
     }
 
     mobilData.status = body.status;
@@ -242,8 +256,8 @@ export class MobilService {
     await mobilData.save();
 
     res.status(200).json({
-      message: 'Data Diedit',
-      status: '200',
+      message: "Data Diedit",
+      status: "200",
       data: mobilData,
     });
   }
@@ -252,20 +266,20 @@ export class MobilService {
     const mobilData: MobilDocument | null = await this.mobilModel.findById(id);
 
     if (!mobilData) {
-      throw new NotFoundException('Mobil Tidak Ditemukan');
+      throw new NotFoundException("Mobil Tidak Ditemukan");
     }
 
     const isUsed = await this.penjualanModel.findOne({ mobil: id });
 
     if (isUsed) {
-      throw new NotFoundException('Data Sedang Digunakan');
+      throw new NotFoundException("Data Sedang Digunakan");
     }
 
     await mobilData.deleteOne();
 
     res.status(204).json({
-      message: 'Data Dihapus',
-      status: '204',
+      message: "Data Dihapus",
+      status: "204",
     });
   }
 
@@ -273,7 +287,7 @@ export class MobilService {
     const convertedData = { ...body };
 
     for (const key in convertedData) {
-      if (convertedData[key] === '') {
+      if (convertedData[key] === "") {
         convertedData[key] = null;
       }
     }
@@ -282,7 +296,7 @@ export class MobilService {
   }
 
   private async checkIsMobilMasterDataExist(
-    body: CreateMobilDto | UpdateMobilDto,
+    body: CreateMobilDto | UpdateMobilDto
   ) {
     const {
       merk,
@@ -297,7 +311,7 @@ export class MobilService {
       const isMerkMobilExist = await this.merkMobilModel.findById(merk);
 
       if (!isMerkMobilExist) {
-        throw new NotFoundException('Merk Mobil Tidak Ditemukan');
+        throw new NotFoundException("Merk Mobil Tidak Ditemukan");
       }
     }
 
@@ -305,7 +319,7 @@ export class MobilService {
       const isBodyStyleExist = await this.bodyStyleModel.findById(bodyStyle);
 
       if (!isBodyStyleExist) {
-        throw new NotFoundException('Body Style Tidak Ditemukan');
+        throw new NotFoundException("Body Style Tidak Ditemukan");
       }
     }
 
@@ -313,7 +327,7 @@ export class MobilService {
       const isTipeMobilExist = await this.tipeMobilModel.findById(tipe);
 
       if (!isTipeMobilExist) {
-        throw new NotFoundException('Tipe Mobil Tidak Ditemukan');
+        throw new NotFoundException("Tipe Mobil Tidak Ditemukan");
       }
     }
 
@@ -322,7 +336,7 @@ export class MobilService {
         await this.warnaMobilModel.findById(warnaExterior);
 
       if (!isWarnaExteriorExist) {
-        throw new NotFoundException('Warna Exterior Tidak Ditemukan');
+        throw new NotFoundException("Warna Exterior Tidak Ditemukan");
       }
     }
 
@@ -331,7 +345,7 @@ export class MobilService {
         await this.warnaMobilModel.findById(warnaInterior);
 
       if (!isWarnaInteriorExist) {
-        throw new NotFoundException('Warna Interior Tidak Ditemukan');
+        throw new NotFoundException("Warna Interior Tidak Ditemukan");
       }
     }
 
@@ -340,7 +354,7 @@ export class MobilService {
         await this.FuelTypeModel.findById(jenisBahanBakar);
 
       if (!isFuelTypeExist) {
-        throw new NotFoundException('Fuel Type Tidak Ditemukan');
+        throw new NotFoundException("Fuel Type Tidak Ditemukan");
       }
     }
   }

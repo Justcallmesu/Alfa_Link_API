@@ -6,6 +6,7 @@ import { MerkMobil } from '@/schemas/mobil/mobil_properties/MerkMobil';
 import { ModelMobil } from '@/schemas/mobil/mobil_properties/Model';
 import { TipeMobil } from '@/schemas/mobil/mobil_properties/TipeMobil';
 import {
+  IsBoolean,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -64,9 +65,9 @@ export class CreateMobilDto {
   @IsOptional()
   jenisBahanBakar: FuelType;
 
-  @CheckIsValidObjectId('fuelType')
+  @CheckIsValidObjectId('model')
   @IsOptional()
-  modelMobilModel: ModelMobil;
+  model: ModelMobil;
 
   @IsNumber()
   @IsOptional()
@@ -160,4 +161,9 @@ export class MobilQueryDto extends Pagination {
   @IsOptional()
   @IsEnum(TransmisiMobil)
   transmisi: TransmisiMobil;
+
+
+  @IsOptional()
+  @IsBoolean()
+  isNotInspected: boolean;
 }

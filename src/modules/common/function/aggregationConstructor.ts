@@ -138,6 +138,7 @@ function parseAggregation(
         }>;
       }>
     | undefined,
+    customQuery?:Array<any>
 ) {
   const { sort, limit = 10, page = 1 } = query as QueryInterface;
 
@@ -190,6 +191,10 @@ function parseAggregation(
 
   aggregation.push(...matchAggregation);
 
+  /**
+   * Custom Query
+   */
+  if(customQuery) aggregation.push(...customQuery );
   /**
    * Pagination
    */
